@@ -16,38 +16,49 @@
         android:layout_weight="15"
         android:orientation="horizontal"
         android:weightSum="100"
-        android:background="@color/navy">
-
-        <RelativeLayout
+        android:background="@color/navy"
+        android:gravity="center">
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="80">
+            android:layout_height="45dp"
+            android:layout_weight="90"
+            android:weightSum="100"
+            android:background="@color/white"
+            android:layout_gravity="center_vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:hint="@string/searchEar"
-                android:id="@+id/etSearch"
-                android:textColor="@color/white"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="20">
-            <ImageButton
-                android:textColor="@color/skyblue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="getItem"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/btnSearch"
-                android:background="@drawable/search"/>
-        </RelativeLayout>
-
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:hint="@string/searchEar"
+                        android:textColorHint="@color/navy_light"
+                        android:id="@+id/etSearch"
+                        android:textColor="@color/black"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="25">
+                    <ImageButton
+                        android:textColor="@color/skyblue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:onClick="getItem"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/btnSearch"
+                        android:background="@drawable/search"/>
+                </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -78,7 +89,7 @@
             android:gravity="center">
             <Button
                 android:text="@string/btn_Next"
-                android:textColor="#ffffff"
+                android:textColor="@color/navy"
                 android:background="@null"
                 android:visibility="invisible"
                 android:layout_width="wrap_content"

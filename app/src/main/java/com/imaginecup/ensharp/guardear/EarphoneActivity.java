@@ -178,6 +178,7 @@ public class EarphoneActivity extends Activity {
         btn_Next.setVisibility(View.VISIBLE);
 
         Log.d("CheckItem", "checkItem 들어옴");
+        Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
 
         //btn_Next.setVisibility(View.VISIBLE);
 
@@ -210,7 +211,6 @@ public class EarphoneActivity extends Activity {
         };
         runAsyncTask(task);
                 */
-
     }
 
     public void NextClick(View view){
@@ -218,12 +218,12 @@ public class EarphoneActivity extends Activity {
         if(btn_Next.isPressed()) {
 
 
-            mPref.putValue("earphone_company", view.getId() , mTextNewToDoID.getText().toString(), "userinfo");
+            /*mPref.putValue("earphone_company", view.getId() , mTextNewToDoID.getText().toString(), "userinfo");
             mPref.putValue("earphone_model", mTextNewToDoID.getText().toString(), "userinfo");
             mPref.putValue("earphone_impedance", mTextNewToDoID.getText().toString(), "userinfo");
             mPref.putValue("earphone_soundpressure", mTextNewToDoID.getText().toString(), "userinfo");
             mPref.putValue("earphone_image", mTextNewToDoID.getText().toString(), "userinfo");
-
+*/
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

@@ -3,22 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:weightSum="10">
+    android:weightSum="100">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="15"
+        android:gravity="center"
         android:id="@+id/layout">
 
         <CheckBox
             android:id="@+id/checkToDoItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="15dp"
-            android:textColor="@color/white"
-            android:scaleX="1"
-            android:scaleY="1"/>
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
@@ -26,12 +23,12 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3">
+        android:layout_weight="30">
 
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/imageView"/>
 
 
@@ -41,8 +38,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="6"
-        android:orientation="vertical">
+        android:layout_weight="55"
+        android:orientation="vertical"
+        android:gravity="left">
 
         <TextView
             android:layout_width="match_parent"
@@ -61,7 +59,6 @@
             android:layout_gravity="left"
             android:gravity="center_vertical"
             android:textSize="24dp" />
-
 
     </LinearLayout>
 
