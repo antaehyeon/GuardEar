@@ -27,7 +27,6 @@ dependencies {
     //compile 'com.android.support:support-v4:21.0.3'// 없
     compile 'com.google.code.gson:gson:2.2.2' // 다름
     compile 'com.google.guava:guava:18.0' //
-    compile 'com.microsoft.azure:azure-mobile-services-android-sdk:2.0.2+'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
