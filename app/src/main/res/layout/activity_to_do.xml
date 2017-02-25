@@ -1,0 +1,343 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/navy"
+    android:weightSum="5"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navy"
+        android:padding="6dip"
+        android:layout_marginBottom="100dp"
+        >
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="0.12"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:id="@+id/layout1"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        >
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/mail"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"/>
+
+        <EditText
+            android:id="@+id/textNewToDoID"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:inputType="textEmailAddress"
+            android:layout_marginLeft="15dp"
+            android:ems="10"
+            android:hint="@string/email"
+            android:textColorHint="@color/navy_middle"
+            android:layout_alignParentStart="true"
+            android:background="@null"/>
+        <requestFocus />
+
+
+    </LinearLayout>
+
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:background="#4e6873"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@drawable/user"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:id="@+id/imageView2" />
+
+            <EditText
+                android:id="@+id/textNewToDoName"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:ems="10"
+                android:hint="Name"
+                android:textColorHint="@color/navy_middle"
+                android:layout_marginLeft="8dp"
+                android:background="@null"/>
+
+            <Button
+                android:id="@+id/btn_check"
+                android:layout_width="wrap_content"
+                android:layout_height="33dp"
+                android:text="@string/btn_check"
+                android:textColor="@color/skyblue"
+                android:layout_gravity="center_vertical"
+                android:layout_centerInParent="true"
+                android:layout_weight="0.6"
+                android:onClick="checkName"
+                android:background = "@drawable/shape"
+                android:layout_marginRight="28dp"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:background="#4e6873"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:id="@+id/layout2"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/locked"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp" />
+
+        <EditText
+            android:id="@+id/textNewToDo"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="@string/password"
+            android:textColorHint="@color/navy_middle"
+            android:layout_below="@+id/etEmail"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="8dp"
+            android:background="@null"/>
+
+    </LinearLayout>
+
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:background="#4e6873"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_weight="1.5"
+         android:id="@+id/layout3"
+         android:orientation="horizontal"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentStart="true"
+         android:gravity="center"
+         android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/locked"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp" />
+
+        <EditText
+            android:id="@+id/textNewToDo2"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="@string/password2"
+            android:textColorHint="@color/navy_middle"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="8dp"
+            android:background="@null"
+            />
+    </LinearLayout>
+
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:background="#4e6873"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+
+        <TextView
+            android:text="@string/sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:id="@+id/sex"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"  />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/radio_sex"
+            android:onClick="Radio_Sex">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:text="MALE"
+                android:id="@+id/maile"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FEMALE"
+                android:id="@+id/female"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/etPasswordConfirm"
+        android:layout_alignParentStart="true">
+
+            <TextView
+                android:text="@string/age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:layout_below="@+id/etPasswordConfirm"
+                android:id="@+id/age"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"/>
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_age"
+                android:layout_alignBottom="@+id/linearLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginRight="40dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="45dp"
+            android:id="@+id/linearLayout2"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_register"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerInParent="true"
+                android:onClick="addItem"
+                android:background="@drawable/loginround"
+                android:layout_marginRight="15dp"/>
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_cancel"
+                android:textColor="@color/white"
+                android:onClick="cancelItem"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:background="@drawable/loginround"
+                android:layout_marginLeft="15dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
