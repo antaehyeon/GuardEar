@@ -280,6 +280,10 @@ public class ToDoActivity extends Activity {
         Log.d("태그", "정보 서버로 저장 ");
 
         mPref.putValue("Login", item.toString(), "ID");
+
+        mPref.putValue("id", mTextNewToDoID.getText().toString(), "userinfo");
+        mPref.putValue("pw", mTextNewToDoID.getText().toString(), "userinfo");
+
         Log.d("태그프리퍼런스저장", item.toString());
 
 
