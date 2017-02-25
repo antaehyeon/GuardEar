@@ -1,30 +1,70 @@
 package com.imaginecup.ensharp.guardear;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 /**
  * Created by Semin on 2017-01-28.
  */
-public class SplashActivity extends Activity {
 
-    /* 스플래쉬 화면이 뜨는 시간 */
-    private final int SPLASH_DISPLAY_LENGTH = 2000;
+public class SplashActivity extends AppCompatActivity {
+
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //pref = new SharedPreferences(this);
-        new Handler().postDelayed(new Runnable() {
+
+        // 해상도 얻어오기
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        // 이미지 뷰 해상도에 맞춰서 적용하기
+        ImageView img = (ImageView) findViewById(R.id.imageView);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) img.getLayoutParams();
+        params.width = metrics.widthPixels;
+        params.height = metrics.heightPixels;
+
+        // relativeLayout = new RelativeLayout(this); 로 하면 setPadding 에 대한 코드적용이 이뤄지지 않음
+        relativeLayout = (RelativeLayout) findViewById(R.id.activity_splash);
+        relativeLayout.setPadding(0, 0, 0, 0);
+
+        img.setLayoutParams(params);
+
+        // 액티비티 핸들러로 지연시키기 ( 5 sec )
+        Handler handler = new Handler() {
             @Override
-            public void run() {
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+//                Intent intent = new Intent(SplashActivity.this, AudioMetryActivity.class);
+//                Intent intent = new Intent(SplashActivity.this, AudioMetryResultActivity.class);
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                SplashActivity.this.startActivity(intent);
-                SplashActivity.this.finish();
+                startActivity(intent);
+                finish();
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        };
+        handler.sendEmptyMessageDelayed(0, 1500);
+    }
+
+    // 뒤로가기 키 막기
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -28,4 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    compile 'com.tsengvn:typekit:1.0.1'
+    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
 }

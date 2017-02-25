@@ -74,6 +74,14 @@
         </activity>
         <activity android:name=".WeeklyInfoActivity">
         </activity>
+
+        // HYEON ACTIVITY
+        <activity
+            android:name=".AudioMetryActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".AudioMetryResultActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
