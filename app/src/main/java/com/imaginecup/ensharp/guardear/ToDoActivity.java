@@ -277,14 +277,15 @@ public class ToDoActivity extends Activity {
         final ToDoItem item = new ToDoItem(mTextNewToDo.getText().toString(), mTextNewToDoID.getText().toString(),
                 mTextNewToDOName.getText().toString(), select_age, select_sex);
 
+        Log.d("태그프리퍼런스저장", item.toString());
         Log.d("태그", "정보 서버로 저장 ");
 
-        mPref.putValue("Login", item.toString(), "ID");
-
+        // 회원가입 시 사용자 정보 임시 저장
         mPref.putValue("id", mTextNewToDoID.getText().toString(), "userinfo");
-        mPref.putValue("pw", mTextNewToDoID.getText().toString(), "userinfo");
-
-        Log.d("태그프리퍼런스저장", item.toString());
+        mPref.putValue("pw", mTextNewToDo.getText().toString(), "userinfo");
+        mPref.putValue("age", select_age, "userinfo");
+        mPref.putValue("sex", select_sex, "userinfo");
+        mPref.putValue("nickname", mTextNewToDOName.getText().toString(), "userinfo");
 
 
         //item.setText(mTextNewToDo.getText().toString());

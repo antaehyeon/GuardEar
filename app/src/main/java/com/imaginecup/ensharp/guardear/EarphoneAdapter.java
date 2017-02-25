@@ -81,8 +81,6 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
 
 
-
-
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0){
@@ -92,6 +90,9 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                     Log.d("체크박스 확인 : ", " if 문");
 
                     EarphoneActivity activity = (EarphoneActivity) mContextEar;
+
+
+
                     activity.checkItem(currentItem);
 
                     activity.NextClick(btn_Next);

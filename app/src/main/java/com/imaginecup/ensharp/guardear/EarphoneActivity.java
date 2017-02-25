@@ -24,6 +24,7 @@ public class EarphoneActivity extends Activity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Earphone> mEarphoneTable;
+    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
 
     private EarphoneAdapter mAdapter;
 
@@ -37,9 +38,8 @@ public class EarphoneActivity extends Activity {
     ListView listViewToDo;
     Button btn_Next;
 
-    private String Convertstr;
-
-    String[] strArray;
+    android.content.SharedPreferences setting;
+    android.content.SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,11 @@ public class EarphoneActivity extends Activity {
             mAdapter = new EarphoneAdapter(this, R.layout.row_earphone);
             listViewToDo = (ListView)findViewById(R.id.listViewToDo);
             listViewToDo.setAdapter(mAdapter);
+
+            mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+            setting = getSharedPreferences("setting", 0);
+            editor = setting.edit();
 
 
         } catch (MalformedURLException e) {
@@ -211,6 +216,15 @@ public class EarphoneActivity extends Activity {
     public void NextClick(View view){
 
         if(btn_Next.isPressed()) {
+
+
+            mPref.putValue("earphone_company", view.getId() , mTextNewToDoID.getText().toString(), "userinfo");
+            mPref.putValue("earphone_model", mTextNewToDoID.getText().toString(), "userinfo");
+            mPref.putValue("earphone_impedance", mTextNewToDoID.getText().toString(), "userinfo");
+            mPref.putValue("earphone_soundpressure", mTextNewToDoID.getText().toString(), "userinfo");
+            mPref.putValue("earphone_image", mTextNewToDoID.getText().toString(), "userinfo");
+
+
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
 

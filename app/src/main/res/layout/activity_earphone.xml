@@ -1,92 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_earphone"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/navy"
     android:orientation = "vertical"
     tools:context="com.imaginecup.ensharp.guardear.EarphoneActivity"
-    android:weightSum="10">
+    android:weightSum="100">
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp">
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.7"
-            android:id="@+id/listViewToDo"
-            tools:listitem="@layout/row_earphone"
-            android:layout_below="@+id/etSearch"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
-            android:dividerHeight="0.4dp"/>
-
-        <Button
-            android:text="@string/btn_Next"
-            android:textColor="#ffffff"
-            android:background="@null"
-            android:visibility="invisible"
-            android:layout_width="80dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
-            android:id="@+id/btn_Next"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:onClick="NextClick"/>
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="15"
         android:orientation="horizontal"
-        android:weightSum="1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:weightSum="100"
+        android:background="@color/navy">
 
-
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.88"
-            android:inputType="textPersonName"
-            android:hint="@string/searchEar"
-            android:ems="10"
-            android:id="@+id/etSearch"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/white"
-            android:theme="@style/MyEditText"/>
-
-
-
-        <ImageButton
-            android:textColor="@color/skyblue"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.12"
-            android:layout_alignBottom="@+id/etSearch"
-            android:onClick="getItem"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/btnSearch"
-            android:background="@drawable/search"
-            />
+            android:layout_weight="80">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:hint="@string/searchEar"
+                android:id="@+id/etSearch"
+                android:textColor="@color/white"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20">
+            <ImageButton
+                android:textColor="@color/skyblue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="getItem"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/btnSearch"
+                android:background="@drawable/search"/>
+        </RelativeLayout>
 
     </LinearLayout>
 
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="85"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="88">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:id="@+id/listViewToDo"
+                tools:listitem="@layout/row_earphone"
+                android:dividerHeight="0.4dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="12"
+            android:gravity="center">
+            <Button
+                android:text="@string/btn_Next"
+                android:textColor="#ffffff"
+                android:background="@null"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_Next"
+                android:onClick="NextClick"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
