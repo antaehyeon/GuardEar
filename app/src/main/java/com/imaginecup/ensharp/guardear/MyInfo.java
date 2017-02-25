@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 /**
@@ -22,6 +23,11 @@ public class MyInfo extends AppCompatActivity {
 
     ImageView mEarphoneImage;
     Bitmap mEarphonePicture;
+    private SharedPreferences mPref;
+    private boolean mIsAutoVolume;
+    private boolean mIsBreakNotification;
+    private ImageButton mAutoVolumeBtn;
+    private ImageButton mBreakNotificationBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +36,7 @@ public class MyInfo extends AppCompatActivity {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.settingstoolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("내 정보");
-
+        mPref = new SharedPreferences(this);
         mEarphoneImage = (ImageView) findViewById(R.id.earphoneImg);
         mEarphonePicture = resizeImage("earphone", 190, 190);
         mEarphoneImage.setImageBitmap(getCircleBitmap(mEarphonePicture));
@@ -70,5 +76,52 @@ public class MyInfo extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void settingButton() {
+        mAutoVolumeBtn = (ImageButton) findViewById(R.id.autoVolumeBtn);
+        mBreakNotificationBtn = (ImageButton) findViewById(R.id.breakNotificationBtn);
+        mIsAutoVolume = mPref.getValue("autovolume", true, "setting");
+        mIsBreakNotification = mPref.getValue("breaknotification", true, "setting");
 
+        if (mIsAutoVolume) {
+            mAutoVolumeBtn.setImageResource(R.drawable.onswitch);
+        } else {
+            mAutoVolumeBtn.setImageResource(R.drawable.offswitch);
+        }
+
+        if (mIsBreakNotification) {
+            mBreakNotificationBtn.setImageResource(R.drawable.onswitch);
+        } else {
+            mBreakNotificationBtn.setImageResource(R.drawable.offswitch);
+        }
+
+        mAutoVolumeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsAutoVolume) {
+                    mAutoVolumeBtn.setImageResource(R.drawable.offswitch);
+                    mPref.putValue("autovolume", false, "setting");
+                    mIsAutoVolume = false;
+                } else {
+                    mAutoVolumeBtn.setImageResource(R.drawable.onswitch);
+                    mPref.putValue("autovolume", true, "setting");
+                    mIsAutoVolume = true;
+                }
+            }
+        });
+
+        mBreakNotificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsBreakNotification) {
+                    mBreakNotificationBtn.setImageResource(R.drawable.offswitch);
+                    mPref.putValue("breaknotification", false, "setting");
+                    mIsBreakNotification = false;
+                } else {
+                    mBreakNotificationBtn.setImageResource(R.drawable.onswitch);
+                    mPref.putValue("breaknotification", true, "setting");
+                    mIsBreakNotification = true;
+                }
+            }
+        });
+    }
 }
