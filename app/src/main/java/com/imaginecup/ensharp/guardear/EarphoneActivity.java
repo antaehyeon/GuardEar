@@ -193,6 +193,8 @@ public class EarphoneActivity extends Activity {
             image = "stormaxblitz";
         } else if (item.getID().toString().equals("AirPods")) {
             image = "airpods";
+        }else if (item.getID().toString().equals("EarPods")) {
+            image = "earpods";
         }else if(item.getID().toString().equals("FIX_XE-501")){
             image = "fixxe_501";
         }else if (item.getID().toString().equals("MDR-EX650AP")) {

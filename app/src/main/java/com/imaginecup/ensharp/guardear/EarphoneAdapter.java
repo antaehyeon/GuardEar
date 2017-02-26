@@ -64,21 +64,23 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         Log.d("체크박스 확인 : ", " setOnclickListener 전");
 
 
-            if (currentItem.getID().toString().equals("HSS-100")) {
-                imageView.setImageResource(R.drawable.hss_100);
-            } else if (currentItem.getID().toString().equals("STORMX_BLITZ")) {
-                imageView.setImageResource(R.drawable.stormaxblitz);
-            } else if (currentItem.getID().toString().equals("AirPods")) {
-                imageView.setImageResource(R.drawable.airpods);
-            }/*else if(currentItem.getID().toString().equals("FIX_XE-501")){
-                imageView.setImageResource(R.drawable.fixxe_501);
-            }else if (currentItem.getID().toString().equals("MDR-EX650AP")) {
-                imageView.setImageResource(R.drawable.mdr_ex650ap);
-            }else if (currentItem.getID().toString().equals("LG_GS200")) {
-                imageView.setImageResource(R.drawable.lg_gs200);
-            }else if (currentItem.getID().toString().equals("EO-IG930BBEGKR")) {
-                imageView.setImageResource(R.drawable.mo_ig930bbegkr);
-            }*/
+        if (currentItem.getID().toString().equals("HSS-100")) {
+            imageView.setImageResource(R.drawable.hss_100);
+        } else if (currentItem.getID().toString().equals("STORMX_BLITZ")) {
+            imageView.setImageResource(R.drawable.stormaxblitz);
+        } else if (currentItem.getID().toString().equals("AirPods")) {
+            imageView.setImageResource(R.drawable.airpods);
+        }else if (currentItem.getID().toString().equals("EarPods")) {
+            imageView.setImageResource(R.drawable.earpods);
+        }else if(currentItem.getID().toString().equals("FIX_XE-501")){
+            imageView.setImageResource(R.drawable.fixxe_501);
+        }else if (currentItem.getID().toString().equals("MDR-EX650AP")) {
+            imageView.setImageResource(R.drawable.mdr_ex650ap);
+        }else if (currentItem.getID().toString().equals("LG_GS200")) {
+            imageView.setImageResource(R.drawable.lg_gs200);
+        }else if (currentItem.getID().toString().equals("EO-IG930BBEGKR")) {
+            imageView.setImageResource(R.drawable.mo_ig930bbegkr);
+        }
 
 
 
