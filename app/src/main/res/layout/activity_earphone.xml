@@ -1,92 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_earphone"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/navy"
     android:orientation = "vertical"
     tools:context="com.imaginecup.ensharp.guardear.EarphoneActivity"
-    android:weightSum="10">
+    android:weightSum="100">
 
 
     <LinearLayout
         android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="15"
         android:orientation="horizontal"
-        android:weightSum="1"
-        android:layout_marginBottom="20dp">
-
-
-
-        <EditText
+        android:weightSum="100"
+        android:background="@color/navy"
+        android:gravity="center">
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.88"
-            android:inputType="textPersonName"
-            android:hint="@string/searchEar"
-            android:ems="10"
-            android:id="@+id/etSearch"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/white"
-            android:theme="@style/MyEditText"/>
+            android:layout_height="45dp"
+            android:layout_weight="90"
+            android:weightSum="100"
+            android:background="@color/white"
+            android:layout_gravity="center_vertical">
 
-
-
-        <ImageButton
-            android:textColor="@color/skyblue"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.12"
-            android:layout_alignBottom="@+id/etSearch"
-            android:onClick="getItem"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/btnSearch"
-            android:background="@drawable/search"
-            />
-
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:hint="@string/searchEar"
+                        android:textColorHint="@color/navy_light"
+                        android:id="@+id/etSearch"
+                        android:textColor="@color/black"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="25">
+                    <ImageButton
+                        android:textColor="@color/skyblue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:onClick="getItem"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/btnSearch"
+                        android:background="@drawable/search"/>
+                </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="85"
         android:orientation="vertical"
-        android:weightSum="1"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp">
+        android:weightSum="100">
 
-        <ListView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.7"
-            android:id="@+id/listViewToDo"
-            tools:listitem="@layout/row_earphone"
-            android:layout_below="@+id/etSearch"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
-            android:dividerHeight="0.4dp"/>
+            android:layout_weight="88">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:id="@+id/listViewToDo"
+                tools:listitem="@layout/row_earphone"
+                android:dividerHeight="0.5dp"/>
+        </RelativeLayout>
 
-        <Button
-            android:text="@string/btn_Next"
-            android:textColor="#ffffff"
-            android:background="@null"
-            android:visibility="invisible"
-            android:layout_width="80dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"
-            android:id="@+id/btn_Next"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:onClick="NextClick"/>
-
+            android:layout_weight="12"
+            android:gravity="center">
+            <Button
+                android:text="@string/btn_Next"
+                android:textColor="@color/navy"
+                android:background="@null"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_Next"
+                android:onClick="NextClick"/>
+        </RelativeLayout>
     </LinearLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

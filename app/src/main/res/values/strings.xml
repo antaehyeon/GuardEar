@@ -11,7 +11,7 @@
     <string name="sex_male">남자</string>
     <string name="select">선택</string>
     <string name="select_age">나이를 선택하세요</string>
-    <string name="btn_register">회원가입</string>
+    <string name="btn_register">이메일로 가입하기</string>
     <string name="btn_login">로그인</string>
     <string name="email">E-mail</string>
     <string name="findEmail">E-mail을 입력해주세요</string>

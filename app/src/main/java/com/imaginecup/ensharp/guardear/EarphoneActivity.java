@@ -24,6 +24,7 @@ public class EarphoneActivity extends Activity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Earphone> mEarphoneTable;
+    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
 
     private EarphoneAdapter mAdapter;
 
@@ -37,9 +38,8 @@ public class EarphoneActivity extends Activity {
     ListView listViewToDo;
     Button btn_Next;
 
-    private String Convertstr;
-
-    String[] strArray;
+    android.content.SharedPreferences setting;
+    android.content.SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,11 @@ public class EarphoneActivity extends Activity {
             mAdapter = new EarphoneAdapter(this, R.layout.row_earphone);
             listViewToDo = (ListView)findViewById(R.id.listViewToDo);
             listViewToDo.setAdapter(mAdapter);
+
+            mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+            setting = getSharedPreferences("setting", 0);
+            editor = setting.edit();
 
 
         } catch (MalformedURLException e) {
@@ -168,11 +173,47 @@ public class EarphoneActivity extends Activity {
     }
 
     public void checkItem(final Earphone item) {
-
+        String image=null;
 
         btn_Next.setVisibility(View.VISIBLE);
 
+
         Log.d("CheckItem", "checkItem 들어옴");
+        Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
+
+
+        mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
+        mPref.putValue("earphone_model", item.getID().toString(), "userinfo");
+        mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
+        mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
+
+        if (item.getID().toString().equals("HSS-100")) {
+            image = "hss_100";
+        } else if (item.getID().toString().equals("STORMX_BLITZ")) {
+            image = "stormaxblitz";
+        } else if (item.getID().toString().equals("AirPods")) {
+            image = "airpods";
+        }else if (item.getID().toString().equals("EarPods")) {
+            image = "earpods";
+        }else if(item.getID().toString().equals("FIX_XE-501")){
+            image = "fixxe_501";
+        }else if (item.getID().toString().equals("MDR-EX650AP")) {
+            image = "mdr_ex650ap";
+        }else if (item.getID().toString().equals("LG_GS200")) {
+            image = "lg_gs200.png";
+        }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
+            image = "mo_ig930bbegkr";
+        }
+
+        mPref.putValue("earphone_image", image, "userinfo");
+
+        Log.d("이어폰 정보", item.getCompany().toString());
+        Log.d("이어폰 정보", item.getID().toString());
+        Log.d("이어폰 정보", item.getImpedance().toString());
+        Log.d("이어폰 정보", item.getSoundPressure().toString());
+        Log.d("이어폰 정보", image);
+
+
 
         //btn_Next.setVisibility(View.VISIBLE);
 
@@ -181,6 +222,7 @@ public class EarphoneActivity extends Activity {
         }
 
         // Set the item as completed and update it in the table
+
         item.setComplete(true);
 
         /*AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
@@ -205,12 +247,12 @@ public class EarphoneActivity extends Activity {
         };
         runAsyncTask(task);
                 */
-
     }
 
     public void NextClick(View view){
 
         if(btn_Next.isPressed()) {
+
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
 
