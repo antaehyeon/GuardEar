@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ServiceData {
     private Context mContext;
+    public static Context sContext;
 
     public ServiceData (Context context) {
         this.mContext = context;
@@ -17,6 +18,16 @@ public class ServiceData {
 
     public boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean sisMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) sContext.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;

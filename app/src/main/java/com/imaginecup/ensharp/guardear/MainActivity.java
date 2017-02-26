@@ -1,13 +1,17 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,10 +33,14 @@ public class MainActivity extends AppCompatActivity {
     public static TextView decibelTxt;
     public static TextView volumeTxt;
     public static TextView isPlayingTxt;
+    public static FrameLayout mRedCircleLayout;
+    public static FrameLayout mSkyCircleLayout;
+    public static FrameLayout mNormalCircleLayout;
+    public static FrameLayout mCircleParentLayout;
 
     private static final String BLUETOOTH_HEADSET_ACTION = "android.bluetooth.headset.action.STATE_CHANGED";
     private static final String BLUETOOTH_HEADSET_STATE = "android.bluetooth.headset.extra.STATE";
-
+    private static final int LIMIT_DECIBEL= 80;
     private static IntentFilter mIntentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     private static BroadcastReceiver mBroadcastReceiver = null;
     private BluetoothAdapter mBluetoothAdapter;
@@ -40,10 +50,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean isServiceOn;
     public SharedPreferences pref;
     private ServiceData mServiceData;
+    public static ServiceData sServiceData;
     private Context mContext;
     private AudioManager mAudiomanager;
-
     private Toolbar mToolbar;
+
+    private static final String TAG = "AppPermission";
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +70,16 @@ public class MainActivity extends AppCompatActivity {
         decibelTxt = (TextView) findViewById(R.id.decibelsTxt);
         volumeTxt = (TextView) findViewById(R.id.volumeTxt);
         isPlayingTxt = (TextView) findViewById(R.id.isPlayingTxt);
+        mNormalCircleLayout = (FrameLayout) findViewById(R.id.normalCircleLayout);
+        mSkyCircleLayout = (FrameLayout) findViewById(R.id.skyCircleLayout);
+        mRedCircleLayout = (FrameLayout) findViewById(R.id.redCircleLayout);
+        mCircleParentLayout = (FrameLayout) findViewById(R.id.circleParentLayout);
+
         serviceBtn = (Button) findViewById(R.id.serviceBtn);
         mAudiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mContext = this;
         mServiceData = new ServiceData(mContext);
+        sServiceData = new ServiceData(mContext);
         pref = new SharedPreferences(this);
         setMainUiInfo();
         serviceBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,12 +90,18 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(),"서비스 시작",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, MainService.class);
                     serviceBtn.setText("서비스 종료");
+                    changeCircle("sky");
                     startService(intent);
                 } else {
                     //Toast.makeText(getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, MainService.class);
+                    Intent intent_mainservice = new Intent(MainActivity.this, MainService.class);
+                    Intent intent_listeningservice = new Intent(MainActivity.this, ListeningService.class);
+                    Intent intent_decibelservice = new Intent(MainActivity.this, DecibelService.class);
+                    stopService(intent_mainservice);
+                    stopService(intent_listeningservice);
+                    stopService(intent_decibelservice);
                     serviceBtn.setText("서비스 시작");
-                    stopService(intent);
+                    changeCircle("normal");
                 }
             }
         });
@@ -148,9 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (!mServiceData.isMyServiceRunning(MainService.class)) {
             serviceBtn.setText("서비스 시작");
+            changeCircle("normal");
             Log.i("서비스 러닝여부", "X");
         } else {
             serviceBtn.setText("서비스 종료");
+            changeCircle("sky");
             Log.i("서비스 러닝여부", "O");
         }
 
@@ -213,9 +240,18 @@ public class MainActivity extends AppCompatActivity {
             case "현재 데시벨":
                 //Log.i("메인으로 넘어온 값", textContent + "?");
                 if (decibelTxt != null) {
-                    decibelTxt.setText(textContent);
+                    if(sServiceData.isMyServiceRunning(MainService.class)){
+                        if(Integer.parseInt(textContent)>LIMIT_DECIBEL) {
+                            changeCircle("red");
+                        } else {
+                            changeCircle("sky");
+                        }
+                        //Log.i("뜨는 값",textContent);
+                        decibelTxt.setText(textContent);
+                    } else {
+                        changeCircle("normal");
+                    }
                 }
-                break;
             case "현재 음량":
                 if (volumeTxt != null) {
                     volumeTxt.setText(textContent);
@@ -223,6 +259,23 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public static void changeCircle(String mode) {
+        if (mode.equals("normal")) {
+            mNormalCircleLayout.setVisibility(View.VISIBLE);
+            mSkyCircleLayout.setVisibility(View.INVISIBLE);
+            mRedCircleLayout.setVisibility(View.INVISIBLE);
+        } else if (mode.equals("sky")) {
+            mNormalCircleLayout.setVisibility(View.INVISIBLE);
+            mSkyCircleLayout.setVisibility(View.VISIBLE);
+            mRedCircleLayout.setVisibility(View.INVISIBLE);
+        } else {
+            mNormalCircleLayout.setVisibility(View.INVISIBLE);
+            mSkyCircleLayout.setVisibility(View.INVISIBLE);
+            mRedCircleLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -251,5 +304,51 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Permission check.
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission() {
+        Log.i(TAG, "CheckPermission : " + checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Explain to the user why we need to write the permission.
+                Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show();
+            }
+
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSION_REQUEST_STORAGE);
+
+            // MY_PERMISSION_REQUEST_STORAGE is an
+            // app-defined int constant
+
+        } else {
+            Log.e(TAG, "permission deny");
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! do the
+                    // calendar task you need to do.
+                } else {
+                    Log.d(TAG, "Permission always deny");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+        }
     }
 }
