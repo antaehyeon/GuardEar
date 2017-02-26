@@ -1,12 +1,12 @@
 package com.imaginecup.ensharp.guardear;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +24,11 @@ import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-public class MainLoginActivity extends Activity {
+public class MainLoginActivity extends AppCompatActivity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<ToDoItem> mToDoTable;
@@ -53,7 +54,8 @@ public class MainLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // facebookSDK 초기화 작업
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        //FacebookSdk.sdkInitialize(this.getApplicationContext());
+        FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
 
 
@@ -66,10 +68,24 @@ public class MainLoginActivity extends Activity {
         join_email = (Button) findViewById(R.id.join_email);
 
 
-        mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+        //mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+        //setting = getSharedPreferences("setting", 0);
+        //editor = setting.edit();
 
-        setting = getSharedPreferences("setting", 0);
-        editor = setting.edit();
+        try {
+            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", MainLoginActivity.this);
+
+            mToDoTable = mClient.getTable(ToDoItem.class);
+            mAdapter = new ToDoItemAdapter(this, R.layout.row_earphone);
+            mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+            setting = getSharedPreferences("setting", 0);
+            editor = setting.edit();
+
+
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
 
 
     }
@@ -140,6 +156,7 @@ public class MainLoginActivity extends Activity {
                                                 });
                                             }
                                             catch (final Exception e) {
+
                                                 createAndShowDialogFromTask(e, "Error");
                                             }
                                             return null;
@@ -148,7 +165,9 @@ public class MainLoginActivity extends Activity {
 
                                     runAsyncTask(task);
 
-                                    Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+
+                                    //Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+                                    Intent intent = new Intent(MainLoginActivity.this, EarphoneActivity.class);
                                     startActivity(intent);
 
                                     finish();
@@ -257,7 +276,8 @@ public class MainLoginActivity extends Activity {
 
         builder.setMessage(message);
         builder.setTitle(title);
-        builder.create().show();
+        //builder.create().show();
+        MainLoginActivity.this.finish();
     }
 
     /**
