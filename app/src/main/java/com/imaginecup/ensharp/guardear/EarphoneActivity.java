@@ -200,7 +200,7 @@ public class EarphoneActivity extends Activity {
         }else if (item.getID().toString().equals("MDR-EX650AP")) {
             image = "mdr_ex650ap";
         }else if (item.getID().toString().equals("LG_GS200")) {
-            image = "lg_gs200.png";
+            image = "lg_gs200";
         }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
             image = "mo_ig930bbegkr";
         }
