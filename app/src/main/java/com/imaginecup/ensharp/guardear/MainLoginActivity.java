@@ -1,12 +1,12 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-public class MainLoginActivity extends AppCompatActivity {
+public class MainLoginActivity extends Activity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<ToDoItem> mToDoTable;
@@ -140,7 +140,7 @@ public class MainLoginActivity extends AppCompatActivity {
                                                 });
                                             }
                                             catch (final Exception e) {
-                                                //createAndShowDialogFromTask(e, "Error");
+                                                createAndShowDialogFromTask(e, "Error");
                                             }
                                             return null;
                                         }

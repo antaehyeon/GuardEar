@@ -1,5 +1,6 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +33,7 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
 
 
     private MobileServiceClient mClient;
