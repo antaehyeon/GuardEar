@@ -13,8 +13,10 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by Semin on 2017-02-20.
@@ -37,8 +39,38 @@ public class MyInfo extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("내 정보");
         mPref = new SharedPreferences(this);
+
+        settingMyInfo();
+        settingButton();
+    }
+
+    public void settingMyInfo() {
+        TextView nameTxt = (TextView) findViewById(R.id.nameTxt);
+        TextView ageTxt = (TextView) findViewById(R.id.ageTxt);
+        TextView earphone_companyTxt = (TextView) findViewById(R.id.earphone_companyTxt);
+        TextView earphone_modelTxt = (TextView) findViewById(R.id.earphone_modelTxt);
+        TextView earphone_impedanceTxt = (TextView) findViewById(R.id.earphone_impedanceTxt);
+        TextView earphone_soundpressureTxt = (TextView) findViewById(R.id.earphone_soundpressureTxt);
+        Button maleBtn = (Button) findViewById(R.id.manBtn);
+        Button femaleBtn = (Button) findViewById(R.id.womanBtn);
+
+        nameTxt.setText(mPref.getValue("name", "성민경", "userinfo"));
+        ageTxt.setText(mPref.getValue("age", "23", "userinfo"));
+        earphone_companyTxt.setText(mPref.getValue("earphone_company", "LG", "userinfo"));
+        earphone_modelTxt.setText(mPref.getValue("earphone_model", "HSS-100", "userinfo"));
+        earphone_soundpressureTxt.setText(mPref.getValue("earphone_soundpressure", "98", "userinfo"));
+        earphone_impedanceTxt.setText(mPref.getValue("earphone_impedance", "16", "userinfo"));
+
+        if (mPref.getValue("sex", "male", "userinfo").equals("male")) {
+            maleBtn.setBackgroundResource(R.drawable.chosen_button);
+            femaleBtn.setBackgroundResource(R.drawable.not_chosen_button);
+        } else {
+            maleBtn.setBackgroundResource(R.drawable.not_chosen_button);
+            femaleBtn.setBackgroundResource(R.drawable.chosen_button);
+        }
+
         mEarphoneImage = (ImageView) findViewById(R.id.earphoneImg);
-        mEarphonePicture = resizeImage("earphone", 190, 190);
+        mEarphonePicture = resizeImage(mPref.getValue("earphone_image", "hss_100", "userinfo"), 190, 190);
         mEarphoneImage.setImageBitmap(getCircleBitmap(mEarphonePicture));
     }
 
