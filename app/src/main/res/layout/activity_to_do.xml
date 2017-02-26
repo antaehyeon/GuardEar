@@ -72,6 +72,7 @@
             android:ems="10"
             android:hint="@string/email"
             android:textColorHint="@color/navy_middle"
+            android:textColor="@color/white"
             android:layout_alignParentStart="true"
             android:background="@null"/>
         <requestFocus />
@@ -110,6 +111,7 @@
                 android:ems="10"
                 android:hint="Name"
                 android:textColorHint="@color/navy_middle"
+                android:textColor="@color/white"
                 android:layout_marginLeft="8dp"
                 android:background="@null"/>
 
@@ -164,6 +166,7 @@
             android:ems="10"
             android:hint="@string/password"
             android:textColorHint="@color/navy_middle"
+            android:textColor="@color/white"
             android:layout_below="@+id/etEmail"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="8dp"
@@ -207,6 +210,7 @@
             android:ems="10"
             android:hint="@string/password2"
             android:textColorHint="@color/navy_middle"
+            android:textColor="@color/white"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="8dp"
@@ -252,6 +256,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_marginRight="40dp"
                 android:text="MALE"
                 android:id="@+id/maile"/>
@@ -259,6 +264,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="FEMALE"
                 android:id="@+id/female"/>
         </RadioGroup>

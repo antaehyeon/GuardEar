@@ -91,6 +91,8 @@ public class ToDoActivity extends Activity {
     private String select_sex;
 
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
+    android.content.SharedPreferences setting;
+    android.content.SharedPreferences.Editor editor;
 
     Button btn_check;
     String convertStr;
@@ -123,6 +125,12 @@ public class ToDoActivity extends Activity {
 
         // Initialize the progress bar
         mProgressBar.setVisibility(ProgressBar.GONE);
+
+        mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -186,7 +194,6 @@ public class ToDoActivity extends Activity {
             // Create an adapter to bind the items with the view
             mAdapter = new ToDoItemAdapter(this, R.layout.row_list_to_do);
 
-            mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
 
             // Load the items from the Mobile Service
             //refreshItemsFromTable();
@@ -278,6 +285,8 @@ public class ToDoActivity extends Activity {
                 mTextNewToDOName.getText().toString(), select_age, select_sex);
 
         Log.d("태그프리퍼런스저장", item.toString());
+        Log.d("태그프리퍼런스저장", mTextNewToDo.getText().toString());
+
         Log.d("태그", "정보 서버로 저장 ");
 
         // 회원가입 시 사용자 정보 임시 저장
@@ -285,7 +294,7 @@ public class ToDoActivity extends Activity {
         mPref.putValue("pw", mTextNewToDo.getText().toString(), "userinfo");
         mPref.putValue("age", select_age, "userinfo");
         mPref.putValue("sex", select_sex, "userinfo");
-        mPref.putValue("nickname", mTextNewToDOName.getText().toString(), "userinfo");
+        mPref.putValue("name", mTextNewToDOName.getText().toString(), "userinfo");
 
 
         //item.setText(mTextNewToDo.getText().toString());

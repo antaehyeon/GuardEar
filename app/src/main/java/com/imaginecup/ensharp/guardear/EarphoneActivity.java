@@ -173,12 +173,45 @@ public class EarphoneActivity extends Activity {
     }
 
     public void checkItem(final Earphone item) {
-
+        String image=null;
 
         btn_Next.setVisibility(View.VISIBLE);
 
+
         Log.d("CheckItem", "checkItem 들어옴");
         Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
+
+
+        mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
+        mPref.putValue("earphone_model", item.getID().toString(), "userinfo");
+        mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
+        mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
+
+        if (item.getID().toString().equals("HSS-100")) {
+            image = "hss_100";
+        } else if (item.getID().toString().equals("STORMX_BLITZ")) {
+            image = "stormaxblitz";
+        } else if (item.getID().toString().equals("AirPods")) {
+            image = "airpods";
+        }else if(item.getID().toString().equals("FIX_XE-501")){
+            image = "fixxe_501";
+        }else if (item.getID().toString().equals("MDR-EX650AP")) {
+            image = "mdr_ex650ap";
+        }else if (item.getID().toString().equals("LG_GS200")) {
+            image = "lg_gs200.png";
+        }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
+            image = "mo_ig930bbegkr";
+        }
+
+        mPref.putValue("earphone_image", image, "userinfo");
+
+        Log.d("이어폰 정보", item.getCompany().toString());
+        Log.d("이어폰 정보", item.getID().toString());
+        Log.d("이어폰 정보", item.getImpedance().toString());
+        Log.d("이어폰 정보", item.getSoundPressure().toString());
+        Log.d("이어폰 정보", image);
+
+
 
         //btn_Next.setVisibility(View.VISIBLE);
 
@@ -187,6 +220,7 @@ public class EarphoneActivity extends Activity {
         }
 
         // Set the item as completed and update it in the table
+
         item.setComplete(true);
 
         /*AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
@@ -216,14 +250,6 @@ public class EarphoneActivity extends Activity {
     public void NextClick(View view){
 
         if(btn_Next.isPressed()) {
-
-
-            /*mPref.putValue("earphone_company", view.getId() , mTextNewToDoID.getText().toString(), "userinfo");
-            mPref.putValue("earphone_model", mTextNewToDoID.getText().toString(), "userinfo");
-            mPref.putValue("earphone_impedance", mTextNewToDoID.getText().toString(), "userinfo");
-            mPref.putValue("earphone_soundpressure", mTextNewToDoID.getText().toString(), "userinfo");
-            mPref.putValue("earphone_image", mTextNewToDoID.getText().toString(), "userinfo");
-*/
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

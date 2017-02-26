@@ -55,6 +55,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         final TextView name = (TextView)row.findViewById(R.id.name);
         final TextView company = (TextView)row.findViewById(R.id.company);
         final ImageView imageView = (ImageView)row.findViewById(R.id.imageView);
+        String imageview;
 
         name.setText(currentItem.getID());
         company.setText(currentItem.getCompany());
@@ -67,7 +68,9 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                 imageView.setImageResource(R.drawable.hss_100);
             } else if (currentItem.getID().toString().equals("STORMX_BLITZ")) {
                 imageView.setImageResource(R.drawable.stormaxblitz);
-            } else if(currentItem.getID().toString().equals("FIX_XE-501")){
+            } else if (currentItem.getID().toString().equals("AirPods")) {
+                imageView.setImageResource(R.drawable.airpods);
+            }/*else if(currentItem.getID().toString().equals("FIX_XE-501")){
                 imageView.setImageResource(R.drawable.fixxe_501);
             }else if (currentItem.getID().toString().equals("MDR-EX650AP")) {
                 imageView.setImageResource(R.drawable.mdr_ex650ap);
@@ -75,9 +78,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                 imageView.setImageResource(R.drawable.lg_gs200);
             }else if (currentItem.getID().toString().equals("EO-IG930BBEGKR")) {
                 imageView.setImageResource(R.drawable.mo_ig930bbegkr);
-            }else if (currentItem.getID().toString().equals("AirPods")) {
-                imageView.setImageResource(R.drawable.airpods);
-            }
+            }*/
 
 
 

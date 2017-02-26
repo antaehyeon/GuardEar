@@ -103,13 +103,19 @@ public class MainLoginActivity extends AppCompatActivity {
                                     Log.d("TAG", "페이스북 이름 : " + name);
                                     Log.d("TAG", "페이스북 성별 : " + gender);
 
+
                                     // Create a new item
                                     final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
 
                                     Log.d("페이스북 서버", "정보 서버로 저장 ");
 
                                     // 페이스북 사용자 정보 저장(프리퍼런스)
-                                    mPref.putValue("Information", item.toString() , "User");
+                                    mPref.putValue("id", email, "userinfo");
+                                    mPref.putValue("pw", pw, "userinfo");
+                                    mPref.putValue("age", age, "userinfo");
+                                    mPref.putValue("sex", gender, "userinfo");
+                                    mPref.putValue("name", name, "userinfo");
+
                                     Log.d("페이스북 서버", item.toString());
 
                                     // 내부 데이터 초기화
