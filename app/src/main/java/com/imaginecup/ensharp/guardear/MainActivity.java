@@ -152,9 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
             pref.putValue("ohm","35","earphone");
             pref.putValue("spl","97","earphone");
-            pref.putValue("autoControl",false,"setting");
         }
-
     }
 
     public void setMainUiInfo() {

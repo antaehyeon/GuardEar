@@ -101,7 +101,7 @@ public class DecibelServiceThread extends Thread {
         double V, mW, dB, temp;
         int decibel;
         int currentVolume = Integer.parseInt(VolumeBroadcastReceiver.currentVolume);
-        boolean isAutoControl = mPref.getValue("autoControl", true, "setting");
+        boolean isAutoControl = mPref.getValue("autovolume", false, "setting");
         //Log.i("getDecibel()함수", currentVolume+"");
         if (!isAutoControl) {
             //Log.i("볼륨컨트롤x", "dd");
