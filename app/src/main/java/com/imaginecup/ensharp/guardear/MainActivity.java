@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothHeadset mBluetoothHeadset;
 
+    private ImageButton decibelInfoBtn;
     private Button serviceBtn;
     public boolean isServiceOn;
     public SharedPreferences pref;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mSkyCircleLayout = (FrameLayout) findViewById(R.id.skyCircleLayout);
         mRedCircleLayout = (FrameLayout) findViewById(R.id.redCircleLayout);
         mCircleParentLayout = (FrameLayout) findViewById(R.id.circleParentLayout);
-
+        decibelInfoBtn = (ImageButton) findViewById(R.id.decibelsInfoBtn);
         serviceBtn = (Button) findViewById(R.id.serviceBtn);
         mAudiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mContext = this;
@@ -105,11 +106,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        decibelInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DecibelInfoActivity.class);
+                startActivity(intent);
+            }
+        });
         decibelDataSave();
-
+        TextView mainTitleTxt = (TextView) findViewById(R.id.mainTitleTxt);
+        mainTitleTxt.setText("Guardear");
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
-        mToolbar.setTitle("safe your ear");
-        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle(null);
+        //mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
     }
 
