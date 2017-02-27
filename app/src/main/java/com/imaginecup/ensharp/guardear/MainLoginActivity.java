@@ -109,7 +109,8 @@ public class MainLoginActivity extends AppCompatActivity {
 
                                 try {
                                     // 이메일, 이름, 성별, 나이 비밀번호
-                                    String email = object.getString("email");
+                                    //String email = object.getString("email");
+                                    String email = "test@naver.com";
                                     String name = object.getString("name");
                                     String gender = object.getString("gender");
                                     String pw = "0000";

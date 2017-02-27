@@ -78,6 +78,9 @@
         <activity android:name=".MyInfo"></activity>
         <activity android:name=".WeeklyAnalysisActivity"></activity>
         <activity android:name=".WeeklyInfoActivity"></activity>
+        <activity
+            android:name=".TimeAnalysisActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"></activity>
         // HYEON ACTIVITY
         <activity
             android:name=".AudioMetryActivity"

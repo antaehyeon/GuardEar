@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -37,7 +38,10 @@ public class MyInfo extends AppCompatActivity {
         setContentView(R.layout.activity_myinfo);
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.settingstoolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("내 정보");
+        TextView myInfoTitleTxt = (TextView) findViewById(R.id.myInfoTitleTxt);
+        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        myInfoTitleTxt.setText("내 정보");
         mPref = new SharedPreferences(this);
 
         settingMyInfo();
@@ -155,5 +159,15 @@ public class MyInfo extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
