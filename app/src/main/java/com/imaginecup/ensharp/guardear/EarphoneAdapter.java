@@ -64,22 +64,28 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         Log.d("체크박스 확인 : ", " setOnclickListener 전");
 
 
-        if (currentItem.getID().toString().equals("HSS-100")) {
-            imageView.setImageResource(R.drawable.hss_100);
-        } else if (currentItem.getID().toString().equals("STORMX_BLITZ")) {
-            imageView.setImageResource(R.drawable.stormaxblitz);
-        } else if (currentItem.getID().toString().equals("AirPods")) {
-            imageView.setImageResource(R.drawable.airpods);
-        }else if (currentItem.getID().toString().equals("EarPods")) {
-            imageView.setImageResource(R.drawable.earpods);
-        }else if(currentItem.getID().toString().equals("FIX_XE-501")){
-            imageView.setImageResource(R.drawable.fixxe_501);
-        }else if (currentItem.getID().toString().equals("MDR-EX650AP")) {
-            imageView.setImageResource(R.drawable.mdr_ex650ap);
-        }else if (currentItem.getID().toString().equals("LG_GS200")) {
-            imageView.setImageResource(R.drawable.lg_gs200);
+        if (currentItem.getID().toString().equals("EO-BG920BBKG")) {
+            imageView.setImageResource(R.drawable.eo_bg920bbkg);
+        } else if (currentItem.getID().toString().equals("EO-EG920BWEG")) {
+            imageView.setImageResource(R.drawable.eo_eg920bweg);
+        }else if (currentItem.getID().toString().equals("EO-BN920CFKG")) {
+            imageView.setImageResource(R.drawable.eo_bn920cfkg);
+        } else if (currentItem.getID().toString().equals("EO-BG930CBKGKR")) {
+            imageView.setImageResource(R.drawable.eo_bg930bkgkr);
+        }else if (currentItem.getID().toString().equals("EO-BG935CBKGKR")) {
+            imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
+        }/*else if(currentItem.getID().toString().equals("EO-HS1393WEG")){
+            imageView.setImageResource(R.drawable.eo_hs1303weg);
+        }*/else if (currentItem.getID().toString().equals("EO-IA510BLKGKR")) {
+            imageView.setImageResource(R.drawable.eo_ia510blkgkr);
         }else if (currentItem.getID().toString().equals("EO-IG930BBEGKR")) {
-            imageView.setImageResource(R.drawable.mo_ig930bbegkr);
+            imageView.setImageResource(R.drawable.eo_ig930bbegkr);
+        }else if (currentItem.getID().toString().equals("EO-MN900KWKG")) {
+            imageView.setImageResource(R.drawable.eo_mn900kwkg);
+        }else if (currentItem.getID().toString().equals("EO-MN910VWKG")) {
+            imageView.setImageResource(R.drawable.eo_mn910vwkg);
+        }else if (currentItem.getID().toString().equals("EO-MG920BBKG")) {
+            imageView.setImageResource(R.drawable.eo_mg920bbkg);
         }
 
 

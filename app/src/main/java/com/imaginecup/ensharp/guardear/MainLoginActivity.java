@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -50,6 +51,14 @@ public class MainLoginActivity extends AppCompatActivity {
     Button join_email;
 
 
+    String email;
+    String name;
+    String gender;
+    String pw;
+    String age;
+
+    final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +66,7 @@ public class MainLoginActivity extends AppCompatActivity {
         //FacebookSdk.sdkInitialize(this.getApplicationContext());
         FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
+
 
 
         //로그인 요청 부분
@@ -67,11 +77,6 @@ public class MainLoginActivity extends AppCompatActivity {
         btn_email = (Button) findViewById(R.id.btn_email);
         join_email = (Button) findViewById(R.id.join_email);
 
-
-        //mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
-        //setting = getSharedPreferences("setting", 0);
-        //editor = setting.edit();
-
         try {
             mClient = new MobileServiceClient("https://safeear.azurewebsites.net", MainLoginActivity.this);
 
@@ -81,6 +86,39 @@ public class MainLoginActivity extends AppCompatActivity {
 
             setting = getSharedPreferences("setting", 0);
             editor = setting.edit();
+
+
+
+            String auto_id = mPref.getValue("id", "", "userinfo");
+            String auto_pw = mPref.getValue("pw", "", "userinfo");
+
+            // Create a new item
+            //final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
+
+            Log.d("자동로그인", auto_id);
+            Log.d("자동로그인", auto_pw);
+            //Log.d("자동로그인", item.toString());
+            Log.d("자동로그인", "test : "+ item.getId());
+
+
+
+
+
+            if(item.toString().equals("null/null/null/null/null")) {
+            }
+            else if(auto_id.equals(item.getId().toString())&& auto_pw.equals(item.getText().toString())){
+
+                Toast.makeText(MainLoginActivity.this, "로그인 되었습니다", Toast.LENGTH_SHORT).show();
+                Log.d("로그인", "로그인 성공");
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                startActivity(intent);
+                finish();
+            }
+            else{
+                Log.d("자동로그인", "일치 값 없음");
+            }
+
 
 
         } catch (MalformedURLException e) {
@@ -109,20 +147,18 @@ public class MainLoginActivity extends AppCompatActivity {
 
                                 try {
                                     // 이메일, 이름, 성별, 나이 비밀번호
-                                    //String email = object.getString("email");
-                                    String email = "test@naver.com";
-                                    String name = object.getString("name");
-                                    String gender = object.getString("gender");
-                                    String pw = "0000";
-                                    String age = "23";
+                                    email = object.getString("email");
+                                    name = object.getString("name");
+                                    gender = object.getString("gender");
+                                    pw = "0000";
+                                    age = "23";
 
                                     Log.d("TAG", "페이스북 이메일 : " + email);
                                     Log.d("TAG", "페이스북 이름 : " + name);
                                     Log.d("TAG", "페이스북 성별 : " + gender);
 
-
                                     // Create a new item
-                                    final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
+                                    //final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
 
                                     Log.d("페이스북 서버", "정보 서버로 저장 ");
 
@@ -134,6 +170,8 @@ public class MainLoginActivity extends AppCompatActivity {
                                     mPref.putValue("name", name, "userinfo");
 
                                     Log.d("페이스북 서버", item.toString());
+
+
 
                                     // 내부 데이터 초기화
                                     item.setComplete(false);
@@ -168,7 +206,7 @@ public class MainLoginActivity extends AppCompatActivity {
 
 
                                     //Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
-                                    Intent intent = new Intent(MainLoginActivity.this, EarphoneActivity.class);
+                                    Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
                                     startActivity(intent);
 
                                     finish();

@@ -78,6 +78,47 @@ public class EarphoneActivity extends Activity {
             setting = getSharedPreferences("setting", 0);
             editor = setting.edit();
 
+            // create a new item
+            final Earphone earphoneItem = new Earphone();
+
+            earphoneItem.setID(mEtSearch.getText().toString());
+            earphoneItem.setComplete(false);
+
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        // 데이터를 가져오는 리스트
+                        final List<Earphone> result = mEarphoneTable.execute().get();
+
+                        Log.d("이어폰", "중복확인 result 값 받아오기");
+                        Log.d("이어폰", "결과값 확인 : " + result.toString());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Log.d("이어폰", "런 들어옴");
+
+                                if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                                listViewToDo.setAdapter(mAdapter);
+
+                                for(Earphone item : result){
+
+                                    mAdapter.add(item);
+                                }
+                                Looper.loop();
+                            }
+                        });
+                    } catch (final Exception e){
+                        //createAndShowDialogFromTask(e, "Error");
+                    }
+                    return null;
+                }
+            };
+            runAsyncTask(task);
+
 
         } catch (MalformedURLException e) {
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -86,7 +127,7 @@ public class EarphoneActivity extends Activity {
 
 
     // 정보 가져오기
-    public void getItem(View view){
+   /* public void getItem(View view){
         Log.d("이어폰", "getItem() 함수 들어옴");
 
         // create a new item
@@ -98,11 +139,9 @@ public class EarphoneActivity extends Activity {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-
                 try {
                     // 데이터를 가져오는 리스트
                     final List<Earphone> result = mEarphoneTable.execute().get();
-
 
                     Log.d("이어폰", "중복확인 result 값 받아오기");
                     Log.d("이어폰", "결과값 확인 : " + result.toString());
@@ -117,17 +156,10 @@ public class EarphoneActivity extends Activity {
 
                             listViewToDo.setAdapter(mAdapter);
 
-                            //// 여기서 리스트 뷰 보여주기
-                            //if(mEtSearch.length() ==0){
-                            //    mAdapter.addAll();
-                            //    Log.d("이어폰", "if 들어옴");
-                            //}
-                            //else{
-                                for(Earphone item : result){
+                            for(Earphone item : result){
 
-                                    mAdapter.add(item);
-                                }
-                            //}
+                                mAdapter.add(item);
+                            }
                             Looper.loop();
                         }
                     });
@@ -138,9 +170,8 @@ public class EarphoneActivity extends Activity {
             }
         };
         runAsyncTask(task);
-
     }
-
+    */
 
     // 쿼리하여 완료로 표시되지 않은 모든 항목 반환 ( 바인딩을 위해 항목이 어댑터에 추가됨)
     private void refreshItemsFromTable() {
@@ -187,8 +218,8 @@ public class EarphoneActivity extends Activity {
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
 
-        if (item.getID().toString().equals("HSS-100")) {
-            image = "hss_100";
+        /*if (item.getID().toString().equals("HSS-100")) {
+            image = "hss-100";
         } else if (item.getID().toString().equals("STORMX_BLITZ")) {
             image = "stormaxblitz";
         } else if (item.getID().toString().equals("AirPods")) {
@@ -203,8 +234,31 @@ public class EarphoneActivity extends Activity {
             image = "lg_gs200";
         }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
             image = "mo_ig930bbegkr";
-        }
+        }*/
 
+        if (item.getID().toString().equals("EO-BG920BBKG")) {
+            image = "eo_bg920bbkg";
+        } else if (item.getID().toString().equals("EO-EG920BWEG")) {
+            image = "eo_eg920bweg";
+        }else if (item.getID().toString().equals("EO-BN920CFKG")) {
+            image = "eo_bn920cfkg";
+        } else if (item.getID().toString().equals("EO-BG930CBKGKR")) {
+            image = "eo_bg930bkgkr";
+        }else if (item.getID().toString().equals("EO-BG935CBKGKR")) {
+            image = "eo_bg935cbkgkr";
+        }/*else if(item.getID().toString().equals("EO-HS1393WEG")){
+            image = "eo_hs1303weg";
+        }*/else if (item.getID().toString().equals("EO-IA510BLKGKR")) {
+            image = "eo_ia510blkgkr";
+        }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
+            image = "eo_ig930bbegkr";
+        }else if (item.getID().toString().equals("EO-MN900KWKG")) {
+            image = "eo_mn900kwkg";
+        }else if (item.getID().toString().equals("EO-MN910VWKG")) {
+            image = "eo_mn910vwkg";
+        }else if (item.getID().toString().equals("EO-MG920BBKG")) {
+            image = "eo_mg920bbkg";
+        }
         mPref.putValue("earphone_image", image, "userinfo");
 
         Log.d("이어폰 정보", item.getCompany().toString());

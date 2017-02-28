@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="15"
+        android:layout_weight="10"
         android:gravity="center"
         android:id="@+id/layout">
 
@@ -17,8 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:scaleX="1"
-            android:scaleY="1"/>
+            android:layout_marginLeft="6dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"/>
 
     </LinearLayout>
 
@@ -27,14 +28,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="20">
-
-
         <ImageView
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:id="@+id/imageView"/>
-
-
     </LinearLayout>
 
 
@@ -58,10 +55,10 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
+            android:layout_weight="4"
             android:layout_gravity="left"
             android:textSize="12dp"
-            android:gravity="center_vertical"/>
+            android:gravity="top"/>
 
     </LinearLayout>
 
