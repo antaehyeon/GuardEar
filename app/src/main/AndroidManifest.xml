@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.imaginecup.ensharp.guardear">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.hardware.wifi"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.hardware.wifi" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -75,9 +75,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MyInfo"></activity>
-        <activity android:name=".WeeklyAnalysisActivity"></activity>
-        <activity android:name=".WeeklyInfoActivity"></activity>
+        <activity android:name=".MyInfo" />
+        <activity android:name=".WeeklyAnalysisActivity" />
+        <activity android:name=".WeeklyInfoActivity" />
         // HYEON ACTIVITY
         <activity
             android:name=".AudioMetryActivity"
@@ -91,7 +91,10 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity android:name=".ToDoActivity" />
-        <activity android:name=".EarphoneActivity" />
+        <activity android:name=".EarphoneActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
 
         <!-- [facebooklogin] -->
         <meta-data
@@ -103,7 +106,14 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".ChangePWActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MainLoginActivity"></activity>
+        <activity android:name=".MainLoginActivity" />
+        <activity android:name=".CompanyTypeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

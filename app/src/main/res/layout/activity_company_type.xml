@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_earphone"
+    android:id="@+id/activity_company_type"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation = "vertical"
+    android:background="@color/navy"
     tools:context="com.imaginecup.ensharp.guardear.EarphoneActivity"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:onClick="linearOnClick">
 
 
     <LinearLayout
@@ -23,43 +25,45 @@
             android:layout_height="45dp"
             android:layout_weight="90"
             android:weightSum="100"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/edittext_style">
+            android:layout_gravity="top"
+            android:background="@drawable/edittext_style"
+            android:layout_marginTop="20dp">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="80">
+                <EditText
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="80">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="textPersonName"
-                        android:hint="@string/searchEar"
-                        android:textColorHint="@color/navy_light"
-                        android:id="@+id/etSearch"
-                        android:textColor="@color/black"
-                        android:layout_marginLeft="10dp"
-                        android:background="@null"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
+                    android:inputType="textPersonName"
+                    android:hint="@string/searchEar"
+                    android:textColorHint="@color/navy_light"
+                    android:id="@+id/etSearch"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="25">
+                <ImageButton
+                    android:textColor="@color/skyblue"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="25">
-                    <ImageButton
-                        android:textColor="@color/skyblue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginLeft="10dp"
-                        android:onClick="getItem"
-                        android:layout_alignParentEnd="true"
-                        android:id="@+id/btnSearch"
-                        android:background="@drawable/search"/>
-                </RelativeLayout>
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="getItem"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/btnSearch"
+                    android:background="@drawable/search"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,10 +74,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SAMSUNG"
+            android:text="회사명으로 검색"
             android:textColor="@color/white"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="30dp"/>
 
     </LinearLayout>
 
@@ -81,25 +85,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80"
+        android:layout_weight="85"
         android:orientation="vertical"
         android:weightSum="100">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="88">
-
+            android:layout_weight="95">
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="90"
-                android:id="@+id/listViewToDo"
-                tools:listitem="@layout/row_earphone"
+                android:background="@color/gray"
+                android:id="@+id/listViewCompany"
+                tools:listitem="@layout/row_earphone_company"
                 android:dividerHeight="0.8dp"
-                android:divider="@color/gray"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:divider="@color/gray"/>
         </RelativeLayout>
 
         <RelativeLayout
