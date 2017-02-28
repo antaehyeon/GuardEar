@@ -60,8 +60,8 @@ public class MyInfo extends AppCompatActivity {
 
         nameTxt.setText(mPref.getValue("name", "성민경", "userinfo"));
         ageTxt.setText(mPref.getValue("age", "23", "userinfo"));
-        earphone_companyTxt.setText(mPref.getValue("earphone_company", "LG", "userinfo"));
-        earphone_modelTxt.setText(mPref.getValue("earphone_model", "HSS-100", "userinfo"));
+        earphone_companyTxt.setText(mPref.getValue("earphone_company", "SAMSUNG", "userinfo"));
+        earphone_modelTxt.setText(mPref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
         earphone_soundpressureTxt.setText(mPref.getValue("earphone_soundpressure", "98", "userinfo"));
         earphone_impedanceTxt.setText(mPref.getValue("earphone_impedance", "16", "userinfo"));
 
@@ -74,7 +74,7 @@ public class MyInfo extends AppCompatActivity {
         }
 
         mEarphoneImage = (ImageView) findViewById(R.id.earphoneImg);
-        mEarphonePicture = resizeImage(mPref.getValue("earphone_image", "hss_100", "userinfo"), 190, 190);
+        mEarphonePicture = resizeImage(mPref.getValue("earphone_image", "eo_bg920bbkg", "userinfo"), 190, 190);
         mEarphoneImage.setImageBitmap(getCircleBitmap(mEarphonePicture));
     }
 

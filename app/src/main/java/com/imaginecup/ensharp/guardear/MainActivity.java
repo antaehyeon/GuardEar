@@ -309,7 +309,10 @@ public class MainActivity extends AppCompatActivity {
         //청력측정 페이지
         else if(id == R.id.action_hearing_test) {
 
-        }
+        } else if(id == R.id.action_logout) {
+
+        }        
+
         return super.onOptionsItemSelected(item);
     }
 
