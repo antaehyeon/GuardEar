@@ -24,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+
 public class MainActivity extends AppCompatActivity {
 
     public static TextView earphoneTxt;
@@ -58,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "AppPermission";
     private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+
+
+    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
+
+    android.content.SharedPreferences setting;
+    android.content.SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +318,21 @@ public class MainActivity extends AppCompatActivity {
         //청력측정 페이지
         else if(id == R.id.action_hearing_test) {
 
-        } else if(id == R.id.action_logout) {
+        }
+        //로그아웃 페이지
+        else if(id == R.id.action_logout) {
+
+            LoginManager.getInstance().logOut();
+
+            editor.clear(); //clear all stored data
+            editor.commit();
+            Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+            Intent intent = new Intent(getApplicationContext(), MainLoginActivity.class);
+
+            startActivity(intent);
+            finish();
 
         }        
 
