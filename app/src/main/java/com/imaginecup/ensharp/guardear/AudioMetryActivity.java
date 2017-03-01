@@ -43,6 +43,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     int whiteColor = Color.parseColor("#FFFFFF");
     int baseColor = Color.parseColor("#213b4c");
+    int pointColor = Color.parseColor("#2f4959");
 
     LineChartView chart;
     private LineChartData data;
@@ -283,6 +284,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
 
         btnCantHear = (Button) findViewById(R.id.btn_cantHear);
+        btnCantHear.setTextColor(pointColor);
         btnCantHear.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -305,6 +307,8 @@ public class AudioMetryActivity extends AppCompatActivity {
                 if (!btnCantHearClick) {
                     btnFreqDown.setEnabled(true);
                     btnFreqUp.setEnabled(true);
+                    btnCantHear.setTextSize(16);
+                    btnCantHear.setTypeface(null, Typeface.BOLD);
                     btnCantHear.setText("들리지 않으면\n클릭하세요");
                     btnCantHearClick = true;
                     toastMessage("왼쪽부터 테스트가 시작됩니다.", SHORT);
@@ -330,6 +334,8 @@ public class AudioMetryActivity extends AppCompatActivity {
                         btnFreqUp.setEnabled(false);
                         toastMessage("오른쪽 테스트를 시작하려면 버튼을 눌러주세요", LONG);
                         btnCantHear.setText("오른쪽 테스트를 \n시작하려면 클릭하세요");
+                        btnCantHear.setTextSize(16);
+                        btnCantHear.setTypeface(null, Typeface.BOLD);
                         btnCantHearClick = false;
                         return;
                     }
@@ -354,6 +360,8 @@ public class AudioMetryActivity extends AppCompatActivity {
                 if (earState == RIGHT && step == 7) {
                     toastMessage("마지막 단계입니다", LONG);
                     btnCantHear.setText("클릭하시면\n결과가 저장됩니다");
+                    btnCantHear.setTextSize(16);
+                    btnCantHear.setTypeface(null, Typeface.BOLD);
                     audioMetryEnd = true;
                     return;
                 }
@@ -371,6 +379,7 @@ public class AudioMetryActivity extends AppCompatActivity {
             }
         });
         btnFreqDown = (Button) findViewById(R.id.btn_freqDown);
+        btnFreqDown.setTextColor(pointColor);
         btnFreqDown.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -389,6 +398,7 @@ public class AudioMetryActivity extends AppCompatActivity {
             }
         });
         btnFreqUp = (Button) findViewById(R.id.btn_freqUp);
+        btnFreqUp.setTextColor(pointColor);
         btnFreqUp.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -404,6 +414,8 @@ public class AudioMetryActivity extends AppCompatActivity {
         });
 
         btnCantHear.setText("시작하려면 버튼을 \n클릭하세요");
+        btnCantHear.setTextSize(16);
+        btnCantHear.setTypeface(null, Typeface.BOLD);
 
         // 하드웨어 오디오 볼륨 조절
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
