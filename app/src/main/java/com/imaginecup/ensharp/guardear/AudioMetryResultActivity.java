@@ -1,16 +1,17 @@
 package com.imaginecup.ensharp.guardear;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class AudioMetryResultActivity extends AppCompatActivity {
     // VARIABLE : 변수들
     RelativeLayout relativeLayout;
     TextView title;
+    Button toolBarNextButton;
 
 
     // VARIABLE - GRAPH
@@ -144,6 +146,15 @@ public class AudioMetryResultActivity extends AppCompatActivity {
            250, 500, 1000, 2000, 4000, 6000, 8000 */
 
         mContext = getApplicationContext();
+
+        // ToolBar Button 생성
+        toolBarNextButton = (Button) findViewById(R.id.toolBar_audiometry_button);
+        toolBarNextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AudioMetryResultActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
     } // onCreate VOID
 

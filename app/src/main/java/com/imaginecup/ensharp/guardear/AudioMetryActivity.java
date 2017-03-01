@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -150,6 +149,8 @@ public class AudioMetryActivity extends AppCompatActivity {
     Button tempButton;
 
     boolean audioMetryEnd = false;
+
+    Button toolbarNextButton;
 
     public void decibelStart() {
         second = new TimerTask() {
@@ -437,7 +438,8 @@ public class AudioMetryActivity extends AppCompatActivity {
         btnFreqDown.setEnabled(false);
         btnFreqUp.setEnabled(false);
 
-
+        toolbarNextButton = (Button) findViewById(R.id.toolBar_audiometry_button);
+        toolbarNextButton.setVisibility(View.INVISIBLE);
     }
 
     /*

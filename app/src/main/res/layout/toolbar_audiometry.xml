@@ -13,4 +13,16 @@
         android:layout_gravity="center"
         android:id="@+id/toolBar_audiometry_title"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:id="@+id/toolBar_audiometry_button"
+        android:textSize="15dp"
+        android:background="@null"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#FFFFFF"
+        android:text="완료"/>
+
 </android.support.v7.widget.Toolbar>
