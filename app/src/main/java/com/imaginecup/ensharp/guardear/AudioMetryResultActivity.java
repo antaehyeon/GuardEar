@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -28,6 +29,9 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class AudioMetryResultActivity extends AppCompatActivity {
+
+    Context mContext;
+
     // COLORS : 색깔 변수들
     int whiteColor = Color.parseColor("#FFFFFF");
     int baseColor = Color.parseColor("#213b4c");
@@ -55,36 +59,37 @@ public class AudioMetryResultActivity extends AppCompatActivity {
     private boolean pointsHaveDifferentColor = false;
     private boolean hasGradientToTransparent = false;
 
-    Line averageLine;
+    Line averageLine, leftLine, rightLine;
     LineChartData data;
 
     List<Line> lines;
-    List<PointValue> averageValues;
+    List<PointValue> averageValues, leftValues, rightValues;
 
-    int[] freqData = {250, 500, 1000, 2000, 4000, 6000, 8000};
+    float[] freqData = {250, 500, 1000, 2000, 4000, 6000, 8000};
+    float[] freqDecibelAverage;
+    float[] tempFreqAverage = {20, 15, 5, 10, 10, 15, 20};
+    float[] freqDecibelRight;
+    float[] freqDecibelLeft;
 
-    // VARIABLE - RECYCLER VIEW
-    LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-    RecyclerView mRecylerView;
-
-    int[] freqDecibelRight;
-    int[] freqDecibelLeft;
 
     // VARIABLE - SINGLETON
-    Singleton mSingleton = new Singleton();
+    Singleton mSingleton;
 
 
-    // FONT CHANGE : 폰트 변경
-    @Override
+    // FONT SETTING
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
 
+    // ON CREATE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_metry_result);
+
+        // SINGLETON GET INSTANCE
+        mSingleton = Singleton.getInstance();
 
         // ActionBar 대신 ToolBar 생성
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_audioMetryResult);
@@ -113,6 +118,20 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(baseColor);
 
+        // AudioMetryActivity 에서 Data 받아오기 (사용자가 조정한 Decibel을 Singleton 을 이용해서 받아온다)
+        freqDecibelLeft = mSingleton.getFreqLeftData();
+        freqDecibelRight = mSingleton.getFreqRightData();
+        for (int i = 0; i < 7; i++) {
+            Log.i("HYEON", "FREQ RIGHT " + i + " : " + freqDecibelRight[i]);
+        }
+        freqDecibelAverage = new float[7];
+        for (int i = 0; i < 7; i++) {
+            freqDecibelAverage[i] = (float)(Math.random()*100);
+        }
+        for (int i = 0; i < 7; i++) {
+            Log.i("HYEON", "FREQ AVERAGE " + i + " : " + freqDecibelAverage[i]);
+        }
+
         // Graph Draw
         // 그래프 그리기 - HelloChart
         resultChart = (LineChartView) relativeLayout.findViewById(R.id.resultChart);
@@ -120,47 +139,45 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         resetViewport();
         resultChart.setViewportCalculationEnabled(false);
 
-        // Recycler View를 위한 RecyclerView 선언 후에 LinearLayoutManager 을 set
-//        mRecylerView.setLayoutManager(mLayoutManager);
+        /* 청력측정한 데이터를 액티비티 구성할 때 받아옴
+           0, 1, 2, 3, 4, 5, 6, 7
+           250, 500, 1000, 2000, 4000, 6000, 8000 */
 
-        /*
-            청력측정한 데이터를 액티비티 구성할 때 받아옴
-            0, 1, 2, 3, 4, 5, 6, 7
-            250, 500, 1000, 2000, 4000, 6000, 8000
-        */
-
-        freqDecibelLeft = mSingleton.getFreqLeftData();
-        freqDecibelRight = mSingleton.getFreqRightData();
-
+        mContext = getApplicationContext();
 
     } // onCreate VOID
 
 
     // Graph Draw - 데이터 생성
     private void generateData() {
-
         lines = new ArrayList<Line>();
 
         // 그래프에 데이터 넣는 과정
         averageValues = new ArrayList<PointValue>();
-//        for (int i = 0; i < 7; i++) {
-//            averageValues.add(new PointValue(freqDecibelLeft[i], freqData[i]));
-//        }
+        leftValues = new ArrayList<PointValue>();
+        rightValues = new ArrayList<PointValue>();
+        for (int i = 0; i < 7; i++) {
+//            averageValues.add(new PointValue(freqData[i], freqDecibelAverage[i]));
+            leftValues.add(new PointValue(freqData[i], freqDecibelLeft[i]));
+            rightValues.add(new PointValue(freqData[i], freqDecibelRight[i]));
+        } // FOR INPUT GRAPH DATA 0-6
+
+        for (int i = 0; i < 7; i++) {
+            averageValues.add(new PointValue(freqData[i], tempFreqAverage[i]));
+        }
 
         // 라인 속성들 지정
         averageLine = new Line(averageValues);
-        averageLine.setColor(ChartUtils.COLORS[2]);
-        averageLine.setShape(diamond);
-        averageLine.setCubic(isCubic);
-        averageLine.setFilled(isFilled);
-        averageLine.setHasLabels(hasLabels);
-        averageLine.setHasLabelsOnlyForSelected(hasLabelForSelected);
-        averageLine.setHasLines(hasLines);
-        averageLine.setHasPoints(hasPoints);
-        averageLine.setPointRadius(1);
+        leftLine = new Line(leftValues);
+        rightLine = new Line(rightValues);
+        setGraphProperties(averageLine, 2);
+        setGraphProperties(leftLine, 4);
+        setGraphProperties(rightLine, 0);
 
         // ArrayList에 Line 하나 추가
         lines.add(averageLine);
+        lines.add(leftLine);
+        lines.add(rightLine);
 
         // LineChartData에 최종으로 ArrayList Lines가 들어감
         data = new LineChartData(lines);
@@ -182,7 +199,7 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         }
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         resultChart.setLineChartData(data);
-    }
+    } // GENERATE DATA FUNCTION
 
     // Graph Draw - 그래프 범위 조정
     private void resetViewport() {
@@ -194,7 +211,25 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         v.right = 8000;
         resultChart.setMaximumViewport(v);
         resultChart.setCurrentViewport(v);
+    } // RESET VIEW PORT FUNCTION
+
+    public void setGraphProperties(Line mLine, int color) {
+        mLine.setColor(ChartUtils.COLORS[color]);
+        mLine.setShape(diamond);
+        mLine.setCubic(isCubic);
+        mLine.setFilled(isFilled);
+        mLine.setHasLabels(hasLabels);
+        mLine.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        mLine.setHasLines(hasLines);
+        mLine.setHasPoints(hasPoints);
+        mLine.setPointRadius(1);
     }
+
+
+
+
+
+
 
 
 } // AudioMetryResultActivity CLASS

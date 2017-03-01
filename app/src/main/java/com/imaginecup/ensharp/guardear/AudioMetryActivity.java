@@ -1,6 +1,7 @@
 package com.imaginecup.ensharp.guardear;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioFormat;
@@ -67,14 +68,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     private boolean hasLabelForSelected = false;
     private boolean pointsHaveDifferentColor = false;
     private boolean hasGradientToTransparent = false;
-
-//    // Card View
-//    Card card;
-//
-//    private RecyclerView mRecyclerView;
-//    private RecyclerView.Adapter mAdapter;
-//    private RecyclerView.LayoutManager mLayoutManager;
-//    private ArrayList<MyData> myDataset;
 
     TextView txtStep, txtFreq, txtEar;
 
@@ -152,6 +145,12 @@ public class AudioMetryActivity extends AppCompatActivity {
     int timer_sec = 0;
     int count = 0;
 
+    Singleton mSingleton;
+
+    Button tempButton;
+
+    boolean audioMetryEnd = false;
+
     public void decibelStart() {
         second = new TimerTask() {
             @Override
@@ -166,7 +165,7 @@ public class AudioMetryActivity extends AppCompatActivity {
     public void Update() {
         Runnable updater = new Runnable() {
             public void run() {
-                controlFreq(1);
+                controlFreq(step);
                 genTone();
                 playSound(leftTone, rightTone);
 //                playTone(leftTone, rightTone);
@@ -286,25 +285,55 @@ public class AudioMetryActivity extends AppCompatActivity {
         btnCantHear.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (audioMetryEnd) {
+                    mSingleton.setFreqRightData(freq250RightDecibel,
+                            freq500RightDecibel,
+                            freq1000RightDecibel,
+                            freq2000RightDecibel,
+                            freq4000RightDecibel,
+                            freq6000RightDecibel,
+                            freq8000RightDecibel);
+
+                    second.cancel();
+
+                    Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
+                    startActivity(intent);
+                }
+
                 if (!btnCantHearClick) {
+                    btnFreqDown.setEnabled(true);
+                    btnFreqUp.setEnabled(true);
                     btnCantHear.setText("들리지 않으면\n클릭하세요");
                     btnCantHearClick = true;
                     toastMessage("왼쪽부터 테스트가 시작됩니다.", SHORT);
                     toastMessage("버튼을 이용해 들리지 않을때까지 조정하세요", LONG);
-                    audioMetryDataChange(1, 1000, LEFT);
+                    if (earState == LEFT) {
+                        audioMetryDataChange(1, 1000, LEFT);
+                    } else {
+                        audioMetryDataChange(1, 1000, RIGHT);
+                        txtEar.setTextSize(25);
+                    }
 
-//                    setSineWaveData(60, 44100, 1000);
-//                    genTone();
-//                    playSound(0.5f, 0.0f);
-//                    playTone(0.5f, 0.0f);
 
                     decibelStart();
-
-//                    GeneratedSineWave generatedSineWave = new GeneratedSineWave();
-//                    generatedSineWave.start();
                 } else {
                     // 역치 정하고 데이터 저장하는 부분으로 진행
                     step ++;
+
+                    if (earState == LEFT && step == 8) {
+                        second.cancel();
+                        step = 1;
+                        earState = RIGHT;
+                        btnFreqDown.setEnabled(false);
+                        btnFreqUp.setEnabled(false);
+                        toastMessage("오른쪽 테스트를 시작하려면 버튼을 눌러주세요", LONG);
+                        btnCantHear.setText("오른쪽 테스트를 \n시작하려면 클릭하세요");
+                        btnCantHearClick = false;
+                        return;
+                    }
+
+                    second.cancel();
 
                     int tempFreq = stepToFreq(step);
 
@@ -319,12 +348,35 @@ public class AudioMetryActivity extends AppCompatActivity {
                         playTone(0.0f, 0.5f);
                     }
                 }
+
+
+                if (earState == RIGHT && step == 7) {
+                    toastMessage("마지막 단계입니다", LONG);
+                    btnCantHear.setText("클릭하시면\n결과가 저장됩니다");
+                    audioMetryEnd = true;
+                    return;
+                }
+
+                // 다른 Class로 넘겨주기 위해서 마지막 단계일경우 데시벨 정보를 저장시킴
+                if (step == 7 && earState == LEFT) {
+                    mSingleton.setFreqLeftData(freq250LeftDecibel,
+                            freq500LeftDecibel,
+                            freq1000LeftDecibel,
+                            freq2000LeftDecibel,
+                            freq4000LeftDecibel,
+                            freq6000LeftDecibel,
+                            freq8000LeftDecibel);
+                }
             }
         });
         btnFreqDown = (Button) findViewById(R.id.btn_freqDown);
         btnFreqDown.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                boolean decibelZero = judgmentDecibel(step);
+                if (decibelZero) return;
+
                 controlDecibel(step, DOWN);
                 if(txtEar.getText().equals("LEFT")) {
                     leftTone -= 0.1f;
@@ -359,6 +411,33 @@ public class AudioMetryActivity extends AppCompatActivity {
         txtStep.setText(null);
         txtFreq.setText(null);
         txtEar.setText(null);
+
+        tempButton = (Button) findViewById(R.id.btn_tempNextActivity);
+        tempButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSingleton.setFreqLeftData(freq250LeftDecibel,
+                        freq500LeftDecibel,
+                        freq1000LeftDecibel,
+                        freq2000LeftDecibel,
+                        freq4000LeftDecibel,
+                        freq6000LeftDecibel,
+                        freq8000LeftDecibel);
+
+                Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        // SINGLETON GET INSTANCE
+        mSingleton = Singleton.getInstance();
+
+        // BUTTON (FREQ 조절) 비활성화
+        btnFreqDown.setEnabled(false);
+        btnFreqUp.setEnabled(false);
+
+
     }
 
     /*
@@ -368,7 +447,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     public void setGraphData(int index, int graphFreq, int graphDecibel, int graphEar) {
         PointValue tempPV = new PointValue(graphFreq, graphDecibel);
 
-        Log.i("HYEON", "" + graphFreq + " " + graphDecibel);
         // LEFT == 1
         if (graphEar == LEFT) {
             leftValue.set(index, tempPV);
@@ -420,11 +498,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     }
 
     public void controlGraphY(int step, int ear) {
-
-        Log.i("HYEON", "" + freq1000LeftDecibel);
-
-        Log.i("HYEON", "controlGraphY 함수에 진입하였습니다");
-        Log.i("HYEON", "ear : " + ear);
         switch(step) {
             case 1:
                 // 1단계일경우
@@ -503,6 +576,49 @@ public class AudioMetryActivity extends AppCompatActivity {
                 return 8000;
         }
         return 0;
+    }
+
+    public boolean judgmentDecibel(int step) {
+        int currentFreq = stepToFreq(step);
+
+        if (earState == LEFT) {
+            switch (currentFreq) {
+                case 250:
+                    if (freq250LeftDecibel == 0) return true;
+                case 500:
+                    if (freq500LeftDecibel == 0) return true;
+                case 1000:
+                    if (freq1000LeftDecibel == 0) return true;
+                case 2000:
+                    if (freq2000LeftDecibel == 0) return true;
+                case 4000:
+                    if (freq4000LeftDecibel == 0) return true;
+                case 6000:
+                    if (freq6000LeftDecibel == 0) return true;
+                case 8000:
+                    if (freq8000LeftDecibel == 0) return true;
+            }
+        }
+
+        if (earState == RIGHT) {
+            switch (currentFreq) {
+                case 250:
+                    if (freq250RightDecibel == 0) return true;
+                case 500:
+                    if (freq500RightDecibel == 0) return true;
+                case 1000:
+                    if (freq1000RightDecibel == 0) return true;
+                case 2000:
+                    if (freq2000RightDecibel == 0) return true;
+                case 4000:
+                    if (freq4000RightDecibel == 0) return true;
+                case 6000:
+                    if (freq6000RightDecibel == 0) return true;
+                case 8000:
+                    if (freq8000RightDecibel == 0) return true;
+            }
+        }
+        return false;
     }
 
     public void controlDecibel(int step, int mode) {
@@ -615,7 +731,7 @@ public class AudioMetryActivity extends AppCompatActivity {
         }
     }
 
-    // 그래프 초기화 메소드
+//    // 그래프 초기화 메소드
 //    private void initView(LineView lineView) {
 //        ArrayList<String> test = new ArrayList<String>();
 //        for (int i=0; i<9; i++) {
@@ -632,7 +748,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     private void generateData() {
 
         lines = new ArrayList<Line>();
-        Log.i("Generate Data = ", "" + lines.size());
 
         // 그래프에 데이터 넣는 과정
         leftValue = new ArrayList<PointValue>();
@@ -741,7 +856,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         v.left = 0;
         v.right = numberOfPoints - 1;
         v.right = 8000;
-        Log.i("resetViewport", "right = " + v.right);
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
     }
@@ -794,14 +908,10 @@ public class AudioMetryActivity extends AppCompatActivity {
         audioTrack.setStereoVolume(left, right);
         try {
             audioTrack.play();
-            Log.i("HYEON" , "playsound TRY");
         } catch (Exception e) { // error message if not playable
             controlFreq(step);
             genTone();
             playSound(leftTone, rightTone);
-            Log.i("HYEON" , "playsound Catch - error?");
-//            Toast.makeText(getApplicationContext(), "Error playing audio",
-//                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -842,3 +952,4 @@ public class AudioMetryActivity extends AppCompatActivity {
 
 
 }
+

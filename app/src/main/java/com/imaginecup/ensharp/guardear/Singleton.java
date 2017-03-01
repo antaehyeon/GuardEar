@@ -1,23 +1,35 @@
 package com.imaginecup.ensharp.guardear;
 
-import android.app.Application;
-
 /**
  * Created by HYEON on 2017-02-25.
  */
 
-public class Singleton extends Application{
+class Singleton {
 
-    int [] freqLeftData = new int[7];
-    int [] freqRightData = new int[7];
+    // SINGLETON VARIABLES
+    private static Singleton singletonInstance;
+
+    // SINGLETON FUNCTION
+    public static Singleton getInstance() {
+        if(singletonInstance == null) {
+            singletonInstance = new Singleton();
+        }
+        return singletonInstance;
+    }
+
+    // VARIABLES
+    float [] freqLeftData = new float[7];
+    float [] freqRightData = new float[7];
+
+
 
 
     // GET
-    public int[] getFreqLeftData() {
+    public float[] getFreqLeftData() {
         return freqLeftData;
     }
 
-    public int[] getFreqRightData() {
+    public float[] getFreqRightData() {
         return freqRightData;
     }
 
@@ -48,3 +60,4 @@ public class Singleton extends Application{
 
 
 }
+
