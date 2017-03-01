@@ -20,7 +20,7 @@
     <string name="btn_cancel">취소</string>
     <string name="btn_check">확인</string>
     <string name="name">닉네임</string>
-    <string name="btn_findPW">비밀번호를 잊어버리셧나요?</string>
+    <string name="btn_findPW">비밀번호를 잊어버리셨나요?</string>
     <string name="common_signin_button_text_long">Google</string>
     <string name="loading">loading</string>
     <string name="btn_send">이메일 전송</string>

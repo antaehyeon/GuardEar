@@ -317,6 +317,10 @@ public class MainActivity extends AppCompatActivity {
         }
         //청력측정 페이지
         else if(id == R.id.action_hearing_test) {
+            Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+
+            startActivity(intent);
+            finish();
 
         }
         //로그아웃 페이지

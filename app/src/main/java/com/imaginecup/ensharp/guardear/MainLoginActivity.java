@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -51,13 +50,8 @@ public class MainLoginActivity extends AppCompatActivity {
     Button join_email;
 
 
-    String email;
-    String name;
-    String gender;
-    String pw;
-    String age;
 
-    final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +61,7 @@ public class MainLoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
 
+        Log.d("페이스북 창", "onCreate()");
 
 
         //로그인 요청 부분
@@ -87,6 +82,8 @@ public class MainLoginActivity extends AppCompatActivity {
             setting = getSharedPreferences("setting", 0);
             editor = setting.edit();
 
+            Log.d("페이스북 창", "onCreate() -try ");
+
 
 
             String auto_id = mPref.getValue("id", "", "userinfo");
@@ -98,13 +95,12 @@ public class MainLoginActivity extends AppCompatActivity {
             Log.d("자동로그인", auto_id);
             Log.d("자동로그인", auto_pw);
             //Log.d("자동로그인", item.toString());
-            Log.d("자동로그인", "test : "+ item.getId());
+            //Log.d("자동로그인", "test : "+ item.getId());
 
 
 
 
-
-            if(item.toString().equals("null/null/null/null/null")) {
+            /*if(item.toString().equals("null/null/null/null/null")) {
             }
             else if(auto_id.equals(item.getId().toString())&& auto_pw.equals(item.getText().toString())){
 
@@ -117,11 +113,12 @@ public class MainLoginActivity extends AppCompatActivity {
             }
             else{
                 Log.d("자동로그인", "일치 값 없음");
-            }
+            }*/
 
 
 
         } catch (MalformedURLException e) {
+            Log.d("페이스북 창", "onCreate() - catch");
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
 
@@ -132,93 +129,94 @@ public class MainLoginActivity extends AppCompatActivity {
     public void facebookClick(View view){
 
         //LoginManager - 요청된 읽기 또는 게시 권한으로 로그인 절차를 시작합니다.
-        LoginManager.getInstance().logInWithReadPermissions(MainLoginActivity.this, Arrays.asList("public_profile", "user_friends"));
+        LoginManager.getInstance().logInWithReadPermissions(MainLoginActivity.this, Arrays.asList("public_profile", "email","user_friends"));
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
                 Log.e("페이스북", "onSuccess");
+                Log.d("페이스북 창", "facebookClick()");
                 // 사용자 정보 획득
 
-                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                final GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.d("페이스북 창", "onCompleted()");
                                 Log.v("result", object.toString()); // 페이스북 로그인 결과
+                                if(response != null) {
+                                    try {
+                                        // 이메일, 이름, 성별, 나이 비밀번호
+                                        String name = object.getString("name");
+                                        String gender = object.getString("gender");
+                                        String email = object.getString("email");
+                                        String pw = "0000";
+                                        String age = "23";
 
-                                try {
-                                    // 이메일, 이름, 성별, 나이 비밀번호
-                                    email = object.getString("email");
-                                    name = object.getString("name");
-                                    gender = object.getString("gender");
-                                    pw = "0000";
-                                    age = "23";
+                                        Log.d("TAG", "페이스북 이메일 : " + email);
+                                        Log.d("TAG", "페이스북 이름 : " + name);
+                                        Log.d("TAG", "페이스북 성별 : " + gender);
 
-                                    Log.d("TAG", "페이스북 이메일 : " + email);
-                                    Log.d("TAG", "페이스북 이름 : " + name);
-                                    Log.d("TAG", "페이스북 성별 : " + gender);
+                                        // Create a new item
+                                        final ToDoItem item = new ToDoItem(pw, email, name, age, gender);
 
-                                    // Create a new item
-                                    //final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
+                                        Log.d("페이스북 서버", "정보 서버로 저장 ");
 
-                                    Log.d("페이스북 서버", "정보 서버로 저장 ");
+                                        // 페이스북 사용자 정보 저장(프리퍼런스)
+                                        mPref.putValue("id", email, "userinfo");
+                                        mPref.putValue("pw", pw, "userinfo");
+                                        mPref.putValue("age", age, "userinfo");
+                                        mPref.putValue("sex", gender, "userinfo");
+                                        mPref.putValue("name", name, "userinfo");
 
-                                    // 페이스북 사용자 정보 저장(프리퍼런스)
-                                    mPref.putValue("id", email, "userinfo");
-                                    mPref.putValue("pw", pw, "userinfo");
-                                    mPref.putValue("age", age, "userinfo");
-                                    mPref.putValue("sex", gender, "userinfo");
-                                    mPref.putValue("name", name, "userinfo");
-
-                                    Log.d("페이스북 서버", item.toString());
+                                        Log.d("페이스북 서버", item.toString());
 
 
+                                        // 내부 데이터 초기화
+                                        item.setComplete(false);
 
-                                    // 내부 데이터 초기화
-                                    item.setComplete(false);
+                                        // Insert the new item
+                                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                                            @Override
+                                            protected Void doInBackground(Void... params) {
+                                                try {
+                                                    final ToDoItem entity = addItemInTable(item);
 
-                                    // Insert the new item
-                                    AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                                        @Override
-                                        protected Void doInBackground(Void... params) {
-                                            try {
-                                                final ToDoItem entity = addItemInTable(item);
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (!entity.isComplete()) {
+                                                                Log.d("태그", "Insert the new item ");
 
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (!entity.isComplete()) {
-                                                            Log.d("태그", "Insert the new item ");
-
-                                                            mAdapter.add(entity);
+                                                                mAdapter.add(entity);
+                                                            }
                                                         }
-                                                    }
-                                                });
+                                                    });
+                                                } catch (final Exception e) {
+
+                                                    createAndShowDialogFromTask(e, "Error");
+                                                }
+                                                return null;
                                             }
-                                            catch (final Exception e) {
+                                        };
 
-                                                createAndShowDialogFromTask(e, "Error");
-                                            }
-                                            return null;
-                                        }
-                                    };
-
-                                    runAsyncTask(task);
+                                        runAsyncTask(task);
 
 
-                                    //Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
-                                    Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
-                                    startActivity(intent);
+                                        Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                                        startActivity(intent);
 
-                                    finish();
+                                        finish();
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         });
 
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email,gender,birthday");
+                //parameters.putString("fields", "email");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
             }
@@ -262,8 +260,8 @@ public class MainLoginActivity extends AppCompatActivity {
 
         // 페이스북 로그인 결과를 콜백매니저에 담는다
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Log.d("페이스북 callbackManager", "onActivityResult()");
 
+        Log.d("페이스북 callbackManager", "onActivityResult()");
 
     }
 
