@@ -12,7 +12,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="40">
+        android:layout_weight="10">
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="35">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"/>
     </LinearLayout>
 
 
@@ -33,7 +45,7 @@
                 android:id="@+id/btn_facebook"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="80"
+                android:layout_weight="75"
                 android:background="#355294"
                 android:text="f 페이스북으로 로그인"
                 android:textColor="@color/white"
@@ -53,7 +65,7 @@
                 android:id="@+id/btn_google"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="80"
+                android:layout_weight="75"
                 android:background="#b51010"
                 android:layout_centerHorizontal="true"
                 android:text="g+ 구글로 로그인"
@@ -73,7 +85,7 @@
                 android:id="@+id/join_email"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="80"
+                android:layout_weight="75"
                 android:background="@color/navy_light"
                 android:layout_centerHorizontal="true"
                 android:text="이메일로 가입하기"
@@ -87,7 +99,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="30"
+        android:layout_weight="20"
         android:layout_gravity="bottom">
 
         <Button

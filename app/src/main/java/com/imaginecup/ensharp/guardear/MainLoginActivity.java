@@ -124,7 +124,7 @@ public class MainLoginActivity extends AppCompatActivity {
 
 
     }
-
+//
     // facebook login button click
     public void facebookClick(View view){
 
