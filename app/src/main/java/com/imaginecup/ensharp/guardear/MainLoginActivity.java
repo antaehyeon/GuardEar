@@ -50,9 +50,6 @@ public class MainLoginActivity extends AppCompatActivity {
     Button join_email;
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

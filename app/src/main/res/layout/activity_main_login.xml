@@ -4,7 +4,7 @@
     android:id="@+id/activity_main_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/navy"
+    android:background="@color/nave_mdarker"
     android:orientation="vertical"
     tools:context="com.imaginecup.ensharp.guardear.MainLoginActivity"
     android:weightSum="100">
@@ -12,19 +12,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="5">
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="35">
+        android:layout_weight="40"
+        android:weightSum="60"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo"/>
+            android:layout_height="0dp"
+            android:layout_weight="45"
+            android:src="@drawable/logo"
+            android:id="@+id/imageView3"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:text="당신의 귀를 보호하세요"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 
@@ -82,15 +97,16 @@
             android:gravity="center_horizontal">
 
             <Button
-                android:id="@+id/join_email"
+                android:id="@+id/btn_email"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="75"
                 android:background="@color/navy_light"
                 android:layout_centerHorizontal="true"
-                android:text="이메일로 가입하기"
+                android:layout_alignParentBottom="true"
+                android:text="이메일로 로그인"
                 android:textColor="@color/white"
-                android:onClick="JoinEmail"
+                android:onClick="LoginEmail"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -99,21 +115,27 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:layout_gravity="bottom">
 
+
+        <view
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:textColor="@color/navy_light"
+            android:layout_above="@+id/join_email"/>
+
         <Button
-            android:id="@+id/btn_email"
+            android:id="@+id/join_email"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:background="@color/white"
-            android:layout_alignParentBottom="true"
-            android:text="이메일로 로그인"
+            android:text="이메일로 가입하기"
             android:textColor="@color/black"
-            android:onClick="LoginEmail"
-            />
+            android:onClick="JoinEmail"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
-
 
 
 </LinearLayout>
