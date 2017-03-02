@@ -12,22 +12,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_weight="10">
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="40"
-        android:weightSum="60"
+        android:layout_weight="45"
+        android:weightSum="100"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="45"
+            android:layout_weight="75"
             android:src="@drawable/logo"
             android:id="@+id/imageView3"
             android:layout_gravity="center"/>
@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="25"
             android:text="당신의 귀를 보호하세요"
             android:textSize="20dp"
             android:textColor="@color/white"
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 />
-            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,15 +115,9 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="25"
+        android:layout_weight="15"
         android:layout_gravity="bottom">
 
-
-        <view
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:textColor="@color/navy_light"
-            android:layout_above="@+id/join_email"/>
 
         <Button
             android:id="@+id/join_email"
