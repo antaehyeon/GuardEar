@@ -133,7 +133,7 @@
     <LinearLayout
         android:id="@+id/LL_decibel"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="15dp"
