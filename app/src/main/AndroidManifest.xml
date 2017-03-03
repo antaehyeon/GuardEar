@@ -17,11 +17,6 @@
         android:largeHeap="true">
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
@@ -119,7 +114,13 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".ChangePWActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MainLoginActivity" />
+        <activity android:name=".MainLoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".CompanyTypeActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
