@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                         changeCircle("normal");
                     }
                 }
+                break;
             case "현재 음량":
                 if (volumeTxt != null) {
                     volumeTxt.setText(textContent);

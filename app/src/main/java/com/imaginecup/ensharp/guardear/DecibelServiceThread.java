@@ -88,9 +88,9 @@ public class DecibelServiceThread extends Thread {
                 TimeUnit.MILLISECONDS.toSeconds(mMillis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mMillis)));
         mSeconds = (int) mMillis / 1000;
         mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
-        Log.i("전 mDecibels=",mDecibels);
+        //Log.i("전 mDecibels=",mDecibels);
         mDecibels = getDecibel();
-        Log.i("후 mDecibels=",mDecibels);
+        //Log.i("후 mDecibels=",mDecibels);
         //return "현재 재생위치 : " + mSeconds + " / " + ms + " 현재 데시벨 : " + mDecibels;
         return mDecibels;
     }

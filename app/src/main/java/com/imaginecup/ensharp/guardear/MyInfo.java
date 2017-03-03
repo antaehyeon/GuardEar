@@ -115,8 +115,8 @@ public class MyInfo extends AppCompatActivity {
     private void settingButton() {
         mAutoVolumeBtn = (ImageButton) findViewById(R.id.autoVolumeBtn);
         mBreakNotificationBtn = (ImageButton) findViewById(R.id.breakNotificationBtn);
-        mIsAutoVolume = mPref.getValue("autovolume", true, "setting");
-        mIsBreakNotification = mPref.getValue("breaknotification", true, "setting");
+        mIsAutoVolume = mPref.getValue("autovolume", false, "setting");
+        mIsBreakNotification = mPref.getValue("breaknotification", false, "setting");
 
         if (mIsAutoVolume) {
             mAutoVolumeBtn.setImageResource(R.drawable.onswitch);
