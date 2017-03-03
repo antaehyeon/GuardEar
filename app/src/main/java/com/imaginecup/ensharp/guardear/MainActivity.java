@@ -1,16 +1,12 @@
 package com.imaginecup.ensharp.guardear;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -58,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private AudioManager mAudiomanager;
     private Toolbar mToolbar;
-
-    private static final String TAG = "AppPermission";
-    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
-
 
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
 
@@ -132,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.setTitle(null);
         //mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
+
     }
 
     public void decibelDataSave(){
@@ -346,49 +339,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Permission check.
-     */
-    @TargetApi(Build.VERSION_CODES.M)
-    private void checkPermission() {
-        Log.i(TAG, "CheckPermission : " + checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Explain to the user why we need to write the permission.
-                Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show();
-            }
-
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MY_PERMISSION_REQUEST_STORAGE);
-
-            // MY_PERMISSION_REQUEST_STORAGE is an
-            // app-defined int constant
-
-        } else {
-            Log.e(TAG, "permission deny");
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
-                } else {
-                    Log.d(TAG, "Permission always deny");
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                break;
-        }
-    }
 }

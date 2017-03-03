@@ -1,8 +1,11 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -49,6 +53,8 @@ public class MainLoginActivity extends AppCompatActivity {
     Button btn_email;
     Button join_email;
 
+    private static final String TAG = "AppPermission";
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class MainLoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         //FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
-
+        checkPermission();
         Log.d("페이스북 창", "onCreate()");
 
 
@@ -335,5 +341,49 @@ public class MainLoginActivity extends AppCompatActivity {
         return entity;
     }
 
+    /**
+     * Permission check.
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission() {
+        Log.i(TAG, "CheckPermission : " + checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Should we show an explanation?
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Explain to the user why we need to write the permission.
+                Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show();
+            }
+
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSION_REQUEST_STORAGE);
+
+            // MY_PERMISSION_REQUEST_STORAGE is an
+            // app-defined int constant
+
+        } else {
+            Log.e(TAG, "permission deny");
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! do the
+                    // calendar task you need to do.
+                } else {
+                    Log.d(TAG, "Permission always deny");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+        }
+    }
 }
