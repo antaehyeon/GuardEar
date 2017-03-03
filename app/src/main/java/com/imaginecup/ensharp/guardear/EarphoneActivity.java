@@ -213,8 +213,8 @@ public class EarphoneActivity extends Activity {
         Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
 
 
-        mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
-        mPref.putValue("earphone_model", item.getID().toString(), "userinfo");
+        //mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
+        mPref.putValue("earphone_model", item.getCompany().toString(), "userinfo");
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
 

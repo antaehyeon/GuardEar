@@ -8,8 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -24,6 +22,9 @@ public class CompanyTypeActivity extends Activity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<CompanyType> mCompanyTable;
+    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
+    android.content.SharedPreferences setting;
+    android.content.SharedPreferences.Editor editor;
 
     private CompanyTypeAdapter mAdapter;
 
@@ -41,6 +42,13 @@ public class CompanyTypeActivity extends Activity {
 
         Log.d("회사명", "CompanyTypeActivity 들어옴");
 
+        mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+        // create a new item
+
+        final CompanyType companyTypeItem = new CompanyType();
 
         mEtSearch = (EditText)findViewById(R.id.etSearch);
         //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -111,17 +119,31 @@ public class CompanyTypeActivity extends Activity {
         }
 
 
-        listViewCompany.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listViewCompany.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
 
                 Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
                 startActivity(intent);
 
                 finish();
             }
-        });
+        });*/
 
+    }
+
+    public void checkItem(final CompanyType item) {
+        String image = null;
+
+        mPref.putValue("earphone_company", item.getID().toString(), "userinfo");
+
+        Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+        startActivity(intent);
+
+        finish();
     }
 
 

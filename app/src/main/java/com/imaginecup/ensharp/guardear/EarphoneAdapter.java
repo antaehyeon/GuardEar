@@ -100,8 +100,6 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
                     EarphoneActivity activity = (EarphoneActivity) mContextEar;
 
-
-
                     activity.checkItem(currentItem);
 
                     activity.NextClick(btn_Next);

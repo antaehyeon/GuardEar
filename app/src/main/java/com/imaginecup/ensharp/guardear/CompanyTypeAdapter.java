@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<CompanyType>{
         //final Button btn_Next = (Button)row.findViewById(R.id.btn_Next);
         final TextView company = (TextView)row.findViewById(R.id.company);
         final ImageView imageView = (ImageView)row.findViewById(R.id.imageView);
+        final ImageButton imageButton = (ImageButton)row.findViewById(R.id.imagebutton) ;
 
         company.setText(currentItem.getID());
         Log.d("체크박스 확인 : ", " setOnclickListener 전");
@@ -79,15 +81,22 @@ public class CompanyTypeAdapter extends ArrayAdapter<CompanyType>{
         Log.d("회사명 체크박스 확인 : ", " 들어오는지 확인");
 
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0){
+                Log.d("체크박스 확인 : ", " OnClcick " );
 
+                if (imageButton.isPressed()== true) {
+                    Log.d("체크박스 확인 : ", " if 문");
 
-        //CompanyTypeActivity activity = (CompanyTypeActivity) mContextCompany;
+                    CompanyTypeActivity activity = (CompanyTypeActivity) mContextCompany;
 
-        //activity.getCompany(currentItem);
-        //activity.checkItem(currentItem);
-        //activity.NextClick(btn_Next);
-        //Log.d("체크박스 확인 : ", " " + checkBox.isChecked());
+                    activity.checkItem(currentItem);
 
+                    //Log.d("체크박스 확인 : ", " " + checkBox.isChecked());
+                }
+            }
+        });
         return row;
     }
 
