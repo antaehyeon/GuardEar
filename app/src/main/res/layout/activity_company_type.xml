@@ -68,23 +68,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
-        android:background="@color/navy_light">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="회사명으로 검색"
-            android:textColor="@color/white"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:layout_weight="85"
         android:orientation="vertical"
         android:weightSum="100">
@@ -120,4 +103,22 @@
                 android:onClick="NextClick"/>
         </RelativeLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:background="@color/navy_light">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="회사명으로 검색"
+            android:textColor="@color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"/>
+
+    </LinearLayout>
+
+
 </LinearLayout>
