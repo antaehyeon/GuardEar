@@ -153,6 +153,7 @@ public class AudioMetryResultActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AudioMetryResultActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

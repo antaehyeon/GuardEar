@@ -302,6 +302,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
                 if (!btnCantHearClick) {
