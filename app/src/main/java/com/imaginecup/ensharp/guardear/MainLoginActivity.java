@@ -54,8 +54,8 @@ public class MainLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // facebookSDK 초기화 작업
-        //FacebookSdk.sdkInitialize(this.getApplicationContext());
-        FacebookSdk.sdkInitialize(MainLoginActivity.this);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        //FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
 
         Log.d("페이스북 창", "onCreate()");

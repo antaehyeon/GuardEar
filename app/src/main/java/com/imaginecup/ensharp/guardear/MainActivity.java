@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Log.i("처음부터 시작", "onCreate 실행");
         earphoneTxt = (TextView) findViewById(R.id.earphoneTxt);
         //bluetoothEarphoneTxt = (TextView) findViewById(R.id.bluetoothTxt);
@@ -325,11 +328,11 @@ public class MainActivity extends AppCompatActivity {
         }
         //로그아웃 페이지
         else if(id == R.id.action_logout) {
-
+            FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
 
-            editor.clear(); //clear all stored data
-            editor.commit();
+            //editor.clear(); //clear all stored data
+            //editor.commit();
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
 
 
