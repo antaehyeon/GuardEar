@@ -75,7 +75,7 @@ public class MainService extends Service {
                     PendingIntent pendingIntent = PendingIntent.getActivity(MainService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     mNotification = new Notification.Builder(getApplicationContext())
-                            .setContentTitle("Decibel Check")
+                            .setContentTitle("Guardear")
                             .setContentText("서비스 On")
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentIntent(pendingIntent)
