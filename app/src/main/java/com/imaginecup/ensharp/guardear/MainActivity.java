@@ -32,14 +32,16 @@ public class MainActivity extends AppCompatActivity {
     public static TextView decibelTxt;
     public static TextView volumeTxt;
     public static TextView isPlayingTxt;
+    public static TextView earphoneModelTxt;
     public static FrameLayout mRedCircleLayout;
     public static FrameLayout mSkyCircleLayout;
     public static FrameLayout mNormalCircleLayout;
     public static FrameLayout mCircleParentLayout;
+    public static SharedPreferences sPref;
 
     private static final String BLUETOOTH_HEADSET_ACTION = "android.bluetooth.headset.action.STATE_CHANGED";
     private static final String BLUETOOTH_HEADSET_STATE = "android.bluetooth.headset.extra.STATE";
-    private static final int LIMIT_DECIBEL= 80;
+    private static final int LIMIT_DECIBEL= 70;
     private static IntentFilter mIntentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     private static BroadcastReceiver mBroadcastReceiver = null;
     private BluetoothAdapter mBluetoothAdapter;
@@ -74,11 +76,13 @@ public class MainActivity extends AppCompatActivity {
         elapseTxt = (TextView) findViewById(R.id.elapseTxt);
         decibelTxt = (TextView) findViewById(R.id.decibelsTxt);
         volumeTxt = (TextView) findViewById(R.id.volumeTxt);
+        earphoneModelTxt = (TextView) findViewById(R.id.earphoneModelTxt) ;
         isPlayingTxt = (TextView) findViewById(R.id.isPlayingTxt);
         mNormalCircleLayout = (FrameLayout) findViewById(R.id.normalCircleLayout);
         mSkyCircleLayout = (FrameLayout) findViewById(R.id.skyCircleLayout);
         mRedCircleLayout = (FrameLayout) findViewById(R.id.redCircleLayout);
         mCircleParentLayout = (FrameLayout) findViewById(R.id.circleParentLayout);
+        sPref = new SharedPreferences(this);
         decibelInfoBtn = (ImageButton) findViewById(R.id.decibelsInfoBtn);
         serviceBtn = (Button) findViewById(R.id.serviceBtn);
         mAudiomanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
         decibelDataSave();
         TextView mainTitleTxt = (TextView) findViewById(R.id.mainTitleTxt);
-        mainTitleTxt.setText("Guardear");
+        mainTitleTxt.setText("홈");
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
         mToolbar.setTitle(null);
         //mToolbar.setTitleTextColor(Color.WHITE);
@@ -170,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setMainUiInfo() {
+
+        earphoneModelTxt.setText(pref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
         if (pref.getValue("0", false, "normalEarphone")) {
             earphoneTxt.setText("Connected");
             Log.i("사용중인 이어폰 종류", "일반");
@@ -215,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static void setMainUiText(String textName, String textContent) {
+
         switch (textName) {
             case "이어폰":
                 Log.i("메인으로 넘어온 값", textContent + "?");
@@ -253,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i("메인으로 넘어온 값", textContent + "?");
                 if (decibelTxt != null) {
                     if(sServiceData.isMyServiceRunning(MainService.class)){
-                        if(Integer.parseInt(textContent)>LIMIT_DECIBEL) {
+                        if(Integer.parseInt(textContent)>=LIMIT_DECIBEL) {
                             changeCircle("red");
                         } else {
                             changeCircle("sky");

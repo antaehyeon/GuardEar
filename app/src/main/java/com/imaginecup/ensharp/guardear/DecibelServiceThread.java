@@ -130,7 +130,7 @@ public class DecibelServiceThread extends Thread {
             //Log.i("temp=",temp+" ");
             dB = Math.round(dB - temp);
             //Log.i("dB=",dB+" ");
-            if (dB > 80) {
+            if (dB >= 70) {
                 //Log.i("볼륨 80 이상", "줄이기");
                 currentVolume--;
                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, AudioManager.FLAG_PLAY_SOUND);

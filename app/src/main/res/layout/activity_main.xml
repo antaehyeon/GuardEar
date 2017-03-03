@@ -130,6 +130,7 @@
                     android:textSize="20dp" />
 
                 <TextView
+                    android:id="@+id/earphoneModelTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -137,7 +138,8 @@
                     android:text="AKG-240"
                     android:textAlignment="center"
                     android:textColor="#97b2c6"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:singleLine="true"/>
             </RelativeLayout>
 
             <RelativeLayout

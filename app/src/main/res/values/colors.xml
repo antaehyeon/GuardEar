@@ -14,5 +14,7 @@
     <color name="orange">#ff8a63</color>
     <color name="gray">#ebebeb</color>
     <color name="nave_mdarker">#031b26</color>
-
+    <color name="yellow">#f8d987</color>
+    <color name="red_light">#eba291</color>
+    <color name="orange_red">#e77b5f</color>
 </resources>

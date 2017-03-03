@@ -148,7 +148,7 @@ public class TimeAnalysisActivity extends Activity {
             } else if (i == 8) {
                 yVals1.add(new BarEntry(i, 0));
             } else if (i == 9) {
-                yVals1.add(new BarEntry(i, 72));
+                yVals1.add(new BarEntry(i, 62));
             } else if (i == 10) {
                 yVals1.add(new BarEntry(i, 79));
             } else if (i == 11) {
@@ -164,9 +164,9 @@ public class TimeAnalysisActivity extends Activity {
             } else if (i == 16) {
                 yVals1.add(new BarEntry(i, 0));
             } else if (i == 17) {
-                yVals1.add(new BarEntry(i, 0));
+                yVals1.add(new BarEntry(i, 60));
             } else if (i == 18) {
-                yVals1.add(new BarEntry(i, 0));
+                yVals1.add(new BarEntry(i, 64));
             } else if (i == 19) {
                 yVals1.add(new BarEntry(i, 0));
             } else if (i == 20) {
@@ -176,7 +176,7 @@ public class TimeAnalysisActivity extends Activity {
             } else if (i == 22) {
                 yVals1.add(new BarEntry(i, 0));
             } else if (i == 23) {
-                yVals1.add(new BarEntry(i, 80));
+                yVals1.add(new BarEntry(i, 50));
             } else if (i == 24) {
                 yVals1.add(new BarEntry(i, 0));
             }
@@ -198,7 +198,7 @@ public class TimeAnalysisActivity extends Activity {
             //set1.setDrawIcons(false);
 
             //set1.setColors(ColorTemplate.MATERIAL_COLORS);
-            set1.setColors(new int[]{this.getResources().getColor(R.color.orange),
+            set1.setColors(new int[]{this.getResources().getColor(R.color.yellow),
                     this.getResources().getColor(R.color.navy)});
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             set1.setDrawValues(false);

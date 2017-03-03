@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/normal_neon_text"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>

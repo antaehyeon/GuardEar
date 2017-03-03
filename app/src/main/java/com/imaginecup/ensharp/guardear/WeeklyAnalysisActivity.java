@@ -173,15 +173,15 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //                yVals1.add(new BarEntry(i, val));
 //            }
             if(i==1){
-                yVals1.add(new BarEntry(i, 68));
+                yVals1.add(new BarEntry(i, 58));
             } else if(i==2) {
-                yVals1.add(new BarEntry(i, 78));
+                yVals1.add(new BarEntry(i, 68));
             } else if(i==3) {
-                yVals1.add(new BarEntry(i, 88));
-            } else if(i==4) {
-                yVals1.add(new BarEntry(i, 71));
-            }else if(i==5) {
                 yVals1.add(new BarEntry(i, 78));
+            } else if(i==4) {
+                yVals1.add(new BarEntry(i, 61));
+            }else if(i==5) {
+                yVals1.add(new BarEntry(i, 68));
             } else if(i==6) {
                 yVals1.add(new BarEntry(i, 95));
             } else if(i==7) {
@@ -205,7 +205,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
             //set1.setDrawIcons(false);
 
             //set1.setColors(ColorTemplate.MATERIAL_COLORS);
-            set1.setColors(new int[]{this.getResources().getColor(R.color.orange),
+            set1.setColors(new int[]{this.getResources().getColor(R.color.yellow),
                     this.getResources().getColor(R.color.navy)});
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             set1.setDrawValues(false);

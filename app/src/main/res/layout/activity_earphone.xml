@@ -110,6 +110,7 @@
             <Button
                 android:text="@string/btn_Next"
                 android:textColor="@color/navy"
+                android:textSize="18dp"
                 android:background="@color/white"
                 android:visibility="invisible"
                 android:layout_width="match_parent"
