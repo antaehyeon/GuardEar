@@ -14,10 +14,16 @@
         android:orientation="vertical"
         android:weightSum="100">
     </LinearLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_gravity="center"
         android:background="@drawable/normal_outer_circle">
-    </LinearLayout>
+        <ImageView
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:src="@drawable/logo"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </FrameLayout>

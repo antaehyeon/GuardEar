@@ -10,14 +10,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="100"
+    android:background="@drawable/splash_image"
+
     tools:context="com.imaginecup.ensharp.guardear.SplashActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="0dip"
-        android:layout_weight="100"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/splash"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true" />
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dip"-->
+        <!--android:layout_weight="100"-->
+        <!--android:scaleType="fitXY"        -->
+        <!--app:srcCompat="@drawable/splash_image"-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_alignParentTop="true" />-->
 </RelativeLayout>

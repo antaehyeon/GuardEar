@@ -4,7 +4,7 @@
     android:id="@+id/activity_main_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/nave_mdarker"
+    android:background="@drawable/login_image"
     android:orientation="vertical"
     tools:context="com.imaginecup.ensharp.guardear.MainLoginActivity"
     android:weightSum="100">
@@ -16,31 +16,22 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="45"
-        android:weightSum="100"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="75"
-            android:src="@drawable/logo"
-            android:id="@+id/imageView3"
-            android:layout_gravity="center"/>
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="25"
             android:text="당신의 귀를 보호하세요"
             android:textSize="20dp"
             android:textColor="@color/white"
-            android:layout_gravity="center"/>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 
 
     <LinearLayout

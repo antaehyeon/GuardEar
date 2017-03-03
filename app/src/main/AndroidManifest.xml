@@ -16,7 +16,13 @@
         android:theme="@style/AppTheme"
         android:largeHeap="true">
         <activity android:name=".MainActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
@@ -114,12 +120,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".ChangePWActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MainLoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        <activity android:name=".MainLoginActivity"
+            android:theme="@style/SplashTheme">>
         </activity>
         <activity android:name=".CompanyTypeActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
