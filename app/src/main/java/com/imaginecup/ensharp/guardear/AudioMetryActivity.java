@@ -915,6 +915,9 @@ public class AudioMetryActivity extends AppCompatActivity {
     }
 
     public void playSound(float left, float right) {
+        if (audioMetryEnd) {
+            return;
+        }
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate,
                 AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
                 numSamples, AudioTrack.MODE_STATIC);
