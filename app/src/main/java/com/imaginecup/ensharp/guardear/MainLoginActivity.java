@@ -63,7 +63,10 @@ public class MainLoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         //FacebookSdk.sdkInitialize(MainLoginActivity.this);
         setContentView(R.layout.activity_main_login);
-        checkPermission();
+        // 버전이 6.0이상인 경우 허가사용을 요청
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermission();
+        }
         Log.d("페이스북 창", "onCreate()");
 
 
