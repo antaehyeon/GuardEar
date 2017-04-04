@@ -52,6 +52,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
 
 
         if (currentItem.getID().toString().equals("APPLE")) {
+            //Picasso.with(mContextCompany).load("https://www.google.co.kr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png").into(imageView);
             imageView.setImageResource(R.drawable.apple);
             Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
         }  else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
