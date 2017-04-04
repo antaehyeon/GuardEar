@@ -33,7 +33,6 @@ public class Company {
     @Override
     public String toString() {
         Log.d("회사명", "회사명 toString()");
-
         return getID();
         //return getID() +  "/" + getSoundPressure() + "/" + getImpedance(); // 임시 변환
     }

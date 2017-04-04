@@ -79,9 +79,8 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         }else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")) {
             imageView.setImageResource(R.drawable.eo_hs1303weg);
         }else if (currentItem.getModelName().toString().equals("EO-IA510BLKGKR")) {
-        }/*else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")){
-            imageView.setImageResource(R.drawable.eo_hs1303weg);
-        }*/ else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
+            imageView.setImageResource(R.drawable.eo_ia510blkgkr);
+        }else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
             imageView.setImageResource(R.drawable.eo_ig930bbegkr);
         }else if (currentItem.getModelName().toString().equals("EO-MN900KWKG")) {
             imageView.setImageResource(R.drawable.eo_mn900kwkg);
