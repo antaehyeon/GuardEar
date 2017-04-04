@@ -55,39 +55,40 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         final TextView name = (TextView)row.findViewById(R.id.name);
         final TextView company = (TextView)row.findViewById(R.id.company);
         final ImageView imageView = (ImageView)row.findViewById(R.id.imageView);
-        String imageview;
+        //String imageview;
 
         name.setText(currentItem.getID());
-        company.setText(currentItem.getCompany());
+        company.setText(currentItem.getModelName());
         checkBox.setChecked(false);
         checkBox.setEnabled(true);
         Log.d("체크박스 확인 : ", " setOnclickListener 전");
 
 
-        if (currentItem.getID().toString().equals("EO-BG920BBKG")) {
+        if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
             imageView.setImageResource(R.drawable.eo_bg920bbkg);
-        } else if (currentItem.getID().toString().equals("EO-EG920BWEG")) {
+        } else if (currentItem.getModelName().toString().equals("EO-EG920BWEG")) {
             imageView.setImageResource(R.drawable.eo_eg920bweg);
-        }else if (currentItem.getID().toString().equals("EO-BN920CFKG")) {
+        }else if (currentItem.getModelName().toString().equals("EO-BN920CFKG")) {
             imageView.setImageResource(R.drawable.eo_bn920cfkg);
-        } else if (currentItem.getID().toString().equals("EO-BG930CBKGKR")) {
+        } else if (currentItem.getModelName().toString().equals("EO-BG930CBKGKR")) {
             imageView.setImageResource(R.drawable.eo_bg930bkgkr);
-        }else if (currentItem.getID().toString().equals("EO-BG935CBKGKR")) {
+        }else if (currentItem.getModelName().toString().equals("EO-BG935CBKGKR")) {
             imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
-        }/*else if(currentItem.getID().toString().equals("EO-HS1393WEG")){
+        }else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")) {
             imageView.setImageResource(R.drawable.eo_hs1303weg);
-        }*/else if (currentItem.getID().toString().equals("EO-IA510BLKGKR")) {
+        }else if (currentItem.getModelName().toString().equals("EO-IA510BLKGKR")) {
             imageView.setImageResource(R.drawable.eo_ia510blkgkr);
-        }else if (currentItem.getID().toString().equals("EO-IG930BBEGKR")) {
+        }else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
             imageView.setImageResource(R.drawable.eo_ig930bbegkr);
-        }else if (currentItem.getID().toString().equals("EO-MN900KWKG")) {
+        }else if (currentItem.getModelName().toString().equals("EO-MN900KWKG")) {
             imageView.setImageResource(R.drawable.eo_mn900kwkg);
-        }else if (currentItem.getID().toString().equals("EO-MN910VWKG")) {
+        }else if (currentItem.getModelName().toString().equals("EO-MN910VWKG")) {
             imageView.setImageResource(R.drawable.eo_mn910vwkg);
-        }else if (currentItem.getID().toString().equals("EO-MG920BBKG")) {
+        }else if (currentItem.getModelName().toString().equals("EO-MG920BBKG")) {
             imageView.setImageResource(R.drawable.eo_mg920bbkg);
+        }else{
+            imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
         }
-
 
 
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,4 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
         return row;
     }
-
-
-
 }

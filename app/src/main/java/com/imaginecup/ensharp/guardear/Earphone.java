@@ -15,16 +15,23 @@ public class Earphone {
      * Item text
      */
     @com.google.gson.annotations.SerializedName("id")
-    private String mId; // 모델
+    private String mId; // 이름
 
-    @com.google.gson.annotations.SerializedName("soundpressure")
-    private String mSoundpressure; // 음압
+
+    @com.google.gson.annotations.SerializedName("companyName")
+    private String mCompanyName; // 회사명
+
+
+    @com.google.gson.annotations.SerializedName("modelName")
+    private String mModelName; // 모델명
 
     @com.google.gson.annotations.SerializedName("impedance")
     private String mImpedance;   // 저항
 
-    @com.google.gson.annotations.SerializedName("company")
-    private String mCompany; // 회사명
+    @com.google.gson.annotations.SerializedName("soundPressure")
+    private String mSoundpressure; // 음압
+
+
 
 
     @com.google.gson.annotations.SerializedName("complete")
@@ -53,11 +60,12 @@ public class Earphone {
      *            The item id
      * @param impedance
      */
-    public Earphone(String id, String soundpressure, String impedance, String company) {
+    public Earphone(String id, String soundpressure, String impedance, String companyName, String modelName) {
         this.setID(id);
         this.setSoundPressure(soundpressure);
         this.setImpedance(impedance);
-        this.setCompany(company);
+        this.setCompanyName(companyName);
+        this.setModelName(modelName);
         Log.d("이어폰", "this.반환값");
     }
 
@@ -84,9 +92,11 @@ public class Earphone {
     public String getImpedance() {  return mImpedance;}
     public final void setImpedance(String impedance) {  mImpedance = impedance;}
 
-    public String getCompany() { return mCompany;}
-    public final void setCompany(String company) { mCompany = company; }
+    public String getCompanyName() { return mCompanyName;}
+    public final void setCompanyName(String companyName) { mCompanyName = companyName; }
 
+    public String getModelName() { return mModelName;}
+    public final void setModelName(String modelName) { mModelName = modelName; }
 
     public boolean isComplete() {
         return mComplete;
