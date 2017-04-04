@@ -54,7 +54,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
         if (currentItem.getID().toString().equals("APPLE")) {
             imageView.setImageResource(R.drawable.apple);
             Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        } else if (currentItem.getID().toString().equals("AUDIO-TEXHNICA")) {
+        }  else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
             imageView.setImageResource(R.drawable.audiotexhnica);
             Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
         } else if(currentItem.getID().toString().equals("CRESYN")){

@@ -53,7 +53,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         final CheckBox checkBox = (CheckBox) row.findViewById(R.id.checkToDoItem);
         final Button btn_Next = (Button)row.findViewById(R.id.btn_Next);
         final TextView name = (TextView)row.findViewById(R.id.name);
-        final TextView company = (TextView)row.findViewById(R.id.company);
+        final TextView company = (TextView)row.findViewById(R.id.company); // 모델명
         final ImageView imageView = (ImageView)row.findViewById(R.id.imageView);
         //String imageview;
 
@@ -62,6 +62,8 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         checkBox.setChecked(false);
         checkBox.setEnabled(true);
         Log.d("체크박스 확인 : ", " setOnclickListener 전");
+
+        Log.d("체크박스 확인 : ", currentItem.toString());
 
 
         if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
@@ -77,8 +79,9 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         }else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")) {
             imageView.setImageResource(R.drawable.eo_hs1303weg);
         }else if (currentItem.getModelName().toString().equals("EO-IA510BLKGKR")) {
-            imageView.setImageResource(R.drawable.eo_ia510blkgkr);
-        }else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
+        }/*else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")){
+            imageView.setImageResource(R.drawable.eo_hs1303weg);
+        }*/ else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
             imageView.setImageResource(R.drawable.eo_ig930bbegkr);
         }else if (currentItem.getModelName().toString().equals("EO-MN900KWKG")) {
             imageView.setImageResource(R.drawable.eo_mn900kwkg);

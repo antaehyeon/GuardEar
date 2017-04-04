@@ -17,22 +17,18 @@ public class Earphone {
     @com.google.gson.annotations.SerializedName("id")
     private String mId; // 이름
 
-
-    @com.google.gson.annotations.SerializedName("companyName")
-    private String mCompanyName; // 회사명
-
-
     @com.google.gson.annotations.SerializedName("modelName")
     private String mModelName; // 모델명
+
+    @com.google.gson.annotations.SerializedName("soundPressure")
+    private String mSoundPressure; // 음압
 
     @com.google.gson.annotations.SerializedName("impedance")
     private String mImpedance;   // 저항
 
-    @com.google.gson.annotations.SerializedName("soundPressure")
-    private String mSoundpressure; // 음압
 
-
-
+    @com.google.gson.annotations.SerializedName("companyName")
+    private String mCompanyName; // 회사명
 
     @com.google.gson.annotations.SerializedName("complete")
     private boolean mComplete;
@@ -46,8 +42,8 @@ public class Earphone {
     public String toString() {
         Log.d("이어폰", "toString()");
 
-        return getID();
-        //return getID() +  "/" + getSoundPressure() + "/" + getImpedance(); // 임시 변환
+        //return getModelName();
+        return getID() +  "/" + getSoundPressure() + "/" + getImpedance(); // 임시 변환
     }
 
 
@@ -56,13 +52,14 @@ public class Earphone {
      *
      * @param id
      *            The item text
-     * @param soundpressure
+     * @param soundPressure
      *            The item id
      * @param impedance
      */
-    public Earphone(String id, String soundpressure, String impedance, String companyName, String modelName) {
+
+    public Earphone(String id, String soundPressure, String impedance, String companyName, String modelName) {
         this.setID(id);
-        this.setSoundPressure(soundpressure);
+        this.setSoundPressure(soundPressure);
         this.setImpedance(impedance);
         this.setCompanyName(companyName);
         this.setModelName(modelName);
@@ -84,9 +81,9 @@ public class Earphone {
     /**
      * Returns the item id
      */
-    public String getSoundPressure() { return mSoundpressure; }
+    public String getSoundPressure() { return mSoundPressure; }
     public final void setSoundPressure(String soundPressure) {
-        mSoundpressure = soundPressure;
+        mSoundPressure = soundPressure;
     }
 
     public String getImpedance() {  return mImpedance;}

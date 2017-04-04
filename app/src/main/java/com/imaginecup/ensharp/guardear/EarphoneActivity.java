@@ -210,7 +210,10 @@ public class EarphoneActivity extends Activity {
 
 
         Log.d("CheckItem", "checkItem 들어옴");
+        Log.d("CheckItem", "정보 들어오나 : " + item.toString());
         Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
+        Log.d("CheckItem", "정보 들어오나 : " + item.getSoundPressure().toString());
+        Log.d("CheckItem", "정보 들어오나 : " + item.getImpedance().toString());
 
 
         //mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
@@ -260,6 +263,7 @@ public class EarphoneActivity extends Activity {
             image = "eo_mg920bbkg";
         }
         mPref.putValue("earphone_image", image, "userinfo");
+
 
         Log.d("이어폰 정보", item.getModelName().toString());
         Log.d("이어폰 정보", item.getID().toString());

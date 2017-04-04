@@ -46,6 +46,7 @@ public class CompanyTypeActivity extends Activity {
         setting = getSharedPreferences("setting", 0);
         editor = setting.edit();
         // create a new item
+
         final Company companyTypeItem = new Company();
 
         mEtSearch = (EditText)findViewById(R.id.etSearch);
