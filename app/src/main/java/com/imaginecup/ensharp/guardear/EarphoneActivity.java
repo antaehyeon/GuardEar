@@ -64,7 +64,7 @@ public class EarphoneActivity extends Activity {
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", EarphoneActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", EarphoneActivity.this);
 
             // Get the Mobile Service Table instance to use
             mEarphoneTable = mClient.getTable(Earphone.class);

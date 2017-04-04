@@ -57,7 +57,7 @@ public class CompanyTypeActivity extends Activity {
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", CompanyTypeActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", CompanyTypeActivity.this);
 
             // Get the Mobile Service Table instance to use
             mCompanyTable = mClient.getTable(CompanyType.class);

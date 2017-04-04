@@ -157,7 +157,6 @@
             android:textColor="@android:color/white"
             android:layout_weight="50"
             android:gravity="right"
-            android:text="40"
             android:textStyle="bold"
             android:textSize="16.5dp"/>
 

@@ -153,6 +153,10 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     Button toolbarNextButton;
 
+    TextView surround_dB;
+    private Timer mTimer;
+    private Handler mHandler;
+
     public void decibelStart() {
         second = new TimerTask() {
             @Override
@@ -192,6 +196,27 @@ public class AudioMetryActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(baseColor);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
+        surround_dB = (TextView) findViewById(R.id.tv_surroundDecibel);
+        mTimer = new Timer(true);  // 데몬 쓰레드로 할 것 인지 여부를 결정한다.
+
+        mHandler = new Handler();
+
+        mTimer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                if (surround_dB != null) {
+                                    int random = (int) (Math.random() * 10)+60;
+                                    surround_dB.setText(Integer.toString(random));
+                                }
+                            }
+                        });
+                    }
+                }, 1000, 1000
+
+        );
 
         // Toolbar 에 넣을 txetView(title) 속성 조정
         title = (TextView) toolbar.findViewById(R.id.toolBar_audiometry_title);
@@ -302,6 +327,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
                     startActivity(intent);
+                    mTimer.cancel();
                     finish();
                 }
 
@@ -325,7 +351,7 @@ public class AudioMetryActivity extends AppCompatActivity {
                     decibelStart();
                 } else {
                     // 역치 정하고 데이터 저장하는 부분으로 진행
-                    step ++;
+                    step++;
 
                     if (earState == LEFT && step == 8) {
                         second.cancel();
@@ -389,7 +415,7 @@ public class AudioMetryActivity extends AppCompatActivity {
                 if (decibelZero) return;
 
                 controlDecibel(step, DOWN);
-                if(txtEar.getText().equals("LEFT")) {
+                if (txtEar.getText().equals("LEFT")) {
                     leftTone -= 0.1f;
                 } else {
                     rightTone -= 0.1f;
@@ -404,7 +430,7 @@ public class AudioMetryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 controlDecibel(step, UP);
-                if(txtEar.getText().equals("LEFT")) {
+                if (txtEar.getText().equals("LEFT")) {
                     leftTone += 0.1f;
                 } else {
                     rightTone += 0.1f;
@@ -419,7 +445,7 @@ public class AudioMetryActivity extends AppCompatActivity {
         btnCantHear.setTypeface(null, Typeface.BOLD);
 
         // 하드웨어 오디오 볼륨 조절
-        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 5, 0);
 
         txtStep.setText(null);
@@ -485,7 +511,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     }
 
-    public void toastMessage (CharSequence text, int mode) {
+    public void toastMessage(CharSequence text, int mode) {
         int toastMode;
         Context context = getApplicationContext();
         if (mode == 1) {
@@ -500,7 +526,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     public void audioMetryDataChange(int step, int freq, int ear) {
         if (step < 10) {
-            txtStep.setText("0"+String.valueOf(step));
+            txtStep.setText("0" + String.valueOf(step));
         } else {
             txtStep.setText(String.valueOf(step));
         }
@@ -513,41 +539,62 @@ public class AudioMetryActivity extends AppCompatActivity {
     }
 
     public void controlGraphY(int step, int ear) {
-        switch(step) {
+        switch (step) {
             case 1:
                 // 1단계일경우
-                if (ear == LEFT) { setGraphData(FREQ1000, 1000, freq1000LeftDecibel, ear); }
-                else { setGraphData(FREQ1000, 1000, freq1000RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ1000, 1000, freq1000LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ1000, 1000, freq1000RightDecibel, ear);
+                }
                 break;
             case 2:
-                if (ear == LEFT) { setGraphData(FREQ250, 250, freq250LeftDecibel, ear); }
-                else { setGraphData(FREQ250, 250, freq250RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ250, 250, freq250LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ250, 250, freq250RightDecibel, ear);
+                }
                 break;
             case 3:
-                if (ear == LEFT) { setGraphData(FREQ500, 500,freq500LeftDecibel, ear); }
-                else { setGraphData(FREQ500, 500, freq500RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ500, 500, freq500LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ500, 500, freq500RightDecibel, ear);
+                }
                 break;
             case 4:
-                if (ear == LEFT) { setGraphData(FREQ2000, 2000,freq2000LeftDecibel, ear); }
-                else { setGraphData(FREQ2000, 2000, freq2000RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ2000, 2000, freq2000LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ2000, 2000, freq2000RightDecibel, ear);
+                }
                 break;
             case 5:
-                if (ear == LEFT) { setGraphData(FREQ4000, 4000,freq4000LeftDecibel, ear); }
-                else { setGraphData(FREQ4000, 4000, freq4000RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ4000, 4000, freq4000LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ4000, 4000, freq4000RightDecibel, ear);
+                }
                 break;
             case 6:
-                if (ear == LEFT) { setGraphData(FREQ6000, 6000,freq6000LeftDecibel, ear); }
-                else { setGraphData(FREQ6000, 6000, freq6000RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ6000, 6000, freq6000LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ6000, 6000, freq6000RightDecibel, ear);
+                }
                 break;
             case 7:
-                if (ear == LEFT) { setGraphData(FREQ8000, 8000,freq8000LeftDecibel, ear); }
-                else { setGraphData(FREQ8000, 8000, freq8000RightDecibel, ear); }
+                if (ear == LEFT) {
+                    setGraphData(FREQ8000, 8000, freq8000LeftDecibel, ear);
+                } else {
+                    setGraphData(FREQ8000, 8000, freq8000RightDecibel, ear);
+                }
                 break;
         }
     }
 
     public void controlFreq(int step) {
-        switch(step) {
+        switch (step) {
             case 1:
                 setSineWaveData(2, 44100, 1000);
                 break;
@@ -637,7 +684,7 @@ public class AudioMetryActivity extends AppCompatActivity {
     }
 
     public void controlDecibel(int step, int mode) {
-        switch(step) {
+        switch (step) {
             case 1:
                 if (earState == LEFT) {
                     if (mode == UP) {
@@ -964,7 +1011,7 @@ public class AudioMetryActivity extends AppCompatActivity {
         }
 
         public void run() {
-            controlFreq(step+1);
+            controlFreq(step + 1);
         }
     }
 

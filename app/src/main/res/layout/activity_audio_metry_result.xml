@@ -143,24 +143,42 @@
 
         // Graph Layout
 
-        <LinearLayout
-            android:id="@+id/linearL_graph"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:layout_weight="55"
-            android:background="@drawable/rounded_radius"
-            android:orientation="vertical">
+            android:layout_weight="55">
 
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/resultChart"
+            <LinearLayout
+                android:id="@+id/linearL_graph"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:layout_weight="55"
+                android:background="@drawable/rounded_radius"
+                android:orientation="vertical">
+
+                <lecho.lib.hellocharts.view.LineChartView
+                    android:id="@+id/resultChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp" />
+            </LinearLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="15dp"
-                android:paddingTop="10dp" />
-        </LinearLayout>
+                android:background="@drawable/rounded_radius"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/test_image"/>
+            </RelativeLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/linerL_info"
@@ -243,21 +261,23 @@
                         app:srcCompat="@drawable/condition_black_letter" />
 
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="50">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:paddingRight="25dp"
-                    android:text="GOOD"
-                    android:textColor="#8BC34A"
-                    android:textSize="25dp"
-                    android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:paddingRight="25dp"
+                        android:text="GOOD"
+                        android:textColor="#8BC34A"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -297,7 +317,7 @@
                     android:layout_weight="70"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
-                    android:text="안태현 님의 청력측정 결과입니다. 청력측정시 소음정도를 기준으로 정확도는 98% 이며, 상태는 나이에 기준하여 양호합니다. 주파수 1000 부분에서 약간의 청력손실이 의심되니 주의하시기 바랍니다." />
+                    android:text="차세민 님의 청력측정 결과입니다. 청력측정시 소음정도를 기준으로 정확도는 98% 이며, 상태는 나이에 기준하여 양호합니다. 고 주파수 부분에서 약간의 청력손실이 의심되니 주의하시기 바랍니다." />
             </LinearLayout>
             <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->

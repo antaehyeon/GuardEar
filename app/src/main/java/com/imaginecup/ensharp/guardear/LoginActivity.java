@@ -78,7 +78,7 @@ public class LoginActivity extends Activity {
         loginButton = (Button)findViewById(R.id.login_button);
 
         try {
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", LoginActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", LoginActivity.this);
 
             mToDoTable = mClient.getTable(ToDoItem.class);
             mAdapter = new ToDoItemAdapter(this, R.layout.row_earphone);

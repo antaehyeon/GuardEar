@@ -79,7 +79,7 @@ public class MainLoginActivity extends AppCompatActivity {
         join_email = (Button) findViewById(R.id.join_email);
 
         try {
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", MainLoginActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", MainLoginActivity.this);
 
             mToDoTable = mClient.getTable(ToDoItem.class);
             mAdapter = new ToDoItemAdapter(this, R.layout.row_earphone);
