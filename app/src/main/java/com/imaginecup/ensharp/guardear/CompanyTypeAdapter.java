@@ -15,7 +15,7 @@ import android.widget.TextView;
  * Created by MinKyeong on 2017. 2. 26..
  */
 
-public class CompanyTypeAdapter extends ArrayAdapter<CompanyType>{
+public class CompanyTypeAdapter extends ArrayAdapter<Company>{
 
     Context mContextCompany;
 
@@ -34,7 +34,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<CompanyType>{
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
 
-        final CompanyType currentItem = getItem(position);
+        final Company currentItem = getItem(position);
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContextCompany).getLayoutInflater();
@@ -55,7 +55,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<CompanyType>{
 
         if (currentItem.getID().toString().equals("APPLE")) {
             imageView.setImageResource(R.drawable.apple);
-        } else if (currentItem.getID().toString().equals("AUDIO-TEXHNICA")) {
+        } else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
             imageView.setImageResource(R.drawable.audiotexhnica);
         } else if(currentItem.getID().toString().equals("CRESYN")){
             imageView.setImageResource(R.drawable.cresyn);

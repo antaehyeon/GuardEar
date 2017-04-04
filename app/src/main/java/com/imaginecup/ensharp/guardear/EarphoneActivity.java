@@ -64,7 +64,7 @@ public class EarphoneActivity extends Activity {
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", EarphoneActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", EarphoneActivity.this);
 
             // Get the Mobile Service Table instance to use
             mEarphoneTable = mClient.getTable(Earphone.class);
@@ -210,11 +210,14 @@ public class EarphoneActivity extends Activity {
 
 
         Log.d("CheckItem", "checkItem 들어옴");
+        Log.d("CheckItem", "정보 들어오나 : " + item.toString());
         Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
+        Log.d("CheckItem", "정보 들어오나 : " + item.getSoundPressure().toString());
+        Log.d("CheckItem", "정보 들어오나 : " + item.getImpedance().toString());
 
 
         //mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
-        mPref.putValue("earphone_model", item.getCompany().toString(), "userinfo");
+        mPref.putValue("earphone_model", item.getCompanyName().toString(), "userinfo");
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
 
@@ -236,32 +239,32 @@ public class EarphoneActivity extends Activity {
             image = "mo_ig930bbegkr";
         }*/
 
-        if (item.getID().toString().equals("EO-BG920BBKG")) {
+        if (item.getModelName().toString().equals("EO-BG920BBKG")) {
             image = "eo_bg920bbkg";
-        } else if (item.getID().toString().equals("EO-EG920BWEG")) {
+        } else if (item.getModelName().toString().equals("EO-EG920BWEG")) {
             image = "eo_eg920bweg";
-        }else if (item.getID().toString().equals("EO-BN920CFKG")) {
+        }else if (item.getModelName().toString().equals("EO-BN920CFKG")) {
             image = "eo_bn920cfkg";
-        } else if (item.getID().toString().equals("EO-BG930CBKGKR")) {
+        } else if (item.getModelName().toString().equals("EO-BG930CBKGKR")) {
             image = "eo_bg930bkgkr";
-        }else if (item.getID().toString().equals("EO-BG935CBKGKR")) {
+        }else if (item.getModelName().toString().equals("EO-BG935CBKGKR")) {
             image = "eo_bg935cbkgkr";
         }/*else if(item.getID().toString().equals("EO-HS1393WEG")){
             image = "eo_hs1303weg";
-        }*/else if (item.getID().toString().equals("EO-IA510BLKGKR")) {
+        }*/else if (item.getModelName().toString().equals("EO-IA510BLKGKR")) {
             image = "eo_ia510blkgkr";
-        }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
+        }else if (item.getModelName().toString().equals("EO-IG930BBEGKR")) {
             image = "eo_ig930bbegkr";
-        }else if (item.getID().toString().equals("EO-MN900KWKG")) {
+        }else if (item.getModelName().toString().equals("EO-MN900KWKG")) {
             image = "eo_mn900kwkg";
-        }else if (item.getID().toString().equals("EO-MN910VWKG")) {
+        }else if (item.getModelName().toString().equals("EO-MN910VWKG")) {
             image = "eo_mn910vwkg";
-        }else if (item.getID().toString().equals("EO-MG920BBKG")) {
+        }else if (item.getModelName().toString().equals("EO-MG920BBKG")) {
             image = "eo_mg920bbkg";
         }
         mPref.putValue("earphone_image", image, "userinfo");
 
-        Log.d("이어폰 정보", item.getCompany().toString());
+        Log.d("이어폰 정보", item.getCompanyName().toString());
         Log.d("이어폰 정보", item.getID().toString());
         Log.d("이어폰 정보", item.getImpedance().toString());
         Log.d("이어폰 정보", item.getSoundPressure().toString());

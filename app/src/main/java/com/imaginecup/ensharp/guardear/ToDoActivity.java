@@ -135,7 +135,7 @@ public class ToDoActivity extends Activity {
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", ToDoActivity.this).withFilter(new ProgressFilter());
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", ToDoActivity.this).withFilter(new ProgressFilter());
 
             // Extend timeout from default of 10s to 20s
             mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {

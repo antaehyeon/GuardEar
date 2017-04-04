@@ -21,7 +21,7 @@ public class CompanyTypeActivity extends Activity {
     //static final String[] LIST_MENU = {"APPLE", "AUDIO-TEXHNICA", "CRESYN", "LG", "SAMSUNG","SENNHEISER","SHURE",   "SONY", "WESTONE", "XENICS"} ;
 
     private MobileServiceClient mClient;
-    private MobileServiceTable<CompanyType> mCompanyTable;
+    private MobileServiceTable<Company> mCompanyTable;
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
@@ -48,7 +48,7 @@ public class CompanyTypeActivity extends Activity {
         editor = setting.edit();
         // create a new item
 
-        final CompanyType companyTypeItem = new CompanyType();
+        final Company companyTypeItem = new Company();
 
         mEtSearch = (EditText)findViewById(R.id.etSearch);
         //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -57,10 +57,10 @@ public class CompanyTypeActivity extends Activity {
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://safeear.azurewebsites.net", CompanyTypeActivity.this);
+            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", CompanyTypeActivity.this);
 
             // Get the Mobile Service Table instance to use
-            mCompanyTable = mClient.getTable(CompanyType.class);
+            mCompanyTable = mClient.getTable(Company.class);
 
             mAdapter = new CompanyTypeAdapter(this, R.layout.row_earphone_company);
             listViewCompany = (ListView)findViewById(R.id.listViewCompany);
@@ -69,7 +69,7 @@ public class CompanyTypeActivity extends Activity {
             Log.d("회사명", "리스트뷰에 셋 어댑터");
 
             // create a new item
-            final CompanyType companyItem = new CompanyType();
+            final Company companyItem = new Company();
 
             companyItem.setID(mEtSearch.getText().toString());
             companyItem.setComplete(false);
@@ -80,7 +80,7 @@ public class CompanyTypeActivity extends Activity {
 
                     try {
                         // 데이터를 가져오는 리스트
-                        final List<CompanyType> result = mCompanyTable.execute().get();
+                        final List<Company> result = mCompanyTable.execute().get();
 
 
                         Log.d("회사명", "중복확인 result 값 받아오기");
@@ -96,7 +96,7 @@ public class CompanyTypeActivity extends Activity {
 
                                 listViewCompany.setAdapter(mAdapter);
 
-                                for(CompanyType item : result){
+                                for(Company item : result){
 
                                     mAdapter.add(item);
                                 }
@@ -135,7 +135,7 @@ public class CompanyTypeActivity extends Activity {
 
     }
 
-    public void checkItem(final CompanyType item) {
+    public void checkItem(final Company item) {
         String image = null;
 
         mPref.putValue("earphone_company", item.getID().toString(), "userinfo");

@@ -17,15 +17,18 @@ public class Earphone {
     @com.google.gson.annotations.SerializedName("id")
     private String mId; // 모델
 
-    @com.google.gson.annotations.SerializedName("soundpressure")
-    private String mSoundpressure; // 음압
+    @com.google.gson.annotations.SerializedName("soundPressure")
+    private String mSoundPressure; // 음압
 
     @com.google.gson.annotations.SerializedName("impedance")
     private String mImpedance;   // 저항
 
-    @com.google.gson.annotations.SerializedName("company")
-    private String mCompany; // 회사명
+    @com.google.gson.annotations.SerializedName("companyName")
+    private String mCompanyName; // 회사명
 
+
+    @com.google.gson.annotations.SerializedName("modelName")
+    private String mModelName; // 회사명
 
     @com.google.gson.annotations.SerializedName("complete")
     private boolean mComplete;
@@ -39,8 +42,8 @@ public class Earphone {
     public String toString() {
         Log.d("이어폰", "toString()");
 
-        return getID();
-        //return getID() +  "/" + getSoundPressure() + "/" + getImpedance(); // 임시 변환
+        //return getModelName();
+        return getID() +  "/" + getSoundPressure() + "/" + getImpedance(); // 임시 변환
     }
 
 
@@ -49,15 +52,16 @@ public class Earphone {
      *
      * @param id
      *            The item text
-     * @param soundpressure
+     * @param soundPressure
      *            The item id
      * @param impedance
      */
-    public Earphone(String id, String soundpressure, String impedance, String company) {
+    public Earphone(String id, String soundPressure, String impedance, String companyname, String modelname) {
         this.setID(id);
-        this.setSoundPressure(soundpressure);
+        this.setSoundPressure(soundPressure);
         this.setImpedance(impedance);
-        this.setCompany(company);
+        this.setCompanyName(companyname);
+        this.setModelName(modelname);
         Log.d("이어폰", "this.반환값");
     }
 
@@ -76,16 +80,19 @@ public class Earphone {
     /**
      * Returns the item id
      */
-    public String getSoundPressure() { return mSoundpressure; }
+    public String getSoundPressure() { return mSoundPressure; }
     public final void setSoundPressure(String soundPressure) {
-        mSoundpressure = soundPressure;
+        mSoundPressure = soundPressure;
     }
 
     public String getImpedance() {  return mImpedance;}
     public final void setImpedance(String impedance) {  mImpedance = impedance;}
 
-    public String getCompany() { return mCompany;}
-    public final void setCompany(String company) { mCompany = company; }
+    public String getCompanyName() { return mCompanyName;}
+    public final void setCompanyName(String company) { mCompanyName = company; }
+
+    public String getModelName() { return mModelName;}
+    public final void setModelName(String modelname) { mModelName = modelname; }
 
 
     public boolean isComplete() {
