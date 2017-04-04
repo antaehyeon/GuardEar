@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by MinKyeong on 2017. 2. 18..
  */
@@ -67,29 +69,77 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
 
         if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
-            imageView.setImageResource(R.drawable.eo_bg920bbkg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/k1M4G7M.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_bg920bbkg);
         } else if (currentItem.getModelName().toString().equals("EO-EG920BWEG")) {
-            imageView.setImageResource(R.drawable.eo_eg920bweg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/qqTihXN.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_eg920bweg);
         }else if (currentItem.getModelName().toString().equals("EO-BN920CFKG")) {
-            imageView.setImageResource(R.drawable.eo_bn920cfkg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/I5RdmqT.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_bn920cfkg);
         } else if (currentItem.getModelName().toString().equals("EO-BG930CBKGKR")) {
-            imageView.setImageResource(R.drawable.eo_bg930bkgkr);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/GXD5SFk.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_bg930bkgkr);
         }else if (currentItem.getModelName().toString().equals("EO-BG935CBKGKR")) {
-            imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/b9NWIe4.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
         }else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")) {
-            imageView.setImageResource(R.drawable.eo_hs1303weg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/vKdm6MG.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_hs1303weg);
         }else if (currentItem.getModelName().toString().equals("EO-IA510BLKGKR")) {
-            imageView.setImageResource(R.drawable.eo_ia510blkgkr);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/d7GD8gJ.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_ia510blkgkr);
         }else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
-            imageView.setImageResource(R.drawable.eo_ig930bbegkr);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/e7NGkx5.pngg")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_ig930bbegkr);
         }else if (currentItem.getModelName().toString().equals("EO-MN900KWKG")) {
-            imageView.setImageResource(R.drawable.eo_mn900kwkg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/UcJUgc6.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_mn900kwkg);
         }else if (currentItem.getModelName().toString().equals("EO-MN910VWKG")) {
-            imageView.setImageResource(R.drawable.eo_mn910vwkg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/kmsqkBX.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_mn910vwkg);
         }else if (currentItem.getModelName().toString().equals("EO-MG920BBKG")) {
-            imageView.setImageResource(R.drawable.eo_mg920bbkg);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/0auySUx.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_mg920bbkg);
         }else{
-            imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
+            Picasso.with(mContextEar)
+                    .load("http://i.imgur.com/3mpEy2p.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+            //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
         }
 
 
