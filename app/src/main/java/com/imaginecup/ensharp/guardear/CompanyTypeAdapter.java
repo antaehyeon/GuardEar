@@ -21,7 +21,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
 
     Context mContextCompany;
     int mLayoutResourceId;
-
+    String url;
 
     public CompanyTypeAdapter(Context context, int layoutResourceId){
         super(context, layoutResourceId);
@@ -52,25 +52,50 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
         company.setText(currentItem.getID());
         Log.d("이어폰 회사명 확인: ", currentItem.getID().toString());
 
+        url = currentItem.getUrl().toString();
 
-        if (currentItem.getID().toString().equals("APPLE")) {
             Picasso.with(mContextCompany)
-                    .load("http://i.imgur.com/3mpEy2p.png")
+                    .load("http://i.imgur.com/"+url)
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
-        }  else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0){
+                Log.d("체크박스 확인 Company : ", " OnClcick " );
+
+                if (imageButton.isPressed()== true) {
+                    Log.d("체크박스 확인 Company : ", " if 문");
+
+                    CompanyTypeActivity activity = (CompanyTypeActivity) mContextCompany;
+
+                    activity.checkItem(currentItem);
+                }
+            }
+        });
+        return row;
+    }
+}
+
+
+ /*if (currentItem.getID().toString().equals("APPLE")) {
             Picasso.with(mContextCompany)
-                    .load("http://i.imgur.com/Cfyxd9i.png")
+                    .load("http://i.imgur.com/"+url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        } else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+ url)
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
         } else if(currentItem.getID().toString().equals("CRESYN")){
             Picasso.with(mContextCompany)
-                    .load("http://i.imgur.com/T8pfQCG.png")
+                    .load("http://i.imgur.com/"+url)
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
         }else if (currentItem.getID().toString().equals("LG")) {
             Picasso.with(mContextCompany)
-                    .load("http://i.imgur.com/2hRSFTn.png")
+                    .load("http://i.imgur.com/"+url)
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
         }else if (currentItem.getID().toString().equals("SAMSUNG")) {
@@ -103,27 +128,4 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
                     .load("http://i.imgur.com/LDlQKLU.png")
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
-        }
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0){
-                Log.d("체크박스 확인 Company : ", " OnClcick " );
-
-                if (imageButton.isPressed()== true) {
-                    Log.d("체크박스 확인 Company : ", " if 문");
-
-                    CompanyTypeActivity activity = (CompanyTypeActivity) mContextCompany;
-
-                    activity.checkItem(currentItem);
-
-                }
-            }
-        });
-
-
-        return row;
-    }
-
-
-}
+        }*/

@@ -29,6 +29,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
      * Adapter View layout
      */
     int mLayoutResourceId;
+    String url;
 
     public EarphoneAdapter(Context contextear, int layoutResourceId) {
         super(contextear, layoutResourceId);
@@ -60,6 +61,8 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         //String imageview;
 
         name.setText(currentItem.getID());
+        url = currentItem.getImage().toString();
+
         company.setText(currentItem.getModelName());
         checkBox.setChecked(false);
         checkBox.setEnabled(true);
@@ -68,7 +71,38 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
         Log.d("체크박스 확인 : ", currentItem.toString());
 
 
-        if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
+        Picasso.with(mContextEar)
+                .load("http://i.imgur.com/"+url)
+                .placeholder(R.drawable.eo_bg920bbkg)
+                .into(imageView);
+
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0){
+                Log.d("체크박스 확인 : ", " OnClcick " );
+
+                if (checkBox.isChecked()== true) {
+                    Log.d("체크박스 확인 : ", " if 문");
+
+                    EarphoneActivity activity = (EarphoneActivity) mContextEar;
+
+                    activity.checkItem(currentItem);
+
+                    activity.NextClick(btn_Next);
+                    //Log.d("체크박스 확인 : ", " " + checkBox.isChecked());
+                }
+            }
+        });
+
+        return row;
+    }
+}
+
+
+
+
+  /*  if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
             Picasso.with(mContextEar)
                     .load("http://i.imgur.com/k1M4G7M.png")
                     .placeholder(R.drawable.eo_bg920bbkg)
@@ -98,7 +132,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
             //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
-        }else if(currentItem.getModelName().toString().equals("EO-HS1393WEG")) {
+        }else if(currentItem.getModelName().toString().equals("EO-HS1303WEG")) {
             Picasso.with(mContextEar)
                     .load("http://i.imgur.com/vKdm6MG.png")
                     .placeholder(R.drawable.eo_bg920bbkg)
@@ -116,7 +150,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
             //imageView.setImageResource(R.drawable.eo_ig930bbegkr);
-        }else if (currentItem.getModelName().toString().equals("EO-MN900KWKG")) {
+        }else if (currentItem.getModelName().toString().equals("EO-MG900KWKG")) {
             Picasso.with(mContextEar)
                     .load("http://i.imgur.com/UcJUgc6.png")
                     .placeholder(R.drawable.eo_bg920bbkg)
@@ -140,27 +174,4 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
                     .placeholder(R.drawable.eo_bg920bbkg)
                     .into(imageView);
             //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
-        }
-
-
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0){
-                Log.d("체크박스 확인 : ", " OnClcick " );
-
-                if (checkBox.isChecked()== true) {
-                    Log.d("체크박스 확인 : ", " if 문");
-
-                    EarphoneActivity activity = (EarphoneActivity) mContextEar;
-
-                    activity.checkItem(currentItem);
-
-                    activity.NextClick(btn_Next);
-                    //Log.d("체크박스 확인 : ", " " + checkBox.isChecked());
-                }
-            }
-        });
-
-        return row;
-    }
-}
+        }*/
