@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
@@ -37,6 +44,11 @@ public class MainLoginActivity extends AppCompatActivity {
     private MobileServiceClient mClient;
     private MobileServiceTable<ToDoItem> mToDoTable;
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
+
+    //android
+    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 1;
+    GoogleApiClient mGoogleApiClient;
+
 
 
     private CallbackManager callbackManager;
@@ -78,6 +90,33 @@ public class MainLoginActivity extends AppCompatActivity {
         btn_email = (Button) findViewById(R.id.btn_email);
         join_email = (Button) findViewById(R.id.join_email);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder( GoogleSignInOptions.DEFAULT_SIGN_IN )
+                            .requestEmail( )
+                            .requestProfile( )
+                            .build( );
+        mGoogleApiClient = new GoogleApiClient.Builder( MainLoginActivity.this )
+                .enableAutoManage( MainLoginActivity.this, new GoogleApiClient.OnConnectionFailedListener( ) {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult )
+                    {
+                        // 연결에 실패했을 경우 실행되는 메서드입니다.
+                    }
+                })
+                // 필요한 api가 있으면 아래에 추가
+                .addApi( Auth.GOOGLE_SIGN_IN_API, gso )
+                .build( );
+        // 로그인 버튼 클릭 리스너 등록
+        Button googleLoginButton = ( Button ) findViewById( R.id.btn_google );
+        googleLoginButton.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick( View view ) {
+                // 구글 로그인 화면을 출력합니다. 화면이 닫힌 후 onActivityResult가 실행됩니다.
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent( mGoogleApiClient );
+                startActivityForResult( signInIntent, RESOLVE_CONNECTION_REQUEST_CODE );
+            }
+        } );
+
+
         try {
             mClient = new MobileServiceClient("https://guardear.azurewebsites.net", MainLoginActivity.this);
 
@@ -103,9 +142,6 @@ public class MainLoginActivity extends AppCompatActivity {
             //Log.d("자동로그인", item.toString());
             //Log.d("자동로그인", "test : "+ item.getId());
 
-
-
-
             /*if(item.toString().equals("null/null/null/null/null")) {
             }
             else if(auto_id.equals(item.getId().toString())&& auto_pw.equals(item.getText().toString())){
@@ -129,8 +165,12 @@ public class MainLoginActivity extends AppCompatActivity {
         }
 
 
+
     }
-//
+
+
+
+
     // facebook login button click
     public void facebookClick(View view){
 
@@ -266,6 +306,19 @@ public class MainLoginActivity extends AppCompatActivity {
 
         // 페이스북 로그인 결과를 콜백매니저에 담는다
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        switch ( requestCode )
+        {
+            case RESOLVE_CONNECTION_REQUEST_CODE:
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent( data );
+                if ( result.isSuccess( ) ) {
+                    GoogleSignInAccount acct = result.getSignInAccount( ); // 계정 정보 얻어오기
+                    Log.i("GOOGLE" , acct.getDisplayName( ) +" " );
+                    Log.i("GOOGLE", acct.getDisplayName());
+                }
+                break;
+            default:
+                super.onActivityResult( requestCode, resultCode, data );
+        }
 
         Log.d("페이스북 callbackManager", "onActivityResult()");
 
