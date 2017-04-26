@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+
+import java.net.MalformedURLException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+
+
+
+    /**      음악 정보 test 중    **/
+    private MobileServiceClient mClient;
+    private MobileServiceTable<MusicInfo> mMusicTable;
+
 
 
     @Override
@@ -142,7 +156,48 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        try {
+
+            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", MainActivity.this);
+
+            // Get the Mobile Service Table instance to use
+            mMusicTable = mClient.getTable(MusicInfo.class);
+
+            checkItem();
+
+
+        } catch (MalformedURLException e) {
+        //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
+
     }
+
+    public void checkItem(){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // 데이터를 가져오는 리스트
+                    final List<MusicInfo> result = mMusicTable.execute().get();
+
+
+                    Log.d("음악정보", "결과값 확인 : " + result.get(5).getValue().toString());
+
+
+                } catch (final Exception e){
+
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+
+
+
+    }
+
 
     public void decibelDataSave() {
         if (pref.getValue("0", "0", "Note5") == "0") {
@@ -395,4 +450,18 @@ public class MainActivity extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
+
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        Log.d("태그", "AsyncTask");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            return task.execute();
+
+        }
+    }
+
+
+
 }

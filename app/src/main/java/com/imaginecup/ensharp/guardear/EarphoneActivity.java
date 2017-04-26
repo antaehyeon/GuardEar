@@ -311,7 +311,8 @@ public class EarphoneActivity extends Activity {
 
         if(btn_Next.isPressed()) {
 
-            Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+            //Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
 
             finish();
