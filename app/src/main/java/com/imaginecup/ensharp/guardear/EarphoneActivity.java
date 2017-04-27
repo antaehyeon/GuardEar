@@ -46,6 +46,9 @@ public class EarphoneActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earphone);
 
+        Log.d("순서확인중", " EarphoneActivity onCreate(Bundle savedInstanceState)");
+
+
         //이어폰 등록 부분
         //model = (EditText)findViewById(R.id.model);
         //soundpressure = (EditText)findViewById(R.id.soundpressure);
@@ -81,6 +84,8 @@ public class EarphoneActivity extends Activity {
             // create a new item
             final Earphone earphoneItem = new Earphone();
 
+
+
             earphoneItem.setID(mEtSearch.getText().toString());
             earphoneItem.setComplete(false);
 
@@ -90,6 +95,8 @@ public class EarphoneActivity extends Activity {
                     try {
                         // 데이터를 가져오는 리스트
                         final List<Earphone> result = mEarphoneTable.execute().get();
+
+                        Log.d("순서확인중", " EarphoneActivity "+ result.toString());
 
                         Log.d("이어폰", "중복확인 result 값 받아오기");
                         Log.d("이어폰", "결과값 확인 : " + result.toString());

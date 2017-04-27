@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
+
     /**
      * Adapter context
      */
@@ -32,8 +33,11 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
     String url;
 
     public EarphoneAdapter(Context contextear, int layoutResourceId) {
+
         super(contextear, layoutResourceId);
 
+
+        Log.d("순서확인중", "EarphoneAdapter(Context contextear, int layoutResourceId)");
         mContextEar = contextear;
         mLayoutResourceId = layoutResourceId;
     }
@@ -43,9 +47,15 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        Log.d("순서확인중", " View getView");
         View row = convertView;
 
         final Earphone currentItem = getItem(position);
+
+        Log.d("순서확인중", " Earphone currentItem = getItem(position);");
+
+
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContextEar).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);

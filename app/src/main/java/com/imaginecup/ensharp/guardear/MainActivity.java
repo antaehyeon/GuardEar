@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
             checkItem();
 
-
         } catch (MalformedURLException e) {
         //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
@@ -175,25 +174,34 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkItem(){
 
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+        //AsyncTask<Void, Void, Void> task =
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     // 데이터를 가져오는 리스트
                     final List<MusicInfo> result = mMusicTable.execute().get();
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    Log.d("음악정보", "결과값 확인 : " + result.get(5).getValue().toString());
+                            for (MusicInfo item : result) {
+                                Log.d("순서확인중", " mMusicTable "+ item.getID().toString());
+
+                            }
+                        }
+                    });
 
 
                 } catch (final Exception e){
-
+                    //createAndShowDialogFromTask(e, "Error");
                 }
                 return null;
             }
-        };
-        runAsyncTask(task);
-
+        }.execute();
+        //runAsyncTask(task);
 
 
     }
