@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,6 +35,8 @@ import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
     /**      음악 정보 test 중    **/
     private MobileServiceClient mClient;
     private MobileServiceTable<MusicInfo> mMusicTable;
+    /**      타이머 함수 test 중  **/
+    private final Handler handler = new Handler();
+    private TimerTask second;
+    int timer_sec;
+    String timer_text;
+    int count;
 
 
 
@@ -164,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             // Get the Mobile Service Table instance to use
             mMusicTable = mClient.getTable(MusicInfo.class);
 
-            checkItem();
+            testStart();
 
         } catch (MalformedURLException e) {
         //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -172,25 +181,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void testStart(){
+
+        timer_sec = 0;
+
+        Toast.makeText(getApplicationContext(), timer_text , Toast.LENGTH_SHORT).show();
+
+        second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("TEST TIMER", "Timer start");
+                checkItem();
+                timer_sec++;
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(second, 0, 1000);
+        
+    }
+
+    protected void Update(){
+
+        Runnable updater = new Runnable() {
+            @Override
+            public void run() {
+                timer_text = timer_sec + "초";
+            }
+        };
+        handler.post(updater);
+
+
+    }
+
+
     public void checkItem(){
 
 
-        //AsyncTask<Void, Void, Void> task =
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     // 데이터를 가져오는 리스트
-                    final List<MusicInfo> result = mMusicTable.execute().get();
+                    //final List<MusicInfo> result = mMusicTable.execute().get();
+                    // mToDoTable.where().field("complete").eq(false).execute().get();
+                    final List<MusicInfo> result = mMusicTable.where().field("id").eq(timer_sec).execute().get();
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             for (MusicInfo item : result) {
+                                timer_text = item.getID().toString();
+                                Toast.makeText( MainActivity.this , item.getID().toString(), Toast.LENGTH_SHORT).show();
                                 Log.d("순서확인중", " mMusicTable "+ item.getID().toString());
-
                             }
+
                         }
                     });
 
