@@ -47,23 +47,41 @@ public class DecibelServiceThread extends Thread {
     }
 
     public void run() {
-        mSoundFile = new SoundFile();
         mPref = new SharedPreferences(mContext);
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        try {
-            controlElapse(RUN);
-            if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
-                mSoundFile.create(mTrackFullPath, mKeyName, mContext);
+        if (mTrackFullPath != "스트리밍 음원") {
+            mSoundFile = new SoundFile();
+            try {
+                controlElapse(RUN);
+                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
+                    mSoundFile.create(mTrackFullPath, mKeyName, mContext);
+                }
+            } catch (final Exception e) {
+                Log.e("mSoundfile이 null", "사운드 파일 없음");
             }
-        } catch (final Exception e) {
-            Log.e("mSoundfile이 null", "사운드 파일 없음");
-        }
-        Log.i("서비스 run", "sendEmptyMessage");
+            Log.i("서비스 run", "sendEmptyMessage");
 
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+            }
+        } else {
+            try {
+                controlElapse(RUN);
+                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
+                    //서버에서 받기
+                }
+            } catch (final Exception e) {
+                Log.e("mSoundfile이 null", "사운드 파일 없음");
+            }
+            Log.i("서비스 run", "sendEmptyMessage");
+
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+            }
         }
+
     }
 
     public void controlElapse(int mode) {

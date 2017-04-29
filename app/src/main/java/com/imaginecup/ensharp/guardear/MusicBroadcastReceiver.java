@@ -152,12 +152,26 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                 mMsg = mHandler.obtainMessage();
                 if (mIsPlaying) {
                     mMsg.what = SEND_MUSIC_INFORMATION;
-                    String musicInfo = new String("가수 : " + mArtistName + "\n" + "제목 : " + mTrackName + "\n" + "음원저장경로 : " + mTrackFullPath + "\n" + "앱명 : " + mPackageName);
+                    String musicInfo = new String("가수 : " + mArtistName + "\n" + "제목 : " + mTrackName + "\n" + "음원저장경로 : " + mTrackFullPath + "\n" + "앱명 : " + mPackageName + " 시작점 : " + Long.toString(0));
+                    Log.e("음원정보", musicInfo);
                     mMsg.obj = musicInfo;
                     mHandler.sendMessage(mMsg);
                     mPref.putValue("0", musicInfo, "음악 재생 정보");
                     if (!mServiceData.isMyServiceRunning(ListeningService.class)) {
                         context.startService(mIntent);
+                    }
+                    if (mServiceData.isMyServiceRunning(DecibelService.class)) {
+                        context.stopService(mdBIntent);
+                        mdBIntent = new Intent(context, DecibelService.class);
+                        mdBIntent.putExtra("trackFullPath", mTrackFullPath);
+                        mdBIntent.putExtra("position", 0);
+                        mdBIntent.putExtra("keyName", mMusicKeyName);
+                        context.startService(mdBIntent);
+                    } else {
+                        mdBIntent.putExtra("trackFullPath", mTrackFullPath);
+                        mdBIntent.putExtra("position", "");
+                        mdBIntent.putExtra("keyName", mMusicKeyName);
+                        context.startService(mdBIntent);
                     }
 //                mIntent = new Intent(context, DecibelService.class);
 //                mIntent.putExtra("trackFullPath",mTrackFullPath);
