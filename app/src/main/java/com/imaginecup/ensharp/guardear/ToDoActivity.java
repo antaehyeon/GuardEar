@@ -99,8 +99,7 @@ public class ToDoActivity extends Activity {
     android.content.SharedPreferences.Editor editor;
 
     Button btn_check;
-    String convertStr;
-    String[] strArray;
+
     boolean checked;
     String mail;
 

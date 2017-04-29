@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +30,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends Activity {
@@ -85,6 +85,7 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
             }
         });
+
 
         try {
             mClient = new MobileServiceClient("https://guardear.azurewebsites.net", LoginActivity.this);
@@ -206,7 +207,70 @@ public class LoginActivity extends Activity {
         strMail = etEmail.getText().toString(); // e-mail
         strPW = etPassword.getText().toString(); // password
 
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // 데이터를 가져오는 리스트
+                    final List<ToDoItem> result = mToDoTable.where().field("id").eq(strMail).execute().get();
+                    Log.d("로그인 확인중", result.toString());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            for (ToDoItem item : result) {
+
+                                Log.d("로그인 확인중 id:", item.getId().toString() +"<<");
+                                Log.d("로그인 확인중 pw", item.getText().toString()+"<<");
+                                if(item.getId().toString().equals(strMail) &&item.getText().toString().equals(strPW)){
+                                    Toast.makeText(LoginActivity.this, "로그인 되었습니다", Toast.LENGTH_SHORT).show();
+                                    Log.d("로그인", "로그인 성공");
+                                    Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+
+                                    startActivity(intent);
+                                    finish();
+                                }else if(!item.getId().toString().equals(strMail)){
+
+                                    editor.clear();
+                                    editor.commit();
+
+                                    Log.d("로그인", "아이디 실패");
+                                    Log.d("로그인", strArray[0].toString());
+                                    etEmail.setText(null);
+                                    etPassword.setText(null);
+                                    Toast.makeText(LoginActivity.this, "등록된 아이디가 없습니다", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(!item.getText().toString().equals(strPW)){
+                                    editor.clear();
+                                    editor.commit();
+
+                                    etPassword.setText(null);
+                                    Toast.makeText(LoginActivity.this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                    Log.d("로그인", "비밀번호 실패");
+
+                                }
+                                else{
+                                    Toast.makeText(LoginActivity.this, "존재하지 않습니다", Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            }
+
+                        }
+                    });
+
+
+                } catch (final Exception e){
+                    //createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        }.execute();
+
+
+
+       /* AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 //final List<ToDoItem> result = mToDoTable.where().field("name").eq(strMail).execute().get();
@@ -270,7 +334,7 @@ public class LoginActivity extends Activity {
                 return null;
             }
         };
-        runAsyncTask(task);
+        runAsyncTask(task);*/
 
 
     }
