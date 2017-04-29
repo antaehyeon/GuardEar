@@ -15,6 +15,10 @@ public class MusicInfo {
     @com.google.gson.annotations.SerializedName("id")
     private String mId; // 노래index
 
+
+    @com.google.gson.annotations.SerializedName("seconds")
+    private String mSeconds; // 초
+
     @com.google.gson.annotations.SerializedName("musicValue")
     private String mMusicValue; // 값
 
@@ -31,7 +35,7 @@ public class MusicInfo {
         Log.d("음악값 정보", "값 :"+toString());
 
         //return getModelName();
-        return getID() +  "/" + getValue();
+        return getID() +  "/" + getSecond()+ "/" + getValue();
     }
 
 
@@ -44,8 +48,9 @@ public class MusicInfo {
      *            The item id
      */
 
-    public MusicInfo(String id, String value) {
+    public MusicInfo(String id, String second, String value) {
         this.setID(id);
+        this.setSecond(second);
         this.setValue(value);
         Log.d("음악 정보", "this.반환값");
     }
@@ -65,6 +70,12 @@ public class MusicInfo {
     /**
      * Returns the item id
      */
+
+    public String getSecond() { return mSeconds; }
+    public final void setSecond(String second) {
+        mSeconds = second;
+    }
+
     public String getValue() { return mMusicValue; }
     public final void setValue(String value) {
         mMusicValue = value;
