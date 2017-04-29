@@ -117,12 +117,27 @@ public class FindpwActivity extends AppCompatActivity {
     //비밀번호 변경 Activity로
     private void changePW() {
 
+        //새로운 인증번호 재 전송
+        AlertDialog.Builder builder = new AlertDialog.Builder(FindpwActivity.this);
+        builder.setTitle(getString(R.string.diolog_once1));
+        builder.setMessage(getString(R.string.diolog_once2));
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                return;
+            }
+        });
+        //알림창 객체 설정
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //인증번호가 일치할 경우
-                if (etNumber.getText().toString().equals("1")) {
+                if (etNumber.getText().toString().equals("5235")) {
 
                     Intent intent = new Intent(getApplicationContext(), ChangePWActivity.class);
 
@@ -132,8 +147,8 @@ public class FindpwActivity extends AppCompatActivity {
                 } else {
                     //새로운 인증번호 재 전송
                     AlertDialog.Builder builder = new AlertDialog.Builder(FindpwActivity.this);
-                    builder.setTitle(getString(R.string.diolog_once1));
-                    builder.setMessage(getString(R.string.diolog_once2));
+                    builder.setTitle("인증번호가 일치하지 않습니다");
+                    builder.setMessage("다시 입력해주세요");
                     builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 

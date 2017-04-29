@@ -233,8 +233,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }.execute();
         //runAsyncTask(task);
-
-
     }
 
 

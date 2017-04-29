@@ -38,7 +38,7 @@ dependencies {
     //
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     //
-    //compile 'com.android.support:support-v4:21.0.3'// 없
+    //compile 'com.android.support:support-v4:21.0.3'//
     compile 'com.google.code.gson:gson:2.2.2'
     // 다름
     compile 'com.google.guava:guava:18.0'
@@ -55,7 +55,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.0.0'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.google.android.gms:play-services-appindexing:9.0.0'
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/mail.jar')
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/additionnal.jar')
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/activation.jar')
+    compile project(':activation')
+    compile project(':additionnal')
+    compile project(':mail')
 }

@@ -77,6 +77,20 @@
             android:background="@null"/>
         <requestFocus />
 
+        <Button
+            android:id="@+id/btn_check"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:text="@string/btn_check"
+            android:textColor="@color/skyblue"
+            android:layout_gravity="center_vertical"
+            android:layout_centerInParent="true"
+            android:layout_weight="0.6"
+            android:onClick="checkName"
+            android:background = "@drawable/shape"
+            android:layout_marginRight="28dp"
+            />
+
 
     </LinearLayout>
 
@@ -115,19 +129,6 @@
                 android:layout_marginLeft="8dp"
                 android:background="@null"/>
 
-            <Button
-                android:id="@+id/btn_check"
-                android:layout_width="wrap_content"
-                android:layout_height="33dp"
-                android:text="@string/btn_check"
-                android:textColor="@color/skyblue"
-                android:layout_gravity="center_vertical"
-                android:layout_centerInParent="true"
-                android:layout_weight="0.6"
-                android:onClick="checkName"
-                android:background = "@drawable/shape"
-                android:layout_marginRight="28dp"
-                />
         </LinearLayout>
 
         <View
@@ -346,7 +347,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>
