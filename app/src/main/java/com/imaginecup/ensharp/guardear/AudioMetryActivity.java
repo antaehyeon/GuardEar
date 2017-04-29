@@ -196,27 +196,27 @@ public class AudioMetryActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(baseColor);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
-        surround_dB = (TextView) findViewById(R.id.tv_surroundDecibel);
-        mTimer = new Timer(true);  // 데몬 쓰레드로 할 것 인지 여부를 결정한다.
+        //surround_dB = (TextView) findViewById(R.id.tv_surroundDecibel);
+        //mTimer = new Timer(true);  // 데몬 쓰레드로 할 것 인지 여부를 결정한다.
 
-        mHandler = new Handler();
+        //mHandler = new Handler();
 
-        mTimer.schedule(
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if (surround_dB != null) {
-                                    int random = (int) (Math.random() * 10)+60;
-                                    surround_dB.setText(Integer.toString(random));
-                                }
-                            }
-                        });
-                    }
-                }, 1000, 1000
-
-        );
+//        mTimer.schedule(
+//                new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        handler.post(new Runnable() {
+//                            public void run() {
+//                                if (surround_dB != null) {
+//                                    int random = (int) (Math.random() * 10)+60;
+//                                    surround_dB.setText(Integer.toString(random));
+//                                }
+//                            }
+//                        });
+//                    }
+//                }, 1000, 1000
+//
+//        );
 
         // Toolbar 에 넣을 txetView(title) 속성 조정
         title = (TextView) toolbar.findViewById(R.id.toolBar_audiometry_title);
@@ -327,7 +327,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
                     startActivity(intent);
-                    mTimer.cancel();
+                    //mTimer.cancel();
                     finish();
                 }
 
