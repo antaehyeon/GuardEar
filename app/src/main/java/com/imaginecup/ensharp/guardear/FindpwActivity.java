@@ -61,7 +61,7 @@ public class FindpwActivity extends AppCompatActivity {
 
     private void equalsMail() {
         //이메일이 맞다면
-        if (etEmail.getText().toString().equals("test")) {
+        if (etEmail.getText().toString().equals("zoz7")) {
 
             findEmail.setTextColor(Color.parseColor("#2f4959"));
             etEmail.setBackgroundColor(Color.parseColor("#2f4959"));
@@ -83,10 +83,10 @@ public class FindpwActivity extends AppCompatActivity {
 
                 sender.sendMail(
 
-                        "메일제목 !!",   //subject.getText().toString(),
-                        "메일 본문입니다..~~ ",           //body.getText().toString(),
+                        "Guardear 비밀번호 재설정",   //subject.getText().toString(),
+                        "비밀번호 재설정 인증메일입니다.\n 인증번호 \'5234\'를 입력해주세요",  //body.getText().toString(),
                         "seong9806@gmail.com",          //from.getText().toString(),
-                        "zoz7@naver.com"            //to.getText().toString()
+                        etEmail.getText().toString()+"@naver.com"         //to.getText().toString()
                 );
 
                 changePW();
@@ -167,7 +167,7 @@ public class FindpwActivity extends AppCompatActivity {
                     sender.sendMail("의견보내기", // subject.getText().toString(),
                             "메일에 들어가는 본문 내용", // body.getText().toString(),
                             "seong9806@gmail.com", // from.getText().toString(),
-                            "zoz7@naver.com" // to.getText().toString()
+                            "seong9806@gmail.com" // to.getText().toString()
                     );
                     sleep(3000);
                 } catch (Exception e) {

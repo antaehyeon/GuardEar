@@ -4,25 +4,23 @@ package com.imaginecup.ensharp.guardear;
  * Created by MinKyeong on 2017. 4. 29..
  */
 
+import android.os.StrictMode;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.security.Security;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.sql.DataSource;
+
 
 
 public class GmailSender extends javax.mail.Authenticator {
@@ -35,7 +33,7 @@ public class GmailSender extends javax.mail.Authenticator {
         Security.addProvider(new com.provider.JSSEProvider());
     }
 
-    public GmailSender(String user, String password) {
+    public GmailSender(final String user, final String password) {
         this.user = user;
         this.password = password;
 
@@ -50,16 +48,31 @@ public class GmailSender extends javax.mail.Authenticator {
         props.put("mail.smtp.socketFactory.fallback", "false");
         props.setProperty("mail.smtp.quitwait", "false");
 
-        session = Session.getDefaultInstance(props, this);
+        //session = Session.getDefaultInstance(props, this);
+        session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
     }
 
     protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(user, password);
+        String username = "user";
+        String password = "password";
+        if ((username != null) && (username.length() > 0) && (password != null)
+                && (password.length   () > 0)) {
+
+            return new PasswordAuthentication(username, password);
+        }
+
+        return null;
+        //return new PasswordAuthentication(user, password);
     }
 
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         MimeMessage message = new MimeMessage(session);
-        DataHandler handler = new DataHandler((javax.activation.DataSource) new ByteArrayDataSource(body.getBytes(), "text/plain"));
+        DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
         message.setSender(new InternetAddress(sender));
         message.setSubject(subject);
         message.setDataHandler(handler);
@@ -67,9 +80,17 @@ public class GmailSender extends javax.mail.Authenticator {
             message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(recipients));
         else
             message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipients));
+
+        if(android.os.Build.VERSION.SDK_INT > 9) {
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+
+        }
+
         Transport.send(message);
     }
-
     public class ByteArrayDataSource implements DataSource {
         private byte[] data;
         private String type;
@@ -106,51 +127,6 @@ public class GmailSender extends javax.mail.Authenticator {
 
         public OutputStream getOutputStream() throws IOException {
             throw new IOException("Not Supported");
-        }
-
-        @Override
-        public Connection getConnection() throws SQLException {
-            return null;
-        }
-
-        @Override
-        public Connection getConnection(String username, String password) throws SQLException {
-            return null;
-        }
-
-        @Override
-        public <T> T unwrap(Class<T> iface) throws SQLException {
-            return null;
-        }
-
-        @Override
-        public boolean isWrapperFor(Class<?> iface) throws SQLException {
-            return false;
-        }
-
-        @Override
-        public PrintWriter getLogWriter() throws SQLException {
-            return null;
-        }
-
-        @Override
-        public void setLogWriter(PrintWriter out) throws SQLException {
-
-        }
-
-        @Override
-        public void setLoginTimeout(int seconds) throws SQLException {
-
-        }
-
-        @Override
-        public int getLoginTimeout() throws SQLException {
-            return 0;
-        }
-
-        @Override
-        public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-            return null;
         }
     }
 }
