@@ -438,7 +438,6 @@ public class ToDoActivity extends Activity {
                 protected Void doInBackground(Void... params) {
                     try {
                         // 데이터를 가져오는 리스트
-
                         final List<ToDoItem> result = mToDoTable.where().field("id").eq(mail).execute().get();
                         Log.d("회원가입 test", result.toString());
 

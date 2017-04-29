@@ -24,6 +24,9 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.ScaleGestureDetector;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -67,6 +70,12 @@ public class SoundFile {
     private String mFileName;
     private String mKeyName;
     private static final int DECIBEL_CONSTANTS = 20;
+    private MobileServiceClient mClient;
+    private ToDoItemAdapter mAdapter;
+
+    /**      음악 정보 test 중    **/
+   // private MobileServiceClient mClient = new MobileServiceClient("http://guardear.azurewebsites.net");
+    private MobileServiceTable<MusicInfo> mMusicTable;
 
     // Custom exception for invalid inputs.
     public class InvalidInputException extends Exception {
@@ -439,6 +448,7 @@ public class SoundFile {
                         //Log.i("과정"," averageHeight = sumHeight / (double) count");
                         perSecondsHeight[seconds] = averageHeight;
                         decibels = DECIBEL_CONSTANTS * Math.log10(perSecondsHeight[seconds]);
+                        addItem(seconds, decibels);
                         mPref.putValue(Integer.toString(seconds), Double.toString(decibels), mKeyName);
                         //Log.i("평균 예상값", "perSecondsHeight[" + seconds + "] = " + averageHeight);
                         //Log.i("평균 예상값", "데시벨[" + seconds + "] = " + decibels);
@@ -460,6 +470,7 @@ public class SoundFile {
                         count = 0;
                         perSecondsHeight[seconds] = averageHeight;
                         decibels = DECIBEL_CONSTANTS * Math.log10(perSecondsHeight[seconds]);
+                        addItem(seconds, decibels);
                         mPref.putValue(Integer.toString(seconds), Double.toString(decibels), mKeyName);
                         //Log.i("평균 예상값", "perSecondsHeight[" + seconds + "] = " + averageHeight);
                         //Log.i("평균 예상값", "데시벨[" + seconds + "] = " + decibels);
@@ -526,6 +537,44 @@ public class SoundFile {
         Log.i("computeDoubles", "종료");
     }
 
+    //곡 정보 저장
+    public void addItem(int seconds, double decibels) {
+
+        // Get the Mobile Service Table instance to use
+        mMusicTable = mClient.getTable(MusicInfo.class);
+
+        // Create a new item
+        final MusicInfo item = new MusicInfo();
+
+        item.setID(mKeyName);
+        item.setSecond(Integer.toString(seconds));
+        item.setValue(Double.toString(decibels));
+        item.setComplete(false);
+
+        // Insert the new item
+/*        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final MusicInfo entity = mMusicTable.insert(item).get();
+                    if (!entity.isComplete()) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.add(entity);
+                            }
+                        });
+                    }
+                } catch (Exception exception) {
+                    createAndShowDialog(exception, "Error");
+                }
+                return null;
+            }
+        }.execute();*/
+
+    }
+
+
     private String formatTime(int pixels, double myZoomFactorByZoomLevel) {
 
         return formatDecimal(myPixelsToSeconds(pixels, myZoomFactorByZoomLevel));
@@ -560,5 +609,6 @@ public class SoundFile {
             return xWhole + "." + xFrac;
         }
     }
+
 
 }
