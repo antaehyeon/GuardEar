@@ -44,7 +44,10 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem> {
         }
 
         row.setTag(currentItem);
-  /*      final CheckBox checkBox = (CheckBox) row.findViewById(R.id.checkToDoItem);
+
+        return row;
+
+        /*      final CheckBox checkBox = (CheckBox) row.findViewById(R.id.checkToDoItem);
         checkBox.setText(currentItem.getText());
         checkBox.setChecked(false);
         checkBox.setEnabled(true);
@@ -64,7 +67,6 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem> {
         });
         */
 
-        return row;
     }
 
 }

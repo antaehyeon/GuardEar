@@ -46,6 +46,9 @@ public class EarphoneActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earphone);
 
+        Log.d("순서확인중", " EarphoneActivity onCreate(Bundle savedInstanceState)");
+
+
         //이어폰 등록 부분
         //model = (EditText)findViewById(R.id.model);
         //soundpressure = (EditText)findViewById(R.id.soundpressure);
@@ -81,6 +84,8 @@ public class EarphoneActivity extends Activity {
             // create a new item
             final Earphone earphoneItem = new Earphone();
 
+
+
             earphoneItem.setID(mEtSearch.getText().toString());
             earphoneItem.setComplete(false);
 
@@ -90,6 +95,8 @@ public class EarphoneActivity extends Activity {
                     try {
                         // 데이터를 가져오는 리스트
                         final List<Earphone> result = mEarphoneTable.execute().get();
+
+                        Log.d("순서확인중", " EarphoneActivity "+ result.toString());
 
                         Log.d("이어폰", "중복확인 result 값 받아오기");
                         Log.d("이어폰", "결과값 확인 : " + result.toString());
@@ -216,8 +223,8 @@ public class EarphoneActivity extends Activity {
         Log.d("CheckItem", "정보 들어오나 : " + item.getImpedance().toString());
 
 
-        //mPref.putValue("earphone_company", item.getCompany().toString(), "userinfo");
-        mPref.putValue("earphone_model", item.getCompanyName().toString(), "userinfo");
+        mPref.putValue("earphone_company", item.getCompanyName().toString(), "userinfo");
+        mPref.putValue("earphone_model", item.getID().toString(), "userinfo");
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
 
@@ -311,7 +318,8 @@ public class EarphoneActivity extends Activity {
 
         if(btn_Next.isPressed()) {
 
-            Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+            //Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
 
             finish();

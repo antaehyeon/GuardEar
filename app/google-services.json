@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "352941624200",
+    "project_id": "guardear"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352941624200:android:e682df3aaab9faa2",
+        "android_client_info": {
+          "package_name": "com.imaginecup.ensharp.guardear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "352941624200-t0cj0pt6s5inksu0lo4f9s94dpsb1qdg.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "352941624200-nrvspvri4arpo5coluki42estgclhkte.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.imaginecup.ensharp.guardear",
+            "certificate_hash": "8c845b8e5d1d3091738dd65f358667d8e7dd40e1"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLYuBPjFc0CXkBXMkju_WHa9VUOPRcXhY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
