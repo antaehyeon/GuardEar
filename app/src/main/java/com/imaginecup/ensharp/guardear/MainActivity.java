@@ -200,20 +200,6 @@ public class MainActivity extends AppCompatActivity {
         
     }
 
-    protected void Update(){
-
-        Runnable updater = new Runnable() {
-            @Override
-            public void run() {
-                timer_text = timer_sec + "초";
-            }
-        };
-        handler.post(updater);
-
-
-    }
-
-
     public void checkItem(){
 
 
@@ -231,8 +217,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
 
                             for (MusicInfo item : result) {
-                                timer_text = item.getID().toString();
-                                Toast.makeText( MainActivity.this , item.getID().toString(), Toast.LENGTH_SHORT).show();
+                                timer_text = item.getValue().toString();
+                                Toast.makeText( MainActivity.this , item.getValue().toString(), Toast.LENGTH_SHORT).show();
                                 Log.d("순서확인중", " mMusicTable "+ item.getID().toString());
                             }
 

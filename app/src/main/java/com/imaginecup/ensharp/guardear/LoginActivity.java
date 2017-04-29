@@ -77,6 +77,15 @@ public class LoginActivity extends Activity {
         btn_findPW = (Button) findViewById(R.id.btnFindPW);
         loginButton = (Button)findViewById(R.id.login_button);
 
+        btn_findPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), FindpwActivity.class);
+                startActivity(intent);
+            }
+        });
+
         try {
             mClient = new MobileServiceClient("https://guardear.azurewebsites.net", LoginActivity.this);
 
