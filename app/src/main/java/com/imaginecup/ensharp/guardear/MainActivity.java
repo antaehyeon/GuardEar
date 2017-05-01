@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             //testStart();
             // 보내기 test
-            testSend();
+            //testSend();
 
         } catch (MalformedURLException e) {
         //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");

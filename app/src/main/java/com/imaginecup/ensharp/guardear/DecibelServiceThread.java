@@ -2,6 +2,7 @@ package com.imaginecup.ensharp.guardear;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -106,10 +107,24 @@ public class DecibelServiceThread extends Thread {
             //addItem(seconds, Double.valueOf(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)), keyname);
             // 데이터 저장
             decibels = mPref.getValue(Integer.toString(seconds), "인식못함", keyname);
+
             item.setID(keyname);
             item.setSecond(Integer.toString(seconds));
             item.setValue(decibels);
-            item.setComplete(false);
+            // Insert the new item
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        final MusicInfo entity = mMusicTable.insert(item).get();
+                    } catch (Exception exception) {
+                        //createAndShowDialog(exception, "Error");
+                    }
+                    return null;
+                }
+            }.execute();
+
             // 값 확인
             Log.d("서버로 데이터 저장", item.toString());
             seconds++;
