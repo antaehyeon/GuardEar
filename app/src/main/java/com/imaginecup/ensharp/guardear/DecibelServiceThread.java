@@ -7,6 +7,9 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,6 +31,8 @@ public class DecibelServiceThread extends Thread {
     private String mKeyName;
     private AudioManager mAudioManager;
     private static final int MEASURE_DECIBEL = 91;
+    private MobileServiceClient mClient;
+    private MobileServiceTable<MusicInfo> mMusicTable;
 
     public DecibelServiceThread() {
     }
@@ -52,10 +57,11 @@ public class DecibelServiceThread extends Thread {
         if (mTrackFullPath != "스트리밍 음원") {
             mSoundFile = new SoundFile();
             try {
-                controlElapse(RUN);
+                //controlElapse(RUN);
                 if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
                     mSoundFile.create(mTrackFullPath, mKeyName, mContext);
                 }
+                sendData(mKeyName);
             } catch (final Exception e) {
                 Log.e("mSoundfile이 null", "사운드 파일 없음");
             }
@@ -81,6 +87,73 @@ public class DecibelServiceThread extends Thread {
             } catch (Exception e) {
             }
         }
+
+    }
+
+    private void sendData(String keyname){
+        // Get the Mobile Service Table instance to use
+        mMusicTable = mClient.getTable(MusicInfo.class);
+
+        // Create a new item
+        final MusicInfo item = new MusicInfo();
+        String decibels;
+
+        int seconds=0;
+        //Log.i("while문 가기 전", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
+        for(seconds = 0; seconds<1000; seconds++){
+            Log.i("서버에 음원데이터 전송", "ㄱㄱ");
+            Log.i("sharedpreference값 출력", seconds+"초"+mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
+            //addItem(seconds, Double.valueOf(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)), keyname);
+            // 데이터 저장
+            decibels = mPref.getValue(Integer.toString(seconds), "인식못함", keyname);
+            item.setID(keyname);
+            item.setSecond(Integer.toString(seconds));
+            item.setValue(decibels);
+            item.setComplete(false);
+            // 값 확인
+            Log.d("서버로 데이터 저장", item.toString());
+            seconds++;
+            if(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)=="인식못함") {
+                Log.i("for문 아웃", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
+                break;
+            }
+        }
+    }
+
+    //곡 정보 저장
+    public void addItem(int seconds, double decibels, String keyname) {
+
+        // Get the Mobile Service Table instance to use
+        mMusicTable = mClient.getTable(MusicInfo.class);
+
+        // Create a new item
+        final MusicInfo item = new MusicInfo();
+
+        item.setID(keyname);
+        item.setSecond(Integer.toString(seconds));
+        item.setValue(Double.toString(decibels));
+        item.setComplete(false);
+        Log.d("서버로 데이터 저장", item.toString());
+        // Insert the new item
+/*        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final MusicInfo entity = mMusicTable.insert(item).get();
+                    if (!entity.isComplete()) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.add(entity);
+                            }
+                        });
+                    }
+                } catch (Exception exception) {
+                    createAndShowDialog(exception, "Error");
+                }
+                return null;
+            }
+        }.execute();*/
 
     }
 
