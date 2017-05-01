@@ -38,6 +38,7 @@ dependencies {
     //
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     //
+
     //compile 'com.android.support:support-v4:21.0.3'//
     compile 'com.google.code.gson:gson:2.2.2'
     // 다름
@@ -55,7 +56,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.0.0'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.google.android.gms:play-services-appindexing:9.0.0'
-    compile project(':activation')
-    compile project(':additionnal')
-    compile project(':mail')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/activation.jar')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/additionnal.jar')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/mail.jar')
 }

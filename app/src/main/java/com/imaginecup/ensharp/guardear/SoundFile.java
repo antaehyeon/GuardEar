@@ -448,7 +448,7 @@ public class SoundFile {
                         //Log.i("과정"," averageHeight = sumHeight / (double) count");
                         perSecondsHeight[seconds] = averageHeight;
                         decibels = DECIBEL_CONSTANTS * Math.log10(perSecondsHeight[seconds]);
-                        addItem(seconds, decibels);
+                        //addItem(seconds, decibels);
                         mPref.putValue(Integer.toString(seconds), Double.toString(decibels), mKeyName);
                         //Log.i("평균 예상값", "perSecondsHeight[" + seconds + "] = " + averageHeight);
                         //Log.i("평균 예상값", "데시벨[" + seconds + "] = " + decibels);
@@ -470,7 +470,7 @@ public class SoundFile {
                         count = 0;
                         perSecondsHeight[seconds] = averageHeight;
                         decibels = DECIBEL_CONSTANTS * Math.log10(perSecondsHeight[seconds]);
-                        addItem(seconds, decibels);
+                        //addItem(seconds, decibels);
                         mPref.putValue(Integer.toString(seconds), Double.toString(decibels), mKeyName);
                         //Log.i("평균 예상값", "perSecondsHeight[" + seconds + "] = " + averageHeight);
                         //Log.i("평균 예상값", "데시벨[" + seconds + "] = " + decibels);
