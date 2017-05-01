@@ -71,7 +71,7 @@ public class SoundFile {
     private String mKeyName;
     private static final int DECIBEL_CONSTANTS = 20;
     private MobileServiceClient mClient;
-    private ToDoItemAdapter mAdapter;
+    private MusicInfoAdapter mAdapter;
 
     /**      음악 정보 test 중    **/
    // private MobileServiceClient mClient = new MobileServiceClient("http://guardear.azurewebsites.net");
@@ -537,6 +537,7 @@ public class SoundFile {
         Log.i("computeDoubles", "종료");
     }
 
+
     //곡 정보 저장
     public void addItem(int seconds, double decibels) {
 
@@ -545,14 +546,16 @@ public class SoundFile {
 
         // Create a new item
         final MusicInfo item = new MusicInfo();
+        Log.d("서버로 데이터 저장", item.toString());
 
         item.setID(mKeyName);
         item.setSecond(Integer.toString(seconds));
         item.setValue(Double.toString(decibels));
         item.setComplete(false);
 
+
         // Insert the new item
-/*        new AsyncTask<Void, Void, Void>() {
+       /* new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {

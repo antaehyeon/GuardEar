@@ -222,8 +222,8 @@ public class LoginActivity extends Activity {
                             for (ToDoItem item : result) {
 
                                 Log.d("로그인 확인중 id:", item.getId().toString() +"<<");
-                                Log.d("로그인 확인중 pw", item.getText().toString()+"<<");
-                                if(item.getId().toString().equals(strMail) &&item.getText().toString().equals(strPW)){
+                                Log.d("로그인 확인중 pw", item.getPassword().toString()+"<<");
+                                if(item.getId().toString().equals(strMail) &&item.getPassword().toString().equals(strPW)){
                                     Toast.makeText(LoginActivity.this, "로그인 되었습니다", Toast.LENGTH_SHORT).show();
                                     Log.d("로그인", "로그인 성공");
                                     Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
@@ -241,7 +241,7 @@ public class LoginActivity extends Activity {
                                     etPassword.setText(null);
                                     Toast.makeText(LoginActivity.this, "등록된 아이디가 없습니다", Toast.LENGTH_SHORT).show();
                                 }
-                                else if(!item.getText().toString().equals(strPW)){
+                                else if(!item.getPassword().toString().equals(strPW)){
                                     editor.clear();
                                     editor.commit();
 

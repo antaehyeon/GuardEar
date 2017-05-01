@@ -177,6 +177,7 @@ public class ToDoActivity extends Activity {
                 }
             });
 
+            // 성별
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                 @Override
@@ -314,6 +315,7 @@ public class ToDoActivity extends Activity {
     public void addItem(View view) {
 
         Log.d("태그", "addItem 실행 ");
+        Log.d("태그", "T?F : "+ checked );
 
         if (mClient == null) {
             return;
@@ -350,14 +352,16 @@ public class ToDoActivity extends Activity {
             return;
         }
 
-        else if(checked == true){
+        if(checked == true){
 
             // Create a new item
             final ToDoItem item = new ToDoItem(mTextNewToDo.getText().toString(), mTextNewToDoID.getText().toString(),
-                    mTextNewToDOName.getText().toString(), select_age, select_sex);
+                    mTextNewToDOName.getText().toString(), mSpinnerAge.getSelectedItem().toString(), select_sex);
 
             Log.d("태그프리퍼런스저장", item.toString());
             Log.d("태그프리퍼런스저장", mTextNewToDo.getText().toString());
+
+
 
             Log.d("태그", "정보 서버로 저장 ");
 
@@ -374,7 +378,7 @@ public class ToDoActivity extends Activity {
 
 
             // Insert the new item
-            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            /*AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
@@ -399,7 +403,7 @@ public class ToDoActivity extends Activity {
                 }
             };
 
-            runAsyncTask(task);
+            runAsyncTask(task);*/
 
             //입력 후 다시 공백칸으로
             mTextNewToDo.setText("");
@@ -431,6 +435,7 @@ public class ToDoActivity extends Activity {
 
         mail = mTextNewToDoID.getText().toString();
 
+        Log.d("회원가입 test_mail : ", mail);
         if(checkEmail(mail)) {
 
             new AsyncTask<Void, Void, Void>() {
@@ -441,14 +446,34 @@ public class ToDoActivity extends Activity {
                         final List<ToDoItem> result = mToDoTable.where().field("id").eq(mail).execute().get();
                         Log.d("회원가입 test", result.toString());
 
+                        if(result.toString().equals("[]")){
+                            checked = true;
+
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
+
+                            //builder.setTitle("제목 설정");
+                            builder.setMessage("사용가능한 이름입니다");
+                            Log.d("회원가입 setMessage", "setMessage 들어옴");
+                            //확인 버튼 클릭 시 설정
+                            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    return;
+                                }
+                            });
+                            //알림창 객체 설정
+                            android.support.v7.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
                                 for (ToDoItem item : result) {
+                                    Log.d("회원가입 test_for", item.toString());
 
                                     //이메일이 있을때
-                                    if (item.getId().toString().equals(mail)) {
+                                    //if (item.getId().toString().equals(mail)) {
 
                                         Log.d("회원가입 test_if", item.getId().toString());
 
@@ -471,30 +496,10 @@ public class ToDoActivity extends Activity {
 
                                         return;
 
-                                    } else {
-                                        Log.d("회원가입 test_else", item.getId().toString());
-
-                                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
-
-                                        //builder.setTitle("제목 설정");
-                                        builder.setMessage("사용가능한 이름입니다");
-                                        //확인 버튼 클릭 시 설정
-                                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                return;
-                                            }
-                                        });
-                                        //알림창 객체 설정
-                                        android.support.v7.app.AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                        // text 초기화
-
-                                        checked = true;
-
-                                        return;
+                                    //} else {
 
 
-                                    }
+                                    //}
                                 } //for
 
                             } //run()

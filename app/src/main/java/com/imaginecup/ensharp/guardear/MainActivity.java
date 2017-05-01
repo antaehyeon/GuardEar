@@ -1,5 +1,6 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     /**      음악 정보 test 중    **/
     private MobileServiceClient mClient;
     private MobileServiceTable<MusicInfo> mMusicTable;
+    private MusicInfoAdapter mAdapter;
     /**      타이머 함수 test 중  **/
     private final Handler handler = new Handler();
     private TimerTask second;
@@ -173,7 +175,9 @@ public class MainActivity extends AppCompatActivity {
             // Get the Mobile Service Table instance to use
             mMusicTable = mClient.getTable(MusicInfo.class);
 
-            testStart();
+            //testStart();
+            // 보내기 test
+            testSend();
 
         } catch (MalformedURLException e) {
         //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -197,11 +201,10 @@ public class MainActivity extends AppCompatActivity {
         };
         Timer timer = new Timer();
         timer.schedule(second, 0, 1000);
-        
+
     }
 
     public void checkItem(){
-
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -224,8 +227,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
-
-
                 } catch (final Exception e){
                     //createAndShowDialogFromTask(e, "Error");
                 }
@@ -234,6 +235,62 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
         //runAsyncTask(task);
     }
+
+    public void testSend(){
+
+        timer_sec = 0;
+
+        second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("TEST TIMER", "Timer send");
+                sendItem();
+                timer_sec++;
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(second, 0, 1000);
+
+    }
+
+    public void sendItem(){
+
+        if (mClient == null) {
+            return;
+        }
+
+        // Create a new item
+        final MusicInfo item = new MusicInfo();
+        Log.i("TEST TIMER", "데이터 저장 전");
+
+        item.setID(Integer.toString(timer_sec)); // setText(mTextNewToDo.getText().toString());
+        item.setSecond(Integer.toString(timer_sec));// setComplete(false);
+        item.setValue(Integer.toString(timer_sec+100));
+        Log.i("TEST TIMER", "데이터 저장 후");
+
+        // Insert the new item
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final MusicInfo entity = mMusicTable.insert(item).get();
+                    /*if (!entity.isComplete()) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.add(entity);
+                            }
+                        });
+                    }*/
+                } catch (Exception exception) {
+                    createAndShowDialog(exception, "Error");
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+
 
 
     public void decibelDataSave() {
@@ -497,6 +554,50 @@ public class MainActivity extends AppCompatActivity {
             return task.execute();
 
         }
+    }
+    private void createAndShowDialogFromTask(final Exception exception, String title) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowDialog(exception, "Error");
+            }
+        });
+        Log.d("태그", "createAndShowDialogFromTask");
+
+    }
+
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param exception The exception to show in the dialog
+     * @param title     The dialog title
+     */
+    private void createAndShowDialog(Exception exception, String title) {
+        Throwable ex = exception;
+        if (exception.getCause() != null) {
+            ex = exception.getCause();
+        }
+        createAndShowDialog(ex.getMessage(), title);
+        Log.d("태그", "createAndShowDialog1");
+
+    }
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param message The dialog message
+     * @param title   The dialog title
+     */
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+        Log.d("태그", "createAndShowDialog2");
+
+
     }
 
 

@@ -60,7 +60,7 @@ public class FindpwActivity extends AppCompatActivity {
     }
 
     private void equalsMail() {
-        //이메일이 맞다면
+        //이메일이 맞다면(임시)
         if (etEmail.getText().toString().equals("zoz7")) {
 
             findEmail.setTextColor(Color.parseColor("#2f4959"));
@@ -201,6 +201,8 @@ public class FindpwActivity extends AppCompatActivity {
         }).start();
 
     }
+
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
