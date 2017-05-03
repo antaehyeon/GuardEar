@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,8 +32,12 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceJsonTable;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
      **/
     private MobileServiceClient mClient;
     private MobileServiceTable<MusicInfo> mMusicTable;
+    private MobileServiceJsonTable mJsonMusicTable;
     private MusicInfoAdapter mAdapter;
     /**
      * 타이머 함수 test 중
@@ -131,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         serviceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!mServiceData.isMyServiceRunning(MainService.class)) {
                     Log.i("isRun여부", "true로 통과");
                     //Toast.makeText(getApplicationContext(),"서비스 시작",Toast.LENGTH_SHORT).show();
@@ -171,22 +178,128 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         try {
-
             mClient = new MobileServiceClient("http://guardear.azurewebsites.net", MainActivity.this);
 
             // Get the Mobile Service Table instance to use
             mMusicTable = mClient.getTable(MusicInfo.class);
 
-            //testStart();
-            // 보내기 test
-            //testSend();
-            sendData();
+            //mJsonMusicTable = mClient.getTable("MusicInfo");
+
+            firstAction();
 
         } catch (MalformedURLException e) {
-            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
 
     }
+
+    private void firstAction(){
+        (new AsyncTask <MainActivity, Void, MainActivity>(){
+            @Override
+            protected MainActivity doInBackground(MainActivity... params) {
+                Log.d("이어폰", "결과값 확인 : doInBackground");
+                return params[0];
+            }
+
+            @Override
+            protected void onPostExecute(MainActivity result) {
+                //super.onPostExecute(result);
+                Log.d("이어폰", "결과값 확인 : onPostExecute");
+                result.getItemByAzure();
+            }
+
+        }).execute(this);
+    }
+
+    public void getItemByAzure(){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Log.d("이어폰", "결과값 확인 : try");
+                    // 데이터를 가져오는 리스트
+                    final List<MusicInfo> result = mMusicTable.orderBy("seconds", QueryOrder.Ascending).top(50).execute().get();
+                    final List<MusicInfo> result2 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(50).top(50).execute().get();
+                    final List<MusicInfo> result3 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(100).top(50).execute().get();
+                    final List<MusicInfo> result4 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(150).top(50).execute().get();
+                    final List<MusicInfo> result5 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(200).top(50).execute().get();
+
+                    Log.d("이어폰", "결과값 확인 : result");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d("이어폰", "런 들어옴");
+
+                            if(Looper.myLooper() == null){ Looper.prepare();   }
+
+
+                            for(MusicInfo item : result){
+
+                                Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString());
+                            }
+                            for(MusicInfo item2 : result2){
+
+                                Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString());
+                            }
+                            for(MusicInfo item3 : result3){
+
+                                Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString());
+                            }
+                            for(MusicInfo item4 : result4){
+
+                                Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString());
+                            }
+                            for(MusicInfo item5 : result5){
+
+                                Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString());
+                            }
+                            Looper.loop();
+                        }
+                    });
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+    }
+
+    public void getItemByJson(){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Log.d("음악정보", "doInBackground");
+                try {
+                    Log.d("음악정보", "데이터를 가져오는 리스트 try");
+                    final JsonElement result = mJsonMusicTable.execute().get();
+                    Log.d("음악정보", "JsonElement");
+                    final JsonArray results = result.getAsJsonArray();
+                    Log.d("음악정보", "JsonArray");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (JsonElement item : results) {
+                                String mText = item.getAsJsonObject().getAsJsonPrimitive("id").getAsString();
+                                Log.d("음악정보",">>"+ mText);
+                            }
+                        }
+                    });
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+
+    }
+
 
     public void testStart() {
 
@@ -198,46 +311,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.i("TEST TIMER", "Timer start");
-                checkItem();
+                //getItem();
                 timer_sec++;
             }
         };
         Timer timer = new Timer();
-        timer.schedule(second, 0, 1000);
+        timer.schedule(second, 0, 500);
 
     }
 
-    public void checkItem() {
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    // 데이터를 가져오는 리스트
-                    //final List<MusicInfo> result = mMusicTable.execute().get();
-                    // mToDoTable.where().field("complete").eq(false).execute().get();
-                    final List<MusicInfo> result = mMusicTable.where().field("id").eq(timer_sec).execute().get();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            for (MusicInfo item : result) {
-                                timer_text = item.getValue().toString();
-                                Toast.makeText(MainActivity.this, item.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                Log.d("순서확인중", " mMusicTable " + item.getID().toString());
-                            }
-
-                        }
-                    });
-                } catch (final Exception e) {
-                    //createAndShowDialogFromTask(e, "Error");
-                }
-                return null;
-            }
-        }.execute();
-        //runAsyncTask(task);
-    }
 
     public void testSend() {
 
@@ -247,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.i("TEST TIMER", "Timer send");
-                sendItem();
+                //sendItem();
                 timer_sec++;
             }
         };
@@ -268,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
         item.setID(Integer.toString(timer_sec)); // setText(mTextNewToDo.getText().toString());
         item.setSecond(Integer.toString(timer_sec));// setComplete(false);
-        item.setValue(Integer.toString(timer_sec + 100));
+        //item.setValue(Integer.toString(timer_sec + 100));
         Log.i("TEST TIMER", "데이터 저장 후");
 
         // Insert the new item
@@ -294,25 +377,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendData() {
-        // Get the Mobile Service Table instance to use
-//        Log.i("음악정보 try 전", "1ㄱㄱ");
-//
-//
-//        try {
-//            Log.i("음악정보", "1ㄱㄱ");
-//            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
-//            // Get the Mobile Service Table instance to use
-//            Log.i("음악정보", "2ㄱㄱ");
-//
-//            mMusicTable = mClient.getTable(MusicInfo.class);
-//            Log.i("음악정보", "3ㄱㄱ");
-//
-//            mMusicTable = mClient.getTable(MusicInfo.class);
-//            Log.i("음악정보", "4ㄱㄱ");
-//            // Create a new item
-//            final MusicInfo item = new MusicInfo();
-//            Log.i("5", "ㄱㄱ");
-//            String decibels;
 
         int seconds = 0;
         //Log.i("while문 가기 전", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
@@ -326,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
             item.setID("어쿠스틱 콜라보너무 보고싶어" + seconds); // setText(mTextNewToDo.getText().toString());
             item.setSecond(Integer.toString(seconds));// setComplete(false);
-            item.setValue((pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어")));
+            //item.setValue((pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어")));
             Log.i("TEST TIMER", "데이터 저장 후");
 
             // Insert the new item
@@ -343,43 +407,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }.execute();
 
-
-            //addItem(seconds, Double.valueOf(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)), keyname);
-            // 데이터 저장
-//                decibels = mPref.getValue(Integer.toString(seconds), "인식못함", keyname);
-//
-//                item.setID(keyname);
-//                item.setSecond(Integer.toString(seconds));
-//                item.setValue(decibels);
-//                // Insert the new item
-//                new AsyncTask<Void, Void, Void>() {
-//
-//                    @Override
-//                    protected Void doInBackground(Void... params) {
-//                        try {
-//                            final MusicInfo entity = mMusicTable.insert(item).get();
-//                        } catch (Exception exception) {
-//                            //createAndShowDialog(exception, "Error");
-//                        }
-//                        return null;
-//                    }
-//                }.execute();
-//
-//                // 값 확인
-//                Log.d("서버로 데이터 저장", item.toString());
-//                seconds++;
             if (pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어") == "인식못함") {
                 Log.i("for문 아웃", pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어"));
                 break;
             }
         }
-//
-//        } catch (MalformedURLException e) {
-//            Log.i("음악정보-", "1'ㄱㄱ");
-//
-//            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-//        }
-
     }
 
 

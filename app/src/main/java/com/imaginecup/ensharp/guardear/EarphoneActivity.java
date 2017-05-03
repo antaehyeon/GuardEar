@@ -84,8 +84,6 @@ public class EarphoneActivity extends Activity {
             // create a new item
             final Earphone earphoneItem = new Earphone();
 
-
-
             earphoneItem.setID(mEtSearch.getText().toString());
             earphoneItem.setComplete(false);
 
