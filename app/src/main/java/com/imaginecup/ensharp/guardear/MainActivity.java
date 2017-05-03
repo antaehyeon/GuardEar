@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
             //mJsonMusicTable = mClient.getTable("MusicInfo");
 
-            firstAction();
+            //firstAction();
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(MainActivity result) {
                 //super.onPostExecute(result);
                 Log.d("이어폰", "결과값 확인 : onPostExecute");
-                result.getItemByAzure();
+                getItemByAzure();
             }
 
         }).execute(this);

@@ -86,9 +86,22 @@ public class DecibelServiceThread extends Thread {
             mode = 1;
             try {
                 controlElapse(RUN);
+
 //                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
 //                    //서버에서 받기
 //                }
+                try {
+                    mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
+
+                    // Get the Mobile Service Table instance to use
+                    mMusicTable = mClient.getTable(MusicInfo.class);
+
+                    firstAction();
+
+                } catch (MalformedURLException e) {
+                    createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+                }
+
             } catch (final Exception e) {
                 Log.e("mSoundfile이 null", "사운드 파일 없음");
             }
@@ -228,17 +241,7 @@ public class DecibelServiceThread extends Thread {
             mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
         } else {
           // 여기다가 받는코드 넣으면 됨
-            try {
-                mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
 
-                // Get the Mobile Service Table instance to use
-                mMusicTable = mClient.getTable(MusicInfo.class);
-
-                firstAction();
-
-            } catch (MalformedURLException e) {
-                createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-            }
             //  mDecibels =? mDecibels라는 데시벨 변수에 넣으면 됨
         }
 
@@ -251,21 +254,21 @@ public class DecibelServiceThread extends Thread {
 
     private void firstAction(){
 
-        (new AsyncTask<MainActivity, Void, MainActivity>(){
+        new AsyncTask<Activity, Void, Activity>(){
             @Override
-            protected MainActivity doInBackground(MainActivity... params) {
+            protected Activity doInBackground(Activity... params) {
                 Log.d("이어폰", "결과값 확인 : doInBackground");
                 return params[0];
             }
 
-            @Override
-            protected void onPostExecute(MainActivity result) {
+            //@Override
+            protected void onPostExecute(Activity result) {
                 //super.onPostExecute(result);
                 Log.d("이어폰", "결과값 확인 : onPostExecute");
-                result.getItemByAzure();
+                getItemByAzure();
             }
 
-        }).execute(this);
+        }.execute(this);
     }
 
     public void getItemByAzure(){

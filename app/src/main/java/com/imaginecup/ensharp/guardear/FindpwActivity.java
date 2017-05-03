@@ -22,13 +22,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 
-
 public class FindpwActivity extends AppCompatActivity {
 
     Button btn_send;
     EditText etNumber, etEmail;
     TextView text_alert1, text_alert2, findEmail;
-    GmailSender sender;
+    //GmailSender sender;
     ProgressDialog dialog;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -79,7 +78,7 @@ public class FindpwActivity extends AppCompatActivity {
 
             try {
                 Log.d("MAIL TESt", "try-in");
-                GmailSender sender = new GmailSender("seong9806@gmail.com","scmk0718!"); // SUBSTITUTE HERE
+                /*GmailSender sender = new GmailSender("seong9806@gmail.com","scmk0718!"); // SUBSTITUTE HERE
 
                 sender.sendMail(
 
@@ -87,7 +86,7 @@ public class FindpwActivity extends AppCompatActivity {
                         "비밀번호 재설정 인증메일입니다.\n 인증번호 \'5234\'를 입력해주세요",  //body.getText().toString(),
                         "seong9806@gmail.com",          //from.getText().toString(),
                         etEmail.getText().toString()+"@naver.com"         //to.getText().toString()
-                );
+                );*/
 
                 changePW();
 
@@ -179,12 +178,12 @@ public class FindpwActivity extends AppCompatActivity {
             public void run() {
                 // TODO Auto-generated method stub
                 try {
-                    sender.sendMail("의견보내기", // subject.getText().toString(),
+                   /* sender.sendMail("의견보내기", // subject.getText().toString(),
                             "메일에 들어가는 본문 내용", // body.getText().toString(),
                             "seong9806@gmail.com", // from.getText().toString(),
                             "seong9806@gmail.com" // to.getText().toString()
                     );
-                    sleep(3000);
+                    sleep(3000);*/
                 } catch (Exception e) {
                     Log.e("SendMail", e.getMessage(), e);
                     Toast.makeText(getApplicationContext(), "신청 실패", Toast.LENGTH_SHORT).show();
