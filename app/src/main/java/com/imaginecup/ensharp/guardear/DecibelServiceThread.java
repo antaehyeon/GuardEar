@@ -1,15 +1,23 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
 
+import java.net.MalformedURLException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -21,6 +29,7 @@ public class DecibelServiceThread extends Thread {
     private String mTrackFullPath;
     private long mStartPosition;
     private Context mContext;
+    private Activity mActivity;
     private long mMillis;
     private static final int RUN = 0;
     private static final int PAUSE = 1;
@@ -219,6 +228,17 @@ public class DecibelServiceThread extends Thread {
             mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
         } else {
           // 여기다가 받는코드 넣으면 됨
+            try {
+                mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
+
+                // Get the Mobile Service Table instance to use
+                mMusicTable = mClient.getTable(MusicInfo.class);
+
+                firstAction();
+
+            } catch (MalformedURLException e) {
+                createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+            }
             //  mDecibels =? mDecibels라는 데시벨 변수에 넣으면 됨
         }
 
@@ -228,6 +248,88 @@ public class DecibelServiceThread extends Thread {
         //return "현재 재생위치 : " + mSeconds + " / " + ms + " 현재 데시벨 : " + mDecibels;
         return mDecibels;
     }
+
+    private void firstAction(){
+
+        (new AsyncTask<MainActivity, Void, MainActivity>(){
+            @Override
+            protected MainActivity doInBackground(MainActivity... params) {
+                Log.d("이어폰", "결과값 확인 : doInBackground");
+                return params[0];
+            }
+
+            @Override
+            protected void onPostExecute(MainActivity result) {
+                //super.onPostExecute(result);
+                Log.d("이어폰", "결과값 확인 : onPostExecute");
+                result.getItemByAzure();
+            }
+
+        }).execute(this);
+    }
+
+    public void getItemByAzure(){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Log.d("이어폰", "결과값 확인 : try");
+                    // 데이터를 가져오는 리스트
+                    final List<MusicInfo> result = mMusicTable.orderBy("seconds", QueryOrder.Ascending).top(50).execute().get();
+                    final List<MusicInfo> result2 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(50).top(50).execute().get();
+                    final List<MusicInfo> result3 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(100).top(50).execute().get();
+                    final List<MusicInfo> result4 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(150).top(50).execute().get();
+                    final List<MusicInfo> result5 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(200).top(50).execute().get();
+
+                    Log.d("이어폰", "결과값 확인 : result");
+
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d("이어폰", "런 들어옴");
+
+                            if(Looper.myLooper() == null){ Looper.prepare();   }
+
+
+                            for(MusicInfo item : result){
+                                mDecibels = item.getValue().toString();
+
+                                Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString());
+                            }
+                            for(MusicInfo item2 : result2){
+                                mDecibels = item2.getValue().toString();
+
+                                Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString());
+                            }
+                            for(MusicInfo item3 : result3){
+                                mDecibels = item3.getValue().toString();
+
+                                Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString());
+                            }
+                            for(MusicInfo item4 : result4){
+                                mDecibels = item4.getValue().toString();
+
+                                Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString());
+                            }
+                            for(MusicInfo item5 : result5){
+                                mDecibels = item5.getValue().toString();
+
+                                Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString());
+                            }
+                            Looper.loop();
+                        }
+                    });
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+    }
+
 
     public String getDecibel() {
         //W = (V * V)/R
@@ -283,4 +385,62 @@ public class DecibelServiceThread extends Thread {
             myTimer.sendEmptyMessage(0);
         }
     };
+
+
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        Log.d("태그", "AsyncTask");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            return task.execute();
+
+        }
+    }
+
+    private void createAndShowDialogFromTask(final Exception exception, String title) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowDialog(exception, "Error");
+            }
+        });
+        Log.d("태그", "createAndShowDialogFromTask");
+
+    }
+
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param exception The exception to show in the dialog
+     * @param title     The dialog title
+     */
+    private void createAndShowDialog(Exception exception, String title) {
+        Throwable ex = exception;
+        if (exception.getCause() != null) {
+            ex = exception.getCause();
+        }
+        createAndShowDialog(ex.getMessage(), title);
+        Log.d("태그", "createAndShowDialog1");
+
+    }
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param message The dialog message
+     * @param title   The dialog title
+     */
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+        Log.d("태그", "createAndShowDialog2");
+
+
+    }
+
 }
