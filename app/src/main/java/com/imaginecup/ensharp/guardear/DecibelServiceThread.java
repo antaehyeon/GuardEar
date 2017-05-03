@@ -33,6 +33,7 @@ public class DecibelServiceThread extends Thread {
     private static final int MEASURE_DECIBEL = 91;
     private MobileServiceClient mClient;
     private MobileServiceTable<MusicInfo> mMusicTable;
+    private int mode;
 
     public DecibelServiceThread() {
     }
@@ -54,7 +55,8 @@ public class DecibelServiceThread extends Thread {
     public void run() {
         mPref = new SharedPreferences(mContext);
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        if (mTrackFullPath != "스트리밍 음원") {
+        if (!mTrackFullPath.equals("스트리밍 음원")) {
+            mode = 0;
             mSoundFile = new SoundFile();
             try {
                 //controlElapse(RUN);
@@ -72,11 +74,12 @@ public class DecibelServiceThread extends Thread {
             } catch (Exception e) {
             }
         } else {
+            mode = 1;
             try {
                 controlElapse(RUN);
-                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
-                    //서버에서 받기
-                }
+//                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
+//                    //서버에서 받기
+//                }
             } catch (final Exception e) {
                 Log.e("mSoundfile이 null", "사운드 파일 없음");
             }
@@ -212,7 +215,13 @@ public class DecibelServiceThread extends Thread {
         String ms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(mMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(mMillis)),
                 TimeUnit.MILLISECONDS.toSeconds(mMillis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mMillis)));
         mSeconds = (int) mMillis / 1000;
-        mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
+        if(mode==0){
+            mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
+        } else {
+          // 여기다가 받는코드 넣으면 됨
+            //  mDecibels =? mDecibels라는 데시벨 변수에 넣으면 됨
+        }
+
         //Log.i("전 mDecibels=",mDecibels);
         mDecibels = getDecibel();
         //Log.i("후 mDecibels=",mDecibels);
