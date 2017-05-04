@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences pref;
     private ServiceData mServiceData;
     public static ServiceData sServiceData;
-    private Context mContext;
+    public static Context mContext;
     private AudioManager mAudiomanager;
     private Toolbar mToolbar;
 
@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
             mMusicTable = mClient.getTable(MusicInfo.class);
 
             //mJsonMusicTable = mClient.getTable("MusicInfo");
-
             //firstAction();
+            //getItemByAzure();
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void firstAction(){
+    public void firstAction(){
         (new AsyncTask <MainActivity, Void, MainActivity>(){
             @Override
             protected MainActivity doInBackground(MainActivity... params) {

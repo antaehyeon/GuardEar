@@ -7,17 +7,14 @@ import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
 
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,6 +40,7 @@ public class DecibelServiceThread extends Thread {
     private MobileServiceClient mClient;
     private MobileServiceTable<MusicInfo> mMusicTable;
     private int mode;
+    private MainActivity mainActivity;
 
     public DecibelServiceThread() {
     }
@@ -65,6 +63,7 @@ public class DecibelServiceThread extends Thread {
         mPref = new SharedPreferences(mContext);
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         Log.i("Run함수 실행", "실행");
+
         if (!mTrackFullPath.equals("스트리밍 음원")) {
             Log.i("모드0", "0");
             mode = 0;
@@ -85,29 +84,35 @@ public class DecibelServiceThread extends Thread {
             } catch (Exception e) {
             }
         } else {
+
+            /*  서버로 부터  정보 불러오는 부분 */
+            try {
+                mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            mMusicTable = mClient.getTable(MusicInfo.class);
+            ((MainActivity)MainActivity.mContext).getItemByAzure();
+            /*  서버로 부터  정보 불러오는 부분 여기까지  이부분 코드만 자유자재로 옮기면 무관함*/
+
+
             mode = 1;
             Log.i("모드1", "1");
             try {
-                //controlElapse(RUN);
+                Log.e("받아오려고 진입", "진입");
+                controlElapse(RUN);
 
 //                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
 //                    //서버에서 받기
 //                }
-                Log.i("사이 진입", "진입");
-                try {
-                    Log.e("받아오려고 진입", "진입");
-                    mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
+                 Log.i("사이 진입", "진입");
 
-                    // Get the Mobile Service Table instance to use
-                    mMusicTable = mClient.getTable(MusicInfo.class);
+                 Log.e("firstAction종료", "종료");
 
-                    firstAction();
-                    Log.e("firstAction종료", "종료");
-                } catch (MalformedURLException e) {
-                    createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-                }
 
-            } catch (final Exception e) {
+            }catch (final Exception e) {
+                createAndShowDialogFromTask(e, "Error");
                 Log.e("mSoundfile이 null", "사운드 파일 없음");
             }
             Log.i("서비스 run", "sendEmptyMessage");
@@ -115,6 +120,7 @@ public class DecibelServiceThread extends Thread {
             try {
                 Thread.sleep(5000);
             } catch (Exception e) {
+                createAndShowDialogFromTask(e, "Error");
             }
         }
 
@@ -257,87 +263,6 @@ public class DecibelServiceThread extends Thread {
         return mDecibels;
     }
 
-    private void firstAction(){
-
-        new AsyncTask<Activity, Void, Activity>(){
-            @Override
-            protected Activity doInBackground(Activity... params) {
-                Log.d("이어폰", "결과값 확인 : doInBackground");
-                return params[0];
-            }
-
-            //@Override
-            protected void onPostExecute(Activity result) {
-                //super.onPostExecute(result);
-                Log.d("이어폰", "결과값 확인 : onPostExecute");
-                getItemByAzure();
-            }
-
-        }.execute(this);
-    }
-
-    public void getItemByAzure(){
-
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    Log.d("이어폰", "결과값 확인 : try");
-                    // 데이터를 가져오는 리스트
-                    final List<MusicInfo> result = mMusicTable.orderBy("seconds", QueryOrder.Ascending).top(50).execute().get();
-                    final List<MusicInfo> result2 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(50).top(50).execute().get();
-                    final List<MusicInfo> result3 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(100).top(50).execute().get();
-                    final List<MusicInfo> result4 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(150).top(50).execute().get();
-                    final List<MusicInfo> result5 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(200).top(50).execute().get();
-
-                    Log.d("이어폰", "결과값 확인 : result");
-
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Log.d("이어폰", "런 들어옴");
-
-                            if(Looper.myLooper() == null){ Looper.prepare();   }
-
-
-                            for(MusicInfo item : result){
-                                mDecibels = item.getValue().toString();
-
-                                Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString());
-                            }
-                            for(MusicInfo item2 : result2){
-                                mDecibels = item2.getValue().toString();
-
-                                Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString());
-                            }
-                            for(MusicInfo item3 : result3){
-                                mDecibels = item3.getValue().toString();
-
-                                Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString());
-                            }
-                            for(MusicInfo item4 : result4){
-                                mDecibels = item4.getValue().toString();
-
-                                Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString());
-                            }
-                            for(MusicInfo item5 : result5){
-                                mDecibels = item5.getValue().toString();
-
-                                Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString());
-                            }
-                            Looper.loop();
-                        }
-                    });
-                } catch (final Exception e){
-                    createAndShowDialogFromTask(e, "Error");
-                }
-                return null;
-            }
-        };
-        runAsyncTask(task);
-    }
-
 
     public String getDecibel() {
         //W = (V * V)/R
@@ -355,6 +280,7 @@ public class DecibelServiceThread extends Thread {
             dB = Math.round(10 * Math.log10(1 / mW));
             dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
             //이제부터 음원에 대한 계산
+            mDecibels = "54";
             temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
             dB = Math.round(dB - temp);
             decibel = (int) dB;

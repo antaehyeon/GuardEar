@@ -92,6 +92,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
             public void onClick(View arg0){
                 Log.d("체크박스 확인 : ", " OnClcick " );
 
+
                 if (checkBox.isChecked()== true) {
                     Log.d("체크박스 확인 : ", " if 문");
 
