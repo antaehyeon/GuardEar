@@ -55,7 +55,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.0.0'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.google.android.gms:play-services-appindexing:9.0.0'
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/additionnal.jar')
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/activation.jar')
-    compile files('/Users/MinKyeong/Guardear/.idea/libraries/mail.jar')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/activation.jar')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/additionnal.jar')
+    compile files('D:/En#/Contest/Guardear/.idea/libraries/mail.jar')
 }

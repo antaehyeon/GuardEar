@@ -64,11 +64,13 @@ public class DecibelServiceThread extends Thread {
     public void run() {
         mPref = new SharedPreferences(mContext);
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        Log.i("Run함수 실행", "실행");
         if (!mTrackFullPath.equals("스트리밍 음원")) {
+            Log.i("모드0", "0");
             mode = 0;
             mSoundFile = new SoundFile();
             try {
-                //controlElapse(RUN);
+                controlElapse(RUN);
                 if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
                     mSoundFile.create(mTrackFullPath, mKeyName, mContext);
                 }
@@ -84,20 +86,23 @@ public class DecibelServiceThread extends Thread {
             }
         } else {
             mode = 1;
+            Log.i("모드1", "1");
             try {
-                controlElapse(RUN);
+                //controlElapse(RUN);
 
 //                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
 //                    //서버에서 받기
 //                }
+                Log.i("사이 진입", "진입");
                 try {
+                    Log.e("받아오려고 진입", "진입");
                     mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
 
                     // Get the Mobile Service Table instance to use
                     mMusicTable = mClient.getTable(MusicInfo.class);
 
                     firstAction();
-
+                    Log.e("firstAction종료", "종료");
                 } catch (MalformedURLException e) {
                     createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
                 }

@@ -164,13 +164,15 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                         context.stopService(mdBIntent);
                         mdBIntent = new Intent(context, DecibelService.class);
                         mdBIntent.putExtra("trackFullPath", mTrackFullPath);
-                        mdBIntent.putExtra("position", 0);
+                        mdBIntent.putExtra("position", 0L);
                         mdBIntent.putExtra("keyName", mMusicKeyName);
+                        Log.i("데시벨 서비스 시작", "시작");
                         context.startService(mdBIntent);
                     } else {
                         mdBIntent.putExtra("trackFullPath", mTrackFullPath);
-                        mdBIntent.putExtra("position", "");
+                        mdBIntent.putExtra("position", 0L);
                         mdBIntent.putExtra("keyName", mMusicKeyName);
+                        Log.i("데시벨 서비스 시작", "시작");
                         context.startService(mdBIntent);
                     }
 //                mIntent = new Intent(context, DecibelService.class);
