@@ -148,7 +148,7 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                 }
                 mPref.putValue("lastPackageName", mPackageName, "lastTrackInformation");
                 Log.i("다른앱 음원정보 결과값", "가수 : " + mArtistName + " 제목 : " + mTrackName + " 음원저장경로 : " + mTrackFullPath + " 앱명 : " + mPackageName);
-
+                mMusicKeyName = mArtistName + mTrackName;
                 mMsg = mHandler.obtainMessage();
                 if (mIsPlaying) {
                     mMsg.what = SEND_MUSIC_INFORMATION;
