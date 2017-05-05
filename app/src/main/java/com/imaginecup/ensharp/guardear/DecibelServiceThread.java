@@ -84,147 +84,29 @@ public class DecibelServiceThread extends Thread {
             } catch (Exception e) {
             }
         } else {
-
-            /*  서버로 부터  정보 불러오는 부분 */
-            try {
-                mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-            mMusicTable = mClient.getTable(MusicInfo.class);
-            ((MainActivity)MainActivity.mContext).getItemByAzure();
-            /*  서버로 부터  정보 불러오는 부분 여기까지  이부분 코드만 자유자재로 옮기면 무관함*/
-
-
             mode = 1;
             Log.i("모드1", "1");
-            try {
-                Log.e("받아오려고 진입", "진입");
-                controlElapse(RUN);
+            controlElapse(RUN);
+            if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
+                Log.i("임시저장값", mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName) + "mSeconds값" + mSeconds);
+            /*  서버로 부터  정보 불러오는 부분 */
+                try {
+                    mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
 
-//                if (mPref.getValue(Integer.toString(mSeconds), "인식못함", mKeyName).equals("인식못함")) {
-//                    //서버에서 받기
-//                }
-                 Log.i("사이 진입", "진입");
-
-                 Log.e("firstAction종료", "종료");
-
-
-            }catch (final Exception e) {
-                createAndShowDialogFromTask(e, "Error");
-                Log.e("mSoundfile이 null", "사운드 파일 없음");
+                mMusicTable = mClient.getTable(MusicInfo.class);
+                ((MainActivity) MainActivity.mContext).getItemByAzure(mKeyName);
+            /*  서버로 부터  정보 불러오는 부분 여기까지  이부분 코드만 자유자재로 옮기면 무관함*/
             }
             Log.i("서비스 run", "sendEmptyMessage");
-
             try {
                 Thread.sleep(5000);
             } catch (Exception e) {
                 createAndShowDialogFromTask(e, "Error");
             }
         }
-
-    }
-
-    private void sendData(String keyname){
-        // Get the Mobile Service Table instance to use
-//        Log.i("음악정보 try 전", "1ㄱㄱ");
-//
-//
-//        try {
-//            Log.i("음악정보", "1ㄱㄱ");
-//            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", mContext);
-//            // Get the Mobile Service Table instance to use
-//            Log.i("음악정보", "2ㄱㄱ");
-//
-//            mMusicTable = mClient.getTable(MusicInfo.class);
-//            Log.i("음악정보", "3ㄱㄱ");
-//
-//            mMusicTable = mClient.getTable(MusicInfo.class);
-//            Log.i("음악정보", "4ㄱㄱ");
-//            // Create a new item
-//            final MusicInfo item = new MusicInfo();
-//            Log.i("5", "ㄱㄱ");
-//            String decibels;
-
-            int seconds=0;
-            //Log.i("while문 가기 전", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
-            for(seconds = 0; seconds<1000; seconds++){
-                Log.i("서버에 음원데이터 전송", "ㄱㄱ");
-                Log.i("sharedpreference값 출력", seconds+"초"+mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
-                //addItem(seconds, Double.valueOf(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)), keyname);
-                // 데이터 저장
-//                decibels = mPref.getValue(Integer.toString(seconds), "인식못함", keyname);
-//
-//                item.setID(keyname);
-//                item.setSecond(Integer.toString(seconds));
-//                item.setValue(decibels);
-//                // Insert the new item
-//                new AsyncTask<Void, Void, Void>() {
-//
-//                    @Override
-//                    protected Void doInBackground(Void... params) {
-//                        try {
-//                            final MusicInfo entity = mMusicTable.insert(item).get();
-//                        } catch (Exception exception) {
-//                            //createAndShowDialog(exception, "Error");
-//                        }
-//                        return null;
-//                    }
-//                }.execute();
-//
-//                // 값 확인
-//                Log.d("서버로 데이터 저장", item.toString());
-//                seconds++;
-//                if(mPref.getValue(Integer.toString(seconds), "인식못함", keyname)=="인식못함") {
-//                    Log.i("for문 아웃", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
-//                    break;
-//                }
-           }
-//
-//        } catch (MalformedURLException e) {
-//            Log.i("음악정보-", "1'ㄱㄱ");
-//
-//            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-//        }
-
-    }
-
-    //곡 정보 저장
-    public void addItem(int seconds, double decibels, String keyname) {
-
-        // Get the Mobile Service Table instance to use
-        mMusicTable = mClient.getTable(MusicInfo.class);
-
-        // Create a new item
-        final MusicInfo item = new MusicInfo();
-
-        item.setID(keyname);
-        item.setSecond(Integer.toString(seconds));
-        item.setValue(Double.toString(decibels));
-        item.setComplete(false);
-        Log.d("서버로 데이터 저장", item.toString());
-        // Insert the new item
-/*        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    final MusicInfo entity = mMusicTable.insert(item).get();
-                    if (!entity.isComplete()) {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                mAdapter.add(entity);
-                            }
-                        });
-                    }
-                } catch (Exception exception) {
-                    createAndShowDialog(exception, "Error");
-                }
-                return null;
-            }
-        }.execute();*/
-
     }
 
     public void controlElapse(int mode) {
@@ -248,14 +130,8 @@ public class DecibelServiceThread extends Thread {
         String ms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(mMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(mMillis)),
                 TimeUnit.MILLISECONDS.toSeconds(mMillis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mMillis)));
         mSeconds = (int) mMillis / 1000;
-        if(mode==0){
-            mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
-        } else {
-          // 여기다가 받는코드 넣으면 됨
-
-            //  mDecibels =? mDecibels라는 데시벨 변수에 넣으면 됨
-        }
-
+        //Log.i("현재 mSeconds값", mSeconds+" " + "키 값 : " + mKeyName);
+        mDecibels = mPref.getValue(Integer.toString(mSeconds), "54", mKeyName);
         //Log.i("전 mDecibels=",mDecibels);
         mDecibels = getDecibel();
         //Log.i("후 mDecibels=",mDecibels);
@@ -280,7 +156,7 @@ public class DecibelServiceThread extends Thread {
             dB = Math.round(10 * Math.log10(1 / mW));
             dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
             //이제부터 음원에 대한 계산
-            mDecibels = "54";
+            //mDecibels = "54";
             temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
             dB = Math.round(dB - temp);
             decibel = (int) dB;

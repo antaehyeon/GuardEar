@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private AudioManager mAudiomanager;
     private Toolbar mToolbar;
 
-    private SharedPreferences mPref;
-
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
     /**
@@ -87,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private String mKeyName;
 
 
     /**
@@ -193,26 +192,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void firstAction(){
-        (new AsyncTask <MainActivity, Void, MainActivity>(){
-            @Override
-            protected MainActivity doInBackground(MainActivity... params) {
-                Log.d("이어폰", "결과값 확인 : doInBackground");
-                return params[0];
-            }
+//    public void firstAction(){
+//        (new AsyncTask <MainActivity, Void, MainActivity>(){
+//            @Override
+//            protected MainActivity doInBackground(MainActivity... params) {
+//                Log.d("이어폰", "결과값 확인 : doInBackground");
+//                return params[0];
+//            }
+//
+//            @Override
+//            protected void onPostExecute(MainActivity result) {
+//                //super.onPostExecute(result);
+//                Log.d("이어폰", "결과값 확인 : onPostExecute");
+//                getItemByAzure();
+//            }
+//
+//        }).execute(this);
+//    }
 
-            @Override
-            protected void onPostExecute(MainActivity result) {
-                //super.onPostExecute(result);
-                Log.d("이어폰", "결과값 확인 : onPostExecute");
-                getItemByAzure();
-            }
-
-        }).execute(this);
-    }
-
-    public void getItemByAzure(){
-
+    public void getItemByAzure(String keyName){
+        mKeyName = keyName;
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -235,26 +234,25 @@ public class MainActivity extends AppCompatActivity {
 
                             if(Looper.myLooper() == null){ Looper.prepare();   }
 
-
                             for(MusicInfo item : result){
-
-                                Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString());
+                                pref.putValue(item.getSecond().toString(), item.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString() + "키 값 "+mKeyName);
                             }
                             for(MusicInfo item2 : result2){
-
-                                Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString());
+                                pref.putValue(item2.getSecond().toString(), item2.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString() + "키 값 "+mKeyName);
                             }
                             for(MusicInfo item3 : result3){
-
-                                Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString());
+                                pref.putValue(item3.getSecond().toString(), item3.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString() + "키 값 "+mKeyName);
                             }
                             for(MusicInfo item4 : result4){
-
-                                Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString());
+                                pref.putValue(item4.getSecond().toString(), item4.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString() + "키 값 "+mKeyName);
                             }
                             for(MusicInfo item5 : result5){
-
-                                Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString());
+                                pref.putValue(item5.getSecond().toString(), item5.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString() + "키 값 "+mKeyName);
                             }
                             Looper.loop();
                         }
