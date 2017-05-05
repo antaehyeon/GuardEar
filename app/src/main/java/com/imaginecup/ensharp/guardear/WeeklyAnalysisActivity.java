@@ -55,7 +55,6 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
     private MobileServiceClient mClient;
     private MobileServiceTable<DailyData> mDailyDataTable;
 
-    private EarphoneAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
