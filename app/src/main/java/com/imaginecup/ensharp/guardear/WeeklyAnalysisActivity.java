@@ -26,6 +26,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
     /* 서버 */
     private MobileServiceClient mClient;
-    private MobileServiceTable<ListeningData> mListeningDataTable;
+    private MobileServiceTable<DailyData> mDailyDataTable;
 
     private EarphoneAdapter mAdapter;
     @Override
@@ -77,6 +78,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
         String month = parsingWeek.split("월")[0];
         String day = parsingWeek.split("월")[1].trim().split("일")[0];
         mKeyName = year + "_" + month +"_" + day;
+         // 일별 정보 가져오는 횟수 세기
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -84,7 +86,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
             mClient = new MobileServiceClient("http://guardear.azurewebsites.net", WeeklyAnalysisActivity.this);
 
             // Get the Mobile Service Table instance to use
-            mListeningDataTable = mClient.getTable(ListeningData.class);
+            mDailyDataTable = mClient.getTable(DailyData.class);
 
             // create a new item
             final ListeningData ListeningDataItem = new ListeningData();
@@ -94,23 +96,21 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
                 protected Void doInBackground(Void... params) {
                     try {
                         // 데이터를 가져오는 리스트
-
-                        final List<ListeningData> result = mListeningDataTable.where().field("date").eq(mKeyName).execute().get();
-                        //final List<ListeningData> result = mListeningDataTable.execute().get();
-
-                        Log.d("청취정보가져오기", " ListeningData "+ result.toString());
+                        final List<DailyData> result = mDailyDataTable.where().field("date").ge(mKeyName).orderBy("date", QueryOrder.Ascending).top(7).execute().get();
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
-                                Log.d("이어폰", "런 들어옴");
-
                                 if(Looper.myLooper() == null){ Looper.prepare();   }
 
-                                for(ListeningData item : result){
+                                for(DailyData item : result){
 
-                                   Log.d("서버로부터 청취정보", item.getDate().toString());
+                                    Log.d("서버로부터 청취정보", "시간 : " + item.getDate());
+                                    Log.d("서버로부터 청취정보", "dB : " + Integer.toString(item.getAvg_dB()));
+                                    Log.d("서버로부터 청취정보", "time : " + Integer.toString(item.getAvg_time()));
+
+
                                 }
                                 Looper.loop();
                             }
