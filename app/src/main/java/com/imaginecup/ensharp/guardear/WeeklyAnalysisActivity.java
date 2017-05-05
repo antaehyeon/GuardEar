@@ -1,9 +1,13 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,8 +24,12 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Semin on 2017-02-22.
@@ -32,7 +40,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
     //private SeekBar mSeekBarX, mSeekBarY;
     private TextView tvX, tvY;
     private IAxisValueFormatter xAxisFormatter;
-
+    private String mKeyName;
     public static final int COLOR_NAVY = Color.parseColor("#213b4c");
     public static final int COLOR_SKYBLUE = Color.parseColor("#02ecfb");
     BarChart chart ;
@@ -40,12 +48,20 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
     ArrayList<String> BarEntryLabels ;
     BarDataSet Bardataset ;
     BarData BARDATA ;
+
+
+    /* 서버 */
+    private MobileServiceClient mClient;
+    private MobileServiceTable<ListeningData> mListeningDataTable;
+
+    private EarphoneAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weeklyanalysis);
         Intent intent = getIntent();
         String week = intent.getExtras().getString("week");
+        String year = intent.getExtras().getString("year");
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.weekly_analysis_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
@@ -57,6 +73,63 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //        getSupportActionBar().setTitle("주간 분석");
 //        getSupportActionBar().setSubtitle(week);
         chart = (BarChart) findViewById(R.id.chart1);
+        String parsingWeek = week.split("~")[0];
+        String month = parsingWeek.split("월")[0];
+        String day = parsingWeek.split("월")[1].trim().split("일")[0];
+        mKeyName = year + "_" + month +"_" + day;
+
+        try {
+            // Create the Mobile Service Client instance, using the provided
+            // Mobile Service URL and key
+            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", WeeklyAnalysisActivity.this);
+
+            // Get the Mobile Service Table instance to use
+            mListeningDataTable = mClient.getTable(ListeningData.class);
+
+            // create a new item
+            final ListeningData ListeningDataItem = new ListeningData();
+
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        // 데이터를 가져오는 리스트
+
+                        final List<ListeningData> result = mListeningDataTable.where().field("date").eq(mKeyName).execute().get();
+                        //final List<ListeningData> result = mListeningDataTable.execute().get();
+
+                        Log.d("청취정보가져오기", " ListeningData "+ result.toString());
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Log.d("이어폰", "런 들어옴");
+
+                                if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                                for(ListeningData item : result){
+
+                                   Log.d("서버로부터 청취정보", item.getDate().toString());
+                                }
+                                Looper.loop();
+                            }
+                        });
+                    } catch (final Exception e){
+                        //createAndShowDialogFromTask(e, "Error");
+                    }
+                    return null;
+                }
+            };
+            runAsyncTask(task);
+
+
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
+
+
+
 
 //        BARENTRY = new ArrayList<>();
 //
@@ -172,7 +245,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //            } else {
 //                yVals1.add(new BarEntry(i, val));
 //            }
-            if(i==1){
+            if(i==1){ // 일
                 yVals1.add(new BarEntry(i, 58));
             } else if(i==2) {
                 yVals1.add(new BarEntry(i, 68));
@@ -262,4 +335,50 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void createAndShowDialogFromTask(final Exception exception, String title) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowDialog(exception, "Error");
+            }
+        });
+        Log.d("태그", "createAndShowDialogFromTask");
+
+    }
+
+    private void createAndShowDialog(Exception exception, String title) {
+        Throwable ex = exception;
+        if(exception.getCause() != null){
+            ex = exception.getCause();
+        }
+        createAndShowDialog(ex.getMessage(), title);
+        Log.d("태그", "createAndShowDialog1");
+
+    }
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+        Log.d("태그", "createAndShowDialog2");
+
+
+    }
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        Log.d("태그", "AsyncTask");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            return task.execute();
+
+        }
+    }
+
+
+
+
+
 }
