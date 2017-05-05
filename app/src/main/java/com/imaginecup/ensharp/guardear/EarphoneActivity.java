@@ -92,7 +92,10 @@ public class EarphoneActivity extends Activity {
                 protected Void doInBackground(Void... params) {
                     try {
                         // 데이터를 가져오는 리스트
-                        final List<Earphone> result = mEarphoneTable.execute().get();
+                        String company = mPref.getValue("earphone_company", "", "userinfo");
+                        Log.d("회사명 확인중", company);
+
+                        final List<Earphone> result = mEarphoneTable.where().field("companyName").eq(company).execute().get();
 
                         Log.d("순서확인중", " EarphoneActivity "+ result.toString());
 
