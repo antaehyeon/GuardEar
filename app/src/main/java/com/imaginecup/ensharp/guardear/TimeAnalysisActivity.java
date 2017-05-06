@@ -37,6 +37,7 @@ public class TimeAnalysisActivity extends Activity {
     private MobileServiceClient mClient;
     private MobileServiceTable<ListeningData> mListeningDataTable;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,12 +123,6 @@ public class TimeAnalysisActivity extends Activity {
         } catch (MalformedURLException e) {
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
-
-
-
-
-
-
     }
 
     private void initiate() {
