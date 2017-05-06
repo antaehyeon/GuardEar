@@ -127,20 +127,25 @@ public class MainLoginActivity extends AppCompatActivity {
             setting = getSharedPreferences("setting", 0);
             editor = setting.edit();
 
-            Log.d("페이스북 창", "onCreate() -try ");
+
+            Log.d("자동로그인 test", "if전");
+            if(setting.getBoolean("Auto_Login_enabled", false)){
+
+                Log.d("자동로그인 test", "자동로그인");
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                startActivity(intent);
+                finish();
+
+            }
 
 
-
-            String auto_id = mPref.getValue("id", "", "userinfo");
-            String auto_pw = mPref.getValue("pw", "", "userinfo");
+            //String auto_id = mPref.getValue("id", "", "userinfo");
+            //String auto_pw = mPref.getValue("pw", "", "userinfo");
 
             // Create a new item
             //final ToDoItem item = new ToDoItem(pw, email, name, age , gender);
 
-            Log.d("자동로그인", auto_id);
-            Log.d("자동로그인", auto_pw);
-            //Log.d("자동로그인", item.toString());
-            //Log.d("자동로그인", "test : "+ item.getId());
 
             /*if(item.toString().equals("null/null/null/null/null")) {
             }
@@ -193,10 +198,29 @@ public class MainLoginActivity extends AppCompatActivity {
                                     try {
                                         // 이메일, 이름, 성별, 나이 비밀번호
                                         String name = object.getString("name");
+                                        Log.d("TAG", "name : "+name);
                                         String gender = object.getString("gender");
                                         String email = object.getString("email");
                                         String pw = "0000";
                                         String age = "23";
+
+
+                                        Log.d("테스트중", "자동로그인 저장전");
+
+                                        /*  자동 로그인  */
+                                        editor.putString("ID", email);
+                                        Log.d("TAG", "editor : "+ setting.getString("ID", ""));
+                                        editor.putString("PW", pw);
+                                        editor.putBoolean("Auto_Login_enabled", true);
+                                        editor.commit();
+                                        Log.d("테스트중", "자동로그인 저장 후");
+                                        /* 자동 로그인 해제 코드
+                                        editor.remove("ID");
+                                        editor.remove("PW");
+                                        editor.remove("Auto_Login_enabled");
+                                        editor.clear();
+                                        editor.commit();
+                                         */
 
                                         Log.d("TAG", "페이스북 이메일 : " + email);
                                         Log.d("TAG", "페이스북 이름 : " + name);
