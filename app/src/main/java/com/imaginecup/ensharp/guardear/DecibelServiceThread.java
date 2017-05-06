@@ -150,41 +150,48 @@ public class DecibelServiceThread extends Thread {
         //Log.i("getDecibel()함수", currentVolume+"");
         if (!isAutoControl) {
             //Log.i("볼륨컨트롤x", "dd");
-            V = Double.parseDouble(mPref.getValue(VolumeBroadcastReceiver.currentVolume, "13.28", "Note5"));
-            //Log.i("음량전압값 변화", " V = " + V + "  볼륨 : " + mPref.getValue("0", "5", "currentVolume"));
-            mW = ((V * V) / Double.parseDouble(mPref.getValue("ohm", "35", "earphone"))) / 1000;
-            dB = Math.round(10 * Math.log10(1 / mW));
-            dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
-            //이제부터 음원에 대한 계산
-            //mDecibels = "54";
-            temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
-            dB = Math.round(dB - temp);
+            if (!(VolumeBroadcastReceiver.currentVolume).equals("0")) {
+                V = Double.parseDouble(mPref.getValue(VolumeBroadcastReceiver.currentVolume, "13.28", "Note5"));
+                //Log.i("음량전압값 변화", " V = " + V + "  볼륨 : " + mPref.getValue("0", "5", "currentVolume"));
+                mW = ((V * V) / Double.parseDouble(mPref.getValue("ohm", "35", "earphone"))) / 1000;
+                dB = Math.round(10 * Math.log10(1 / mW));
+                dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
+                //이제부터 음원에 대한 계산
+                //mDecibels = "54";
+                temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
+                dB = Math.round(dB - temp);
+            } else {
+                dB = 0;
+            }
             decibel = (int) dB;
             return Integer.toString(decibel);
         } else {
             //Log.i("볼륨컨트롤O", "dd");
-            V = Double.parseDouble(mPref.getValue(Integer.toString(currentVolume), "13.28", "Note5"));
-            //Log.i("음량전압값 변화", " V = " + V);
-            mW = ((V * V) / Double.parseDouble(mPref.getValue("ohm", "35", "earphone"))) / 1000;
-            //Log.i("음량전압값 변화", " mW = " + mW);
-            dB = Math.round(10 * Math.log10(1 / mW));
-            //Log.i("음량전압값 변화", " dB = " + dB);
-            dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
-            //Log.i("음량전압값 변화", " dB = " + dB);
-            //이제부터 음원에 대한 계산
-            temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
-            //Log.i("temp=",temp+" ");
-            dB = Math.round(dB - temp);
-            //Log.i("dB=",dB+" ");
-            if (dB >= 70) {
-                //Log.i("볼륨 80 이상", "줄이기");
-                currentVolume--;
-                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, AudioManager.FLAG_PLAY_SOUND);
+            if (!(VolumeBroadcastReceiver.currentVolume).equals("0")) {
+                V = Double.parseDouble(mPref.getValue(Integer.toString(currentVolume), "13.28", "Note5"));
+                //Log.i("음량전압값 변화", " V = " + V);
+                mW = ((V * V) / Double.parseDouble(mPref.getValue("ohm", "35", "earphone"))) / 1000;
+                //Log.i("음량전압값 변화", " mW = " + mW);
+                dB = Math.round(10 * Math.log10(1 / mW));
+                //Log.i("음량전압값 변화", " dB = " + dB);
+                dB = Double.parseDouble(mPref.getValue("spl", "97", "earphone")) - dB;
+                //Log.i("음량전압값 변화", " dB = " + dB);
+                //이제부터 음원에 대한 계산
+                temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
+                //Log.i("temp=",temp+" ");
+                dB = Math.round(dB - temp);
+                //Log.i("dB=",dB+" ");
+                if (dB >= 70) {
+                    //Log.i("볼륨 80 이상", "줄이기");
+                    currentVolume--;
+                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, AudioManager.FLAG_PLAY_SOUND);
+                }
+            } else {
+                dB = 0;
             }
             decibel = (int) dB;
             return Integer.toString(decibel);
         }
-
     }
 
     Handler myTimer = new Handler() {
