@@ -98,7 +98,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
                     EarphoneActivity activity = (EarphoneActivity) mContextEar;
 
-                    activity.checkItem(currentItem);
+                    activity.checkItem(currentItem, url);
 
                     activity.NextClick(btn_Next);
                     //Log.d("체크박스 확인 : ", " " + checkBox.isChecked());
@@ -112,77 +112,3 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
 
 
-
-  /*  if (currentItem.getModelName().toString().equals("EO-BG920BBKG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/k1M4G7M.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_bg920bbkg);
-        } else if (currentItem.getModelName().toString().equals("EO-EG920BWEG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/qqTihXN.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_eg920bweg);
-        }else if (currentItem.getModelName().toString().equals("EO-BN920CFKG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/I5RdmqT.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_bn920cfkg);
-        } else if (currentItem.getModelName().toString().equals("EO-BG930CBKGKR")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/GXD5SFk.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_bg930bkgkr);
-        }else if (currentItem.getModelName().toString().equals("EO-BG935CBKGKR")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/b9NWIe4.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
-        }else if(currentItem.getModelName().toString().equals("EO-HS1303WEG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/vKdm6MG.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_hs1303weg);
-        }else if (currentItem.getModelName().toString().equals("EO-IA510BLKGKR")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/d7GD8gJ.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_ia510blkgkr);
-        }else if (currentItem.getModelName().toString().equals("EO-IG930BBEGKR")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/e7NGkx5.pngg")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_ig930bbegkr);
-        }else if (currentItem.getModelName().toString().equals("EO-MG900KWKG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/UcJUgc6.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_mn900kwkg);
-        }else if (currentItem.getModelName().toString().equals("EO-MN910VWKG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/kmsqkBX.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_mn910vwkg);
-        }else if (currentItem.getModelName().toString().equals("EO-MG920BBKG")) {
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/0auySUx.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_mg920bbkg);
-        }else{
-            Picasso.with(mContextEar)
-                    .load("http://i.imgur.com/3mpEy2p.png")
-                    .placeholder(R.drawable.eo_bg920bbkg)
-                    .into(imageView);
-            //imageView.setImageResource(R.drawable.eo_bg935cbkgkr);
-        }*/

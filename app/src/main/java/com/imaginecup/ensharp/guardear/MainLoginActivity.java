@@ -125,14 +125,14 @@ public class MainLoginActivity extends AppCompatActivity {
 
 
 
-                /*Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
                 startActivity(intent);
 
-                finish();*/
+                finish();
 
             }
         } );
-        
+
 
         try {
             mClient = new MobileServiceClient("https://guardear.azurewebsites.net", MainLoginActivity.this);

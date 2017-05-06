@@ -211,7 +211,7 @@ public class EarphoneActivity extends Activity {
                 }.execute();
     }
 
-    public void checkItem(final Earphone item) {
+    public void checkItem(final Earphone item, String url) {
         String image=null;
 
         btn_Next.setVisibility(View.VISIBLE);
@@ -229,25 +229,12 @@ public class EarphoneActivity extends Activity {
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
 
-        /*if (item.getID().toString().equals("HSS-100")) {
-            image = "hss-100";
-        } else if (item.getID().toString().equals("STORMX_BLITZ")) {
-            image = "stormaxblitz";
-        } else if (item.getID().toString().equals("AirPods")) {
-            image = "airpods";
-        }else if (item.getID().toString().equals("EarPods")) {
-            image = "earpods";
-        }else if(item.getID().toString().equals("FIX_XE-501")){
-            image = "fixxe_501";
-        }else if (item.getID().toString().equals("MDR-EX650AP")) {
-            image = "mdr_ex650ap";
-        }else if (item.getID().toString().equals("LG_GS200")) {
-            image = "lg_gs200";
-        }else if (item.getID().toString().equals("EO-IG930BBEGKR")) {
-            image = "mo_ig930bbegkr";
-        }*/
+        image = url;
 
-        if (item.getModelName().toString().equals("EO-BG920BBKG")) {
+
+
+
+       /* if (item.getModelName().toString().equals("EO-BG920BBKG")) {
             image = "eo_bg920bbkg";
         } else if (item.getModelName().toString().equals("EO-EG920BWEG")) {
             image = "eo_eg920bweg";
@@ -259,7 +246,8 @@ public class EarphoneActivity extends Activity {
             image = "eo_bg935cbkgkr";
         }/*else if(item.getID().toString().equals("EO-HS1393WEG")){
             image = "eo_hs1303weg";
-        }*/else if (item.getModelName().toString().equals("EO-IA510BLKGKR")) {
+        }*/
+        /*else if (item.getModelName().toString().equals("EO-IA510BLKGKR")) {
             image = "eo_ia510blkgkr";
         }else if (item.getModelName().toString().equals("EO-IG930BBEGKR")) {
             image = "eo_ig930bbegkr";
@@ -270,6 +258,11 @@ public class EarphoneActivity extends Activity {
         }else if (item.getModelName().toString().equals("EO-MG920BBKG")) {
             image = "eo_mg920bbkg";
         }
+        else{
+            image = "eo_bg920bbkg";
+        }
+*/
+
         mPref.putValue("earphone_image", image, "userinfo");
 
 
