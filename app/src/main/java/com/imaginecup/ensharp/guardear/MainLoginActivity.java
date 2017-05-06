@@ -68,6 +68,7 @@ public class MainLoginActivity extends AppCompatActivity {
     private static final String TAG = "AppPermission";
     private final int MY_PERMISSION_REQUEST_STORAGE = 100;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +91,9 @@ public class MainLoginActivity extends AppCompatActivity {
         btn_email = (Button) findViewById(R.id.btn_email);
         join_email = (Button) findViewById(R.id.join_email);
 
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder( GoogleSignInOptions.DEFAULT_SIGN_IN )
                             .requestEmail( )
                             .requestProfile( )
@@ -105,7 +109,9 @@ public class MainLoginActivity extends AppCompatActivity {
                 // 필요한 api가 있으면 아래에 추가
                 .addApi( Auth.GOOGLE_SIGN_IN_API, gso )
                 .build( );
+
         // 로그인 버튼 클릭 리스너 등록
+        // 구글로 로그인
         Button googleLoginButton = ( Button ) findViewById( R.id.btn_google );
         googleLoginButton.setOnClickListener( new View.OnClickListener( ) {
             @Override
@@ -113,9 +119,20 @@ public class MainLoginActivity extends AppCompatActivity {
                 // 구글 로그인 화면을 출력합니다. 화면이 닫힌 후 onActivityResult가 실행됩니다.
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent( mGoogleApiClient );
                 startActivityForResult( signInIntent, RESOLVE_CONNECTION_REQUEST_CODE );
+
+                /*  자동 로그인 */
+
+
+
+
+                /*Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                startActivity(intent);
+
+                finish();*/
+
             }
         } );
-
+        
 
         try {
             mClient = new MobileServiceClient("https://guardear.azurewebsites.net", MainLoginActivity.this);
@@ -124,20 +141,17 @@ public class MainLoginActivity extends AppCompatActivity {
             mAdapter = new ToDoItemAdapter(this, R.layout.row_earphone);
             mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
 
-            setting = getSharedPreferences("setting", 0);
-            editor = setting.edit();
 
-
-            Log.d("자동로그인 test", "if전");
             if(setting.getBoolean("Auto_Login_enabled", false)){
 
                 Log.d("자동로그인 test", "자동로그인");
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                 startActivity(intent);
-                finish();
+                //finish();
 
             }
+
 
 
             //String auto_id = mPref.getValue("id", "", "userinfo");
@@ -198,29 +212,20 @@ public class MainLoginActivity extends AppCompatActivity {
                                     try {
                                         // 이메일, 이름, 성별, 나이 비밀번호
                                         String name = object.getString("name");
-                                        Log.d("TAG", "name : "+name);
                                         String gender = object.getString("gender");
                                         String email = object.getString("email");
                                         String pw = "0000";
                                         String age = "23";
 
-
-                                        Log.d("테스트중", "자동로그인 저장전");
-
-                                        /*  자동 로그인  */
+                                        /*  자동 로그인*/
                                         editor.putString("ID", email);
-                                        Log.d("TAG", "editor : "+ setting.getString("ID", ""));
                                         editor.putString("PW", pw);
                                         editor.putBoolean("Auto_Login_enabled", true);
                                         editor.commit();
-                                        Log.d("테스트중", "자동로그인 저장 후");
-                                        /* 자동 로그인 해제 코드
-                                        editor.remove("ID");
-                                        editor.remove("PW");
-                                        editor.remove("Auto_Login_enabled");
-                                        editor.clear();
-                                        editor.commit();
-                                         */
+
+                                        // 자동 로그인 해제 코드
+                                        //editor.clear();
+                                        //editor.commit();
 
                                         Log.d("TAG", "페이스북 이메일 : " + email);
                                         Log.d("TAG", "페이스북 이름 : " + name);
@@ -307,6 +312,7 @@ public class MainLoginActivity extends AppCompatActivity {
     // login btn click
     public void LoginEmail(View view) {
 
+
         Intent intent = new Intent(getApplicationContext(),  LoginActivity.class);
         startActivity(intent);
 
@@ -336,8 +342,16 @@ public class MainLoginActivity extends AppCompatActivity {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent( data );
                 if ( result.isSuccess( ) ) {
                     GoogleSignInAccount acct = result.getSignInAccount( ); // 계정 정보 얻어오기
+
+                    /* 자동 로그인 정보 저장*/
+
+                    editor.putString("ID", acct.getEmail());
+                    editor.putString("PW", "0000");
+                    editor.putBoolean("Auto_Login_enabled", true);
+                    editor.commit();
+
                     Log.i("GOOGLE" , acct.getDisplayName( ) +" " );
-                    Log.i("GOOGLE", acct.getDisplayName());
+                    Log.i("GOOGLE" , acct.getEmail( ) +" " );
                 }
                 break;
             default:

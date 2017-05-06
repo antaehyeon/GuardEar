@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     int timer_sec;
     String timer_text;
     int count;
+    private MainLoginActivity mainLogin;
 
 
     @Override
@@ -133,6 +134,12 @@ public class MainActivity extends AppCompatActivity {
         sServiceData = new ServiceData(mContext);
         pref = new SharedPreferences(this);
         setMainUiInfo();
+
+
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+
+
         serviceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -602,20 +609,22 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         //청력측정 페이지
-        else if (id == R.id.action_hearing_test) {
+        /*else if (id == R.id.action_hearing_test) {
+
             Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
 
             startActivity(intent);
             finish();
-
-        }
+        }*/
         //로그아웃 페이지
         else if (id == R.id.action_logout) {
             FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
 
-            //editor.clear(); //clear all stored data
-            //editor.commit();
+
+            editor.clear();
+            editor.commit();
+
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
 
 
