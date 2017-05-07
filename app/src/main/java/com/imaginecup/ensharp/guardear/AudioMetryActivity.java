@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -153,6 +154,9 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     Button toolbarNextButton;
 
+    boolean isRepeatAudioTrackPlayAndStop = false;
+    boolean isAudioTrackAlreadyUse = false;
+
     TextView surround_dB;
     private Timer mTimer;
     private Handler mHandler;
@@ -165,7 +169,7 @@ public class AudioMetryActivity extends AppCompatActivity {
             }
         };
         Timer timer = new Timer();
-        timer.schedule(second, 0, 1000);
+        timer.schedule(second, 0, 300);
     }
 
     public void Update() {
@@ -196,27 +200,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(baseColor);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
-        //surround_dB = (TextView) findViewById(R.id.tv_surroundDecibel);
-        //mTimer = new Timer(true);  // 데몬 쓰레드로 할 것 인지 여부를 결정한다.
-
-        //mHandler = new Handler();
-
-//        mTimer.schedule(
-//                new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        handler.post(new Runnable() {
-//                            public void run() {
-//                                if (surround_dB != null) {
-//                                    int random = (int) (Math.random() * 10)+60;
-//                                    surround_dB.setText(Integer.toString(random));
-//                                }
-//                            }
-//                        });
-//                    }
-//                }, 1000, 1000
-//
-//        );
 
         // Toolbar 에 넣을 txetView(title) 속성 조정
         title = (TextView) toolbar.findViewById(R.id.toolBar_audiometry_title);
@@ -229,6 +212,9 @@ public class AudioMetryActivity extends AppCompatActivity {
         relativeLayout.setBackgroundColor(baseColor);
         relativeLayout.setPadding(0, 0, 0, 0);
 
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate,
+                AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
+                numSamples, AudioTrack.MODE_STATIC);
 
         // Notification Bar 색상 지정
         //https://medium.com/@mindwing/actionbar-%EB%A5%BC-%EB%8B%A4%EB%A4%84%EB%B4%85%EC%8B%9C%EB%8B%A4-401709e5480d#.jsyw89cbu
@@ -239,25 +225,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         //http://ghj1001020.tistory.com/m/21
         window.setStatusBarColor(baseColor);
 
-
-//        // 그래프 그리기
-//        LineView lineView = (LineView) relativeLayout.findViewById(R.id.line_view);
-//        initView(lineView);
-////        lineView.setDrawDotLine(false); //optional
-////        lineView.setShowPopup(LineView.SHOW_POPUPS_MAXMIN_ONLY); //optional
-////        LineView.setBottomTextList(strList);
-////        lineView.setColorArray(new int[]{Color.BLACK,Color.GREEN,Color.GRAY,Color.CYAN});
-//
-//        ArrayList<Integer> dataList = new ArrayList<>();
-//        float random = (float)(Math.random()*9+1);
-//        for (int i=0; i<9; i++){
-//            dataList.add((int)(Math.random()*random));
-//        }
-//
-//        ArrayList<ArrayList<Integer>> dataLists = new ArrayList<>();
-//        dataLists.add(dataList);
-//
-//        lineView.setDataList(dataLists); //or lineView.setFloatDataList(floatDataLists)
 
         // 그래프 그리기 - HelloChart
         chart = (LineChartView) relativeLayout.findViewById(R.id.chart);
@@ -277,27 +244,6 @@ public class AudioMetryActivity extends AppCompatActivity {
 
         resetViewport();
 
-//        previewX();
-
-//        // Card View
-//        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-//
-//        // use a linear layout manager
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//
-//        // specify an adapter (see also next example)
-//        myDataset = new ArrayList<>();
-//        mAdapter = new MyAdapter(myDataset);
-//        mRecyclerView.setAdapter(mAdapter);
-
-//        myDataset.add(new MyData("#InsideOut", R.mipmap.insideout));
-//        myDataset.add(new MyData("#Mini", R.mipmap.mini));
-//        myDataset.add(new MyData("ToyStory", R.mipmap.toystory));
-
-//        myDataset.add(new MyData("현재 진행하고 있는 단계는 1 단계 입니다.", "현재 테스트중인 데시벨은 1000Hz 입니다."));
-
-
         // 아래쪽에서 STEP 변수들
         txtStep = (TextView) findViewById(R.id.tv_step);
         txtFreq = (TextView) findViewById(R.id.tv_freq);
@@ -306,7 +252,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         // BLUE : #2196F3 (BLUE)
         // RED : #F44336 (RED)
         txtEar.setTextColor(Color.parseColor("#F44336"));
-
 
         btnCantHear = (Button) findViewById(R.id.btn_cantHear);
         btnCantHear.setTextColor(pointColor);
@@ -793,19 +738,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         }
     }
 
-//    // 그래프 초기화 메소드
-//    private void initView(LineView lineView) {
-//        ArrayList<String> test = new ArrayList<String>();
-//        for (int i=0; i<9; i++) {
-//            test.add(String.valueOf(i+1));
-//        }
-//        lineView.setBottomTextList(test);
-//        lineView.setColorArray(new int[]{Color.parseColor("#F44336"),Color.parseColor("#9C27B0"),Color.parseColor("#2196F3"),Color.parseColor("#009688")});
-//        lineView.setDrawDotLine(true);
-//        lineView.setShowPopup(LineView.SHOW_POPUPS_NONE);
-//
-//    }
-
     // 그래프 V2
     private void generateData() {
 
@@ -814,10 +746,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         // 그래프에 데이터 넣는 과정
         leftValue = new ArrayList<PointValue>();
         rightValue = new ArrayList<PointValue>();
-//            for (int j = 0; j < numberOfPoints; ++j) {
-//                values.add(new PointValue(j, randomNumbersTab[i][j]));
-//                Log.i("HYEON", "" + randomNumbersTab[i][j]);
-//            }
 
         // PointValue (X, Y좌표)
         leftValue.add(new PointValue(250, 30));
@@ -860,18 +788,11 @@ public class AudioMetryActivity extends AppCompatActivity {
         rightLine.setHasLines(hasLines);
         rightLine.setHasPoints(hasPoints);
 
-//        if (pointsHaveDifferentColor){
-//            line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-//        }
-
         leftLine.setPointRadius(5);
         rightLine.setPointRadius(5);
 
         lines.add(leftLine);
         lines.add(rightLine);
-
-//        PointValue pv = new PointValue(250, 10);
-//        rightValue.set(0, pv);
 
         data = new LineChartData(lines);
 
@@ -890,12 +811,9 @@ public class AudioMetryActivity extends AppCompatActivity {
             xData.add(8000f);
 
             axisX = Axis.generateAxisFromRange(0.0f, 8000.0f, 1000.0f);
-//            axisX = Axis.generateAxisFromCollection(xData);
             axisX.setHasLines(true);
 
-//            axisX = Axis.generateAxisFromCollection(xData);
             Axis axisY = new Axis().setHasLines(true);
-//            axisY = Axis.generateAxisFromRange(0.0f, 100.0f, -10.0f);
             if (hasAxesNames) {
                 axisX.setName("Frequency(Hz)");
                 axisY.setName("DBHL(Decibels)");
@@ -922,29 +840,7 @@ public class AudioMetryActivity extends AppCompatActivity {
         chart.setCurrentViewport(v);
     }
 
-//    private void previewX() {
-//        Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-//        float dx = tempViewport.width() / 4;
-////        dx = 250;
-//        Log.i("HYEON", "dx : " + dx + " TempViewPort : " + tempViewport + " height : " + tempViewport.height());
-//        tempViewport.left = 0;
-//        tempViewport.right = 10;
-//        tempViewport.inset(dx, 0);
-//
-//        chart.setCurrentViewport(tempViewport);
-//
-//    }
-
     void genTone() {
-        // fill out the array
-//        for (int i = 0; i < numSamples; ++i) {
-//            if (step % 2 != 0) {
-//                sample[i] = Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone));
-//            } else {
-//                tmpSample[i] = Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone));
-//            }
-//        }
-
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone));
         }
@@ -965,19 +861,40 @@ public class AudioMetryActivity extends AppCompatActivity {
         if (audioMetryEnd) {
             return;
         }
-        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate,
-                AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
-                numSamples, AudioTrack.MODE_STATIC);
+//        if (isAudioTrackAlreadyUse) {
+//            isAudioTrackAlreadyUse = false;
+//            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate,
+//                    AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
+//                    numSamples, AudioTrack.MODE_STATIC);
+//            Log.i("HYEON", "isAudioTrackAlready 867 OK");
+//        }
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
         audioTrack.getChannelConfiguration();
         audioTrack.setStereoVolume(left, right);
-        try {
+//        isAudioTrackAlreadyUse = true;
+
+        audioTrack.getState();
+        Log.i("HYEON", "audioTrack 875 OK");
+
+        if (isRepeatAudioTrackPlayAndStop) {
+            Log.i("HYEON", "audioTrack stop OK");
+            audioTrack.stop();
+            isRepeatAudioTrackPlayAndStop = false;
+        } else {
+            Log.i("HYEON", "audioTrack Play OK");
             audioTrack.play();
-        } catch (Exception e) { // error message if not playable
-            controlFreq(step);
-            genTone();
-            playSound(leftTone, rightTone);
+            isRepeatAudioTrackPlayAndStop = true;
         }
+
+        Log.i("HYEON", "true - 889 OK");
+
+//        try {
+//            audioTrack.play();
+//        } catch (Exception e) { // error message if not playable
+//            controlFreq(step);
+//            genTone();
+//            playSound(leftTone, rightTone);
+//        }
     }
 
     public void playTone(float left, float right) { // overloaded playTone

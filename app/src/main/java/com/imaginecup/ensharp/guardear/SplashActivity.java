@@ -48,9 +48,9 @@ public class SplashActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 
-//                Intent intent = new Intent(SplashActivity.this, AudioMetryActivity.class);
+                Intent intent = new Intent(SplashActivity.this, AudioMetryActivity.class);
 //                Intent intent = new Intent(SplashActivity.this, AudioMetryResultActivity.class);
-                Intent intent = new Intent(SplashActivity.this, MainLoginActivity.class);
+//                Intent intent = new Intent(SplashActivity.this, MainLoginActivity.class);
                 startActivity(intent);
                 finish();
             }
