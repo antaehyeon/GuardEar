@@ -73,7 +73,8 @@ public class MyInfo extends AppCompatActivity {
         ageTxt.setText(mPref.getValue("age", "23", "userinfo"));
         earphone_companyTxt.setText(mPref.getValue("earphone_company", "SAMSUNG", "userinfo"));
         earphone_modelTxt.setText(mPref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
-        earphone_soundpressureTxt.setText(mPref.getValue("earphone_soundpressure", "98", "userinfo"));
+        int soundpressure = (int)Double.parseDouble(mPref.getValue("earphone_soundpressure", "98", "userinfo"));
+        earphone_soundpressureTxt.setText(soundpressure+"");
         earphone_impedanceTxt.setText(mPref.getValue("earphone_impedance", "16", "userinfo"));
 
         if (mPref.getValue("sex", "male", "userinfo").equals("male")) {

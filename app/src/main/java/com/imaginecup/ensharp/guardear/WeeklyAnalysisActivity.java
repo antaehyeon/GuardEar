@@ -11,6 +11,8 @@ import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -35,7 +37,7 @@ import java.util.List;
 /**
  * Created by Semin on 2017-02-22.
  */
-public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChartValueSelectedListener{
+public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChartValueSelectedListener {
 
     protected BarChart mChart;
     //private SeekBar mSeekBarX, mSeekBarY;
@@ -44,16 +46,24 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
     private String mKeyName;
     public static final int COLOR_NAVY = Color.parseColor("#213b4c");
     public static final int COLOR_SKYBLUE = Color.parseColor("#02ecfb");
-    BarChart chart ;
-    ArrayList<BarEntry> BARENTRY ;
-    ArrayList<String> BarEntryLabels ;
-    BarDataSet Bardataset ;
-    BarData BARDATA ;
-
+    BarChart chart;
+    ArrayList<BarEntry> BARENTRY;
+    ArrayList<String> BarEntryLabels;
+    BarDataSet Bardataset;
+    BarData BARDATA;
+    private LinearLayout dailyDecibelBar;
+    private LinearLayout dailyTimeBar;
+    private TextView averageDecibelTxt;
+    private TextView averageTimeTxt;
+    private TextView detailAverageDecibelTxt;
+    private TextView detailAverageTimeTxt;
+    private int averageDecibel;
+    private int averageTime;
 
     /* 서버 */
     private MobileServiceClient mClient;
     private MobileServiceTable<DailyData> mDailyDataTable;
+    private List<DailyData> result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +80,26 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
         weeklyanalysisTitleTxt.setText("주간 분석");
         weeklyanalysisSubTitleTxt.setText(week);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dailyDecibelBar = (LinearLayout) findViewById(R.id.dailyDecibelBar);
+        dailyTimeBar = (LinearLayout) findViewById(R.id.dailyTimeBar);
+        averageDecibelTxt = (TextView) findViewById(R.id.averageDecibelTxt);
+        averageTimeTxt = (TextView) findViewById(R.id.averageTimeTxt);
+        detailAverageDecibelTxt = (TextView) findViewById(R.id.detailAverageDecibelTxt);
+        detailAverageTimeTxt = (TextView) findViewById(R.id.detailAverageTimeTxt);
+        averageDecibel = 0;
+        averageTime = 0;
 //        getSupportActionBar().setTitle("주간 분석");
 //        getSupportActionBar().setSubtitle(week);
         chart = (BarChart) findViewById(R.id.chart1);
         String parsingWeek = week.split("~")[0];
         String month = parsingWeek.split("월")[0];
         String day = parsingWeek.split("월")[1].trim().split("일")[0];
-        mKeyName = year + "_" + month +"_" + day;
-         // 일별 정보 가져오는 횟수 세기
+        if(Integer.parseInt(day)<10){
+            day = "0"+day;
+        }
+        mKeyName = year + "_" + month + "_" + day;
+        Log.d("수정한 날짜", mKeyName);
+        // 일별 정보 가져오는 횟수 세기
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -95,26 +117,32 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
                 protected Void doInBackground(Void... params) {
                     try {
                         // 데이터를 가져오는 리스트
-                        final List<DailyData> result = mDailyDataTable.where().field("date").ge(mKeyName).orderBy("date", QueryOrder.Ascending).top(7).execute().get();
+                        //final List<DailyData> result = mDailyDataTable.where().field("date").ge(mKeyName).orderBy("date", QueryOrder.Ascending).top(7).execute().get();
+                        result = mDailyDataTable.where().field("date").ge(mKeyName).orderBy("date", QueryOrder.Ascending).top(7).execute().get();
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
-                                if(Looper.myLooper() == null){ Looper.prepare();   }
-
-                                for(DailyData item : result){
-
-                                    Log.d("서버로부터 청취정보", "시간 : " + item.getDate());
-                                    Log.d("서버로부터 청취정보", "dB : " + Integer.toString(item.getAvg_dB()));
-                                    Log.d("서버로부터 청취정보", "time : " + Integer.toString(item.getAvg_time()));
-
-
+                                if (Looper.myLooper() == null) {
+                                    Looper.prepare();
                                 }
+                                for (DailyData item : result) {
+                                    averageDecibel += item.getAvg_dB();
+                                    averageTime += item.getAvg_time();
+//                                    Log.d("서버로부터 청취정보", "시간 : " + item.getDate());
+//                                    Log.d("서버로부터 청취정보", "dB : " + Integer.toString(item.getAvg_dB()));
+//                                    Log.d("서버로부터 청취정보", "time : " + Integer.toString(item.getAvg_time()));
+                                }
+                                averageDecibel = averageDecibel / 7;
+                                averageTime = averageTime / 7;
+                                Log.d("평균데시벨", "" + averageDecibel);
+                                Log.d("평균시간", "" + averageTime);
+                                initiate();
                                 Looper.loop();
                             }
                         });
-                    } catch (final Exception e){
+                    } catch (final Exception e) {
                         //createAndShowDialogFromTask(e, "Error");
                     }
                     return null;
@@ -126,8 +154,6 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
         } catch (MalformedURLException e) {
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
-
-
 
 
 //        BARENTRY = new ArrayList<>();
@@ -149,10 +175,10 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //        chart.animateY(3000);
         //XAxis XAxis = mChart.getXAxis ();
 
-        initiate();
+        //initiate();
     }
 
-    private void initiate(){
+    private void initiate() {
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setPinchZoom(false);
@@ -221,12 +247,33 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //        mv.setChartView(mChart); // For bounds control
 //        mChart.setMarker(mv); // Set the marker to the chart
 
+        ViewGroup.LayoutParams dailyDecibelParams = dailyDecibelBar.getLayoutParams();
+        ViewGroup.LayoutParams dailyTimeParams = dailyTimeBar.getLayoutParams();
+        double ratio = averageDecibel / 120.0;
+        dailyDecibelParams.width = (int) ((double) 1258 * ratio);
+        dailyDecibelBar.setLayoutParams(dailyDecibelParams);
+        ratio = averageTime / 90.0;
+        dailyTimeParams.width = (int) ((double) 1258 * ratio);
+        dailyTimeBar.setLayoutParams(dailyTimeParams);
+        averageDecibelTxt.setText(averageDecibel + "");
+        averageTimeTxt.setText(timeFormat(averageTime));
+        detailAverageDecibelTxt.setText(averageDecibel + "dB");
+        detailAverageTimeTxt.setText(timeFormat(averageTime));
         setData(6, 100);
-
         // setting data
 //        mSeekBarY.setProgress(50);
 //        mSeekBarX.setProgress(12);
         // mChart.setDrawLegend(false);
+    }
+
+    private String timeFormat(int time) {
+        if (time < 60) {
+            return time + "분";
+        } else {
+            int hour = time / 60;
+            int minute = time % 60;
+            return hour + "시간 " + minute + "분";
+        }
     }
 
     private void setData(int count, float range) {
@@ -244,20 +291,28 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 //            } else {
 //                yVals1.add(new BarEntry(i, val));
 //            }
-            if(i==1){ // 일
-                yVals1.add(new BarEntry(i, 58));
-            } else if(i==2) {
-                yVals1.add(new BarEntry(i, 68));
-            } else if(i==3) {
-                yVals1.add(new BarEntry(i, 78));
-            } else if(i==4) {
-                yVals1.add(new BarEntry(i, 61));
-            }else if(i==5) {
-                yVals1.add(new BarEntry(i, 68));
-            } else if(i==6) {
-                yVals1.add(new BarEntry(i, 95));
-            } else if(i==7) {
-                yVals1.add(new BarEntry(i, 83));
+            if (i == 1) { // 일
+                //yVals1.add(new BarEntry(i, 58));
+                yVals1.add(new BarEntry(i, result.get(0).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(0).getAvg_dB()));
+            } else if (i == 2) {
+                yVals1.add(new BarEntry(i, result.get(1).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(1).getAvg_dB()));
+            } else if (i == 3) {
+                yVals1.add(new BarEntry(i, result.get(2).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(2).getAvg_dB()));
+            } else if (i == 4) {
+                yVals1.add(new BarEntry(i, result.get(3).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(3).getAvg_dB()));
+            } else if (i == 5) {
+                yVals1.add(new BarEntry(i, result.get(4).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(4).getAvg_dB()));
+            } else if (i == 6) {
+                yVals1.add(new BarEntry(i, result.get(5).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(5).getAvg_dB()));
+            } else if (i == 7) {
+                yVals1.add(new BarEntry(i, result.get(6).getAvg_dB()));
+                Log.d("데시벨 정보", "dB : " + Integer.toString(result.get(6).getAvg_dB()));
             }
         }
 
@@ -265,13 +320,13 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            Log.i("if","여기 들어옴");
+            Log.i("if", "여기 들어옴");
             set1 = (MyBarDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals1);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         } else {
-            Log.i("else","여기 들어옴");
+            Log.i("else", "여기 들어옴");
             set1 = new MyBarDataSet(yVals1, "");
 
             //set1.setDrawIcons(false);
@@ -302,7 +357,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
             return;
 
         Intent intent = new Intent(this, TimeAnalysisActivity.class);
-        intent.putExtra("day",xAxisFormatter.getFormattedValue(e.getX(), null));
+        intent.putExtra("day", xAxisFormatter.getFormattedValue(e.getX(), null));
         //Log.i("요일값",xAxisFormatter.getFormattedValue(e.getX(), null));
         startActivity(intent);
 
@@ -348,13 +403,14 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
     private void createAndShowDialog(Exception exception, String title) {
         Throwable ex = exception;
-        if(exception.getCause() != null){
+        if (exception.getCause() != null) {
             ex = exception.getCause();
         }
         createAndShowDialog(ex.getMessage(), title);
         Log.d("태그", "createAndShowDialog1");
 
     }
+
     private void createAndShowDialog(final String message, final String title) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -365,6 +421,7 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
 
     }
+
     private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
         Log.d("태그", "AsyncTask");
 
@@ -375,9 +432,4 @@ public class WeeklyAnalysisActivity extends AppCompatActivity implements OnChart
 
         }
     }
-
-
-
-
-
 }
