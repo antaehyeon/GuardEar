@@ -109,7 +109,7 @@
             android:gravity="center">
             <Button
                 android:text="@string/btn_Next"
-                android:textColor="@color/navy_light"
+                android:textColor="@color/skyblue"
                 android:textSize="18dp"
                 android:background="@color/white"
                 android:visibility="invisible"

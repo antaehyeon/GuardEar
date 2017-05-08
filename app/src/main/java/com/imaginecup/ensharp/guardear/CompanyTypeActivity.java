@@ -143,6 +143,8 @@ public class CompanyTypeActivity extends Activity {
         Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
         startActivity(intent);
 
+        finish();
+
     }
 
 

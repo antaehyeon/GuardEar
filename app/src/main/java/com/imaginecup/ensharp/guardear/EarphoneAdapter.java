@@ -83,7 +83,7 @@ public class EarphoneAdapter extends ArrayAdapter<Earphone> {
 
         Picasso.with(mContextEar)
                 .load("http://i.imgur.com/"+url)
-                .placeholder(R.drawable.eo_bg920bbkg)
+                .placeholder(R.drawable.eo_ig930bbegkr)
                 .into(imageView);
 
 

@@ -56,7 +56,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
 
             Picasso.with(mContextCompany)
                     .load("http://i.imgur.com/"+url)
-                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .placeholder(R.drawable.eo_ig930bbegkr)
                     .into(imageView);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
