@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by MinKyeong on 2017. 2. 26..
  */
@@ -19,7 +21,7 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
 
     Context mContextCompany;
     int mLayoutResourceId;
-
+    String url;
 
     public CompanyTypeAdapter(Context context, int layoutResourceId){
         super(context, layoutResourceId);
@@ -50,38 +52,12 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
         company.setText(currentItem.getID());
         Log.d("이어폰 회사명 확인: ", currentItem.getID().toString());
 
+        url = currentItem.getUrl().toString();
 
-        if (currentItem.getID().toString().equals("APPLE")) {
-            imageView.setImageResource(R.drawable.apple);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }  else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
-            imageView.setImageResource(R.drawable.audiotexhnica);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        } else if(currentItem.getID().toString().equals("CRESYN")){
-            imageView.setImageResource(R.drawable.cresyn);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("LG")) {
-            imageView.setImageResource(R.drawable.lg);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("SAMSUNG")) {
-            imageView.setImageResource(R.drawable.samsung);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("SENNHEISER")) {
-            imageView.setImageResource(R.drawable.sennheiser);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("SHURE")) {
-            imageView.setImageResource(R.drawable.shure);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("SONY")) {
-            imageView.setImageResource(R.drawable.sony);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("WESTONE")) {
-            imageView.setImageResource(R.drawable.westone);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }else if (currentItem.getID().toString().equals("XENICS")) {
-            imageView.setImageResource(R.drawable.xenics);
-            Log.d("이어폰 회사명 확인 IF문: ", currentItem.getID().toString());
-        }
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,14 +70,62 @@ public class CompanyTypeAdapter extends ArrayAdapter<Company>{
                     CompanyTypeActivity activity = (CompanyTypeActivity) mContextCompany;
 
                     activity.checkItem(currentItem);
-
                 }
             }
         });
-
-
         return row;
     }
-
-
 }
+
+
+ /*if (currentItem.getID().toString().equals("APPLE")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        } else if (currentItem.getID().toString().equals("AUDIOTEXHNICA")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+ url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        } else if(currentItem.getID().toString().equals("CRESYN")){
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("LG")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/"+url)
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("SAMSUNG")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/o4CVkD2.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("SENNHEISER")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/nklSu9U.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("SHURE")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/lFFfW38.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("SONY")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/M5ud3it.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("WESTONE")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/dZz5jlc.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }else if (currentItem.getID().toString().equals("XENICS")) {
+            Picasso.with(mContextCompany)
+                    .load("http://i.imgur.com/LDlQKLU.png")
+                    .placeholder(R.drawable.eo_bg920bbkg)
+                    .into(imageView);
+        }*/

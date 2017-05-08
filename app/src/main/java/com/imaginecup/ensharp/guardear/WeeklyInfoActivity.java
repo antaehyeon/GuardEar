@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by Semin on 2017-02-21.
  */
-public class WeeklyInfoActivity extends AppCompatActivity implements WeeklyRecyclerAdapter.OnItemClickListener{
+public class WeeklyInfoActivity extends AppCompatActivity implements WeeklyRecyclerAdapter.OnItemClickListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -44,7 +44,8 @@ public class WeeklyInfoActivity extends AppCompatActivity implements WeeklyRecyc
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getBaseContext(), WeeklyAnalysisActivity.class);
-        intent.putExtra("week",mWeeklyRecylerAdapter.getItem(position).getDetailWeek());
+        intent.putExtra("week", mWeeklyRecylerAdapter.getItem(position).getDetailWeek());
+        intent.putExtra("year", mWeeklyRecylerAdapter.getItem(position).getYear());
         startActivity(intent);
 
 //        startActivityForResult(intent, REQUEST_CODE_SPOTINFO);
@@ -52,8 +53,18 @@ public class WeeklyInfoActivity extends AppCompatActivity implements WeeklyRecyc
     }
 
     private ArrayList<WeeklyData> getDataset() {
-
         ArrayList<WeeklyData> dataset = new ArrayList<>();
+        dataset.add(new WeeklyData("2017", "W19", "5월 7일~13일"));
+        dataset.add(new WeeklyData("2017", "W18", "4월 30일~5월 6일"));
+        dataset.add(new WeeklyData("2017", "W17", "4월 23일~29일"));
+        dataset.add(new WeeklyData("2017", "W16", "4월 16일~22일"));
+        dataset.add(new WeeklyData("2017", "W15", "4월 9일~15일"));
+        dataset.add(new WeeklyData("2017", "W14", "4월 2일~8일"));
+        dataset.add(new WeeklyData("2017", "W13", "3월 26일~4월 1일"));
+        dataset.add(new WeeklyData("2017", "W12", "3월 19일~25일"));
+        dataset.add(new WeeklyData("2017", "W11", "3월 12일~18일"));
+        dataset.add(new WeeklyData("2017", "W10", "3월 5일~11일"));
+        dataset.add(new WeeklyData("2017", "W9", "2월 26일~3월 4일"));
         dataset.add(new WeeklyData("2017", "W8", "2월 19일~25일"));
         dataset.add(new WeeklyData("2017", "W7", "2월 12일~18일"));
         dataset.add(new WeeklyData("2017", "W6", "2월 5일~11일"));
@@ -65,10 +76,6 @@ public class WeeklyInfoActivity extends AppCompatActivity implements WeeklyRecyc
         dataset.add(new WeeklyData("2016", "W52", "12월 25일~31일"));
         dataset.add(new WeeklyData("2016", "W51", "12월 18일~24일"));
         dataset.add(new WeeklyData("2016", "W50", "12월 11일~17일"));
-        dataset.add(new WeeklyData("2016", "W49", "12월 4일~10일"));
-        dataset.add(new WeeklyData("2016", "W48", "11월 27일~12월 3일"));
-        dataset.add(new WeeklyData("2016", "W47", "11월 20일~26일"));
-        dataset.add(new WeeklyData("2016", "W46", "11월 13일~19일"));
         return dataset;
     }
 

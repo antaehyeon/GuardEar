@@ -30,6 +30,9 @@ public class Earphone {
     @com.google.gson.annotations.SerializedName("companyName")
     private String mCompanyName; // 회사명
 
+    @com.google.gson.annotations.SerializedName("image")
+    private String mImage; // 회사명
+
     @com.google.gson.annotations.SerializedName("complete")
     private boolean mComplete;
 
@@ -57,12 +60,13 @@ public class Earphone {
      * @param impedance
      */
 
-    public Earphone(String id, String soundPressure, String impedance, String companyName, String modelName) {
+    public Earphone(String id, String soundPressure, String impedance, String companyName, String modelName, String image) {
         this.setID(id);
         this.setSoundPressure(soundPressure);
         this.setImpedance(impedance);
         this.setCompanyName(companyName);
         this.setModelName(modelName);
+        this.setImage(image);
         Log.d("이어폰", "this.반환값");
     }
 
@@ -94,6 +98,9 @@ public class Earphone {
 
     public String getModelName() { return mModelName;}
     public final void setModelName(String modelName) { mModelName = modelName; }
+
+    public String getImage() { return mImage;}
+    public final void setImage(String image) { mImage = image; }
 
     public boolean isComplete() {
         return mComplete;

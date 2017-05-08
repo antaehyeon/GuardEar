@@ -10,8 +10,8 @@ public class ToDoItem {
     /**
      * Item text
      */
-    @com.google.gson.annotations.SerializedName("text")
-    private String mText; // 비밀번호
+    @com.google.gson.annotations.SerializedName("password")
+    private String mPassword; // 비밀번호
 
     @com.google.gson.annotations.SerializedName("name")
     private String mName; // 닉네임
@@ -43,7 +43,7 @@ public class ToDoItem {
         //return getText();
         Log.d("태그", "toString()");
 
-        return getId() + "/" + getText() + "/" + getName() + "/" + getAge() + "/" + getSex(); // 임시 변환
+        return getId() + "/" + getPassword() + "/" + getName() + "/" + getAge() + "/" + getSex(); // 임시 변환
     }
 
 
@@ -56,8 +56,8 @@ public class ToDoItem {
      *            The item id
      * @param name
      */
-    public ToDoItem(String text, String id, String name, String age, String sex) {
-        this.setText(text);
+    public ToDoItem(String password, String id, String name, String age, String sex) {
+        this.setPassword(password);
         this.setId(id);
         this.setName(name);
         this.setAge(age);
@@ -68,18 +68,18 @@ public class ToDoItem {
     /**
      * Returns the item text
      */
-    public String getText() {
-        return mText;
+    public String getPassword() {
+        return mPassword;
     }
 
     /**
      * Sets the item text
      *
-     * @param text
+     * @param password
      *            text to set
      */
-    public final void setText(String text) {
-        mText = text;
+    public final void setPassword(String password) {
+        mPassword = password;
     }
 
     /**

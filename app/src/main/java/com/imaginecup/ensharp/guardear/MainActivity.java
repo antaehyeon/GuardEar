@@ -1,5 +1,6 @@
 package com.imaginecup.ensharp.guardear;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
@@ -7,7 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +28,21 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceJsonTable;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
+
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String BLUETOOTH_HEADSET_ACTION = "android.bluetooth.headset.action.STATE_CHANGED";
     private static final String BLUETOOTH_HEADSET_STATE = "android.bluetooth.headset.extra.STATE";
-    private static final int LIMIT_DECIBEL= 70;
+    private static final int LIMIT_DECIBEL = 70;
     private static IntentFilter mIntentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     private static BroadcastReceiver mBroadcastReceiver = null;
     private BluetoothAdapter mBluetoothAdapter;
@@ -53,14 +74,35 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences pref;
     private ServiceData mServiceData;
     public static ServiceData sServiceData;
-    private Context mContext;
+    public static Context mContext;
     private AudioManager mAudiomanager;
     private Toolbar mToolbar;
 
-    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
-
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    private String mKeyName;
+
+
+    /**
+     * 음악 정보 test 중
+     **/
+    private MobileServiceClient mClient;
+    private MobileServiceTable<MusicInfo> mMusicTable;
+    private MobileServiceJsonTable mJsonMusicTable;
+    private MusicInfoAdapter mAdapter;
+    /**
+     * 타이머 함수 test 중
+     **/
+    private final Handler handler = new Handler();
+    private TimerTask second;
+    int timer_sec;
+    String timer_text;
+    int count;
 
 
     @Override
@@ -76,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         elapseTxt = (TextView) findViewById(R.id.elapseTxt);
         decibelTxt = (TextView) findViewById(R.id.decibelsTxt);
         volumeTxt = (TextView) findViewById(R.id.volumeTxt);
-        earphoneModelTxt = (TextView) findViewById(R.id.earphoneModelTxt) ;
+        earphoneModelTxt = (TextView) findViewById(R.id.earphoneModelTxt);
         isPlayingTxt = (TextView) findViewById(R.id.isPlayingTxt);
         mNormalCircleLayout = (FrameLayout) findViewById(R.id.normalCircleLayout);
         mSkyCircleLayout = (FrameLayout) findViewById(R.id.skyCircleLayout);
@@ -94,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         serviceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!mServiceData.isMyServiceRunning(MainService.class)) {
                     Log.i("isRun여부", "true로 통과");
                     //Toast.makeText(getApplicationContext(),"서비스 시작",Toast.LENGTH_SHORT).show();
@@ -129,47 +172,286 @@ public class MainActivity extends AppCompatActivity {
         //mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        try {
+            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", MainActivity.this);
+
+            // Get the Mobile Service Table instance to use
+            mMusicTable = mClient.getTable(MusicInfo.class);
+
+            //mJsonMusicTable = mClient.getTable("MusicInfo");
+            //firstAction();
+            //getItemByAzure();
+
+        } catch (MalformedURLException e) {
+            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
+
     }
 
-    public void decibelDataSave(){
-        if(pref.getValue("0","0","Note5")=="0"){
-            for(int i=0;i<16;i++){
-                if(i==0) {
-                    pref.putValue(Integer.toString(i),"3.7","Note5");
-                } else if(i==1) {
-                    pref.putValue(Integer.toString(i),"4.78","Note5");
-                } else if(i==2) {
-                    pref.putValue(Integer.toString(i),"5.11","Note5");
-                } else if(i==3) {
-                    pref.putValue(Integer.toString(i),"6.27","Note5");
-                } else if(i==4) {
-                    pref.putValue(Integer.toString(i),"8.39","Note5");
-                } else if(i==5) {
-                    pref.putValue(Integer.toString(i),"13.28","Note5");
-                } else if(i==6) {
-                    pref.putValue(Integer.toString(i),"20.42","Note5");
-                } else if(i==7) {
-                    pref.putValue(Integer.toString(i),"31.73","Note5");
-                } else if(i==8) {
-                    pref.putValue(Integer.toString(i),"44.92","Note5");
-                } else if(i==9) {
-                    pref.putValue(Integer.toString(i),"55.75","Note5");
-                } else if(i==10) {
-                    pref.putValue(Integer.toString(i),"78","Note5");
-                } else if(i==11) {
-                    pref.putValue(Integer.toString(i),"110.43","Note5");
-                } else if(i==12) {
-                    pref.putValue(Integer.toString(i),"176","Note5");
-                } else if(i==13) {
-                    pref.putValue(Integer.toString(i),"279","Note5");
-                } else if(i==14) {
-                    pref.putValue(Integer.toString(i),"443","Note5");
-                } else if(i==15) {
-                    pref.putValue(Integer.toString(i),"558","Note5");
+//    public void firstAction(){
+//        (new AsyncTask <MainActivity, Void, MainActivity>(){
+//            @Override
+//            protected MainActivity doInBackground(MainActivity... params) {
+//                Log.d("이어폰", "결과값 확인 : doInBackground");
+//                return params[0];
+//            }
+//
+//            @Override
+//            protected void onPostExecute(MainActivity result) {
+//                //super.onPostExecute(result);
+//                Log.d("이어폰", "결과값 확인 : onPostExecute");
+//                getItemByAzure();
+//            }
+//
+//        }).execute(this);
+//    }
+
+    public void getItemByAzure(String keyName){
+        mKeyName = keyName;
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Log.d("이어폰", "결과값 확인 : try");
+                    // 데이터를 가져오는 리스트
+                    final List<MusicInfo> result = mMusicTable.orderBy("seconds", QueryOrder.Ascending).top(50).execute().get();
+                    final List<MusicInfo> result2 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(50).top(50).execute().get();
+                    final List<MusicInfo> result3 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(100).top(50).execute().get();
+                    final List<MusicInfo> result4 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(150).top(50).execute().get();
+                    final List<MusicInfo> result5 = mMusicTable.orderBy("seconds", QueryOrder.Ascending).skip(200).top(50).execute().get();
+
+                    Log.d("이어폰", "결과값 확인 : result");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d("이어폰", "런 들어옴");
+
+                            if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                            for(MusicInfo item : result){
+                                pref.putValue(item.getSecond().toString(), item.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인1" ,item.getSecond().toString()+"초"+item.getValue().toString() + "키 값 "+mKeyName);
+                            }
+                            for(MusicInfo item2 : result2){
+                                pref.putValue(item2.getSecond().toString(), item2.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인2", item2.getSecond().toString()+"초"+item2.getValue().toString() + "키 값 "+mKeyName);
+                            }
+                            for(MusicInfo item3 : result3){
+                                pref.putValue(item3.getSecond().toString(), item3.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인3",item3.getSecond().toString()+"초"+item3.getValue().toString() + "키 값 "+mKeyName);
+                            }
+                            for(MusicInfo item4 : result4){
+                                pref.putValue(item4.getSecond().toString(), item4.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인4", item4.getSecond().toString()+"초"+item4.getValue().toString() + "키 값 "+mKeyName);
+                            }
+                            for(MusicInfo item5 : result5){
+                                pref.putValue(item5.getSecond().toString(), item5.getValue().toString(),  mKeyName);
+                                //Log.d("음악정보확인5", item5.getSecond().toString()+"초"+item5.getValue().toString() + "키 값 "+mKeyName);
+                            }
+                            Looper.loop();
+                        }
+                    });
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+    }
+
+    public void getItemByJson(){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Log.d("음악정보", "doInBackground");
+                try {
+                    Log.d("음악정보", "데이터를 가져오는 리스트 try");
+                    final JsonElement result = mJsonMusicTable.execute().get();
+                    Log.d("음악정보", "JsonElement");
+                    final JsonArray results = result.getAsJsonArray();
+                    Log.d("음악정보", "JsonArray");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (JsonElement item : results) {
+                                String mText = item.getAsJsonObject().getAsJsonPrimitive("id").getAsString();
+                                Log.d("음악정보",">>"+ mText);
+                            }
+                        }
+                    });
+                } catch (final Exception e){
+                    createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+
+    }
+
+
+    public void testStart() {
+
+        timer_sec = 0;
+
+        Toast.makeText(getApplicationContext(), timer_text, Toast.LENGTH_SHORT).show();
+
+        second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("TEST TIMER", "Timer start");
+                //getItem();
+                timer_sec++;
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(second, 0, 500);
+
+    }
+
+
+
+    public void testSend() {
+
+        timer_sec = 0;
+
+        second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("TEST TIMER", "Timer send");
+                //sendItem();
+                timer_sec++;
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(second, 0, 1000);
+
+    }
+
+    public void sendItem() {
+
+        if (mClient == null) {
+            return;
+        }
+
+        // Create a new item
+        final MusicInfo item = new MusicInfo();
+        Log.i("TEST TIMER", "데이터 저장 전");
+
+        item.setID(Integer.toString(timer_sec)); // setText(mTextNewToDo.getText().toString());
+        item.setSecond(Integer.toString(timer_sec));// setComplete(false);
+        //item.setValue(Integer.toString(timer_sec + 100));
+        Log.i("TEST TIMER", "데이터 저장 후");
+
+        // Insert the new item
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final MusicInfo entity = mMusicTable.insert(item).get();
+                    /*if (!entity.isComplete()) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.add(entity);
+                            }
+                        });
+                    }*/
+                } catch (Exception exception) {
+                    createAndShowDialog(exception, "Error");
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    private void sendData() {
+
+        int seconds = 0;
+        //Log.i("while문 가기 전", mPref.getValue(Integer.toString(seconds), "인식못함", keyname));
+        for (seconds = 0; seconds < 1000; seconds++) {
+            Log.i("서버에 음원데이터 전송", "ㄱㄱ");
+            Log.i("sharedpreference값 출력", seconds + "초" + pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어"));
+
+            // Create a new item
+            final MusicInfo item = new MusicInfo();
+            Log.i("TEST TIMER", "데이터 저장 전");
+
+            item.setID("어쿠스틱 콜라보너무 보고싶어" + seconds); // setText(mTextNewToDo.getText().toString());
+            item.setSecond(Integer.toString(seconds));// setComplete(false);
+            //item.setValue((pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어")));
+            Log.i("TEST TIMER", "데이터 저장 후");
+
+            // Insert the new item
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        final MusicInfo entity = mMusicTable.insert(item).get();
+                    } catch (Exception exception) {
+                        //createAndShowDialog(exception, "Error");
+                    }
+                    return null;
+                }
+            }.execute();
+
+            if (pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어") == "인식못함") {
+                Log.i("for문 아웃", pref.getValue(Integer.toString(seconds), "인식못함", "어쿠스틱 콜라보너무 보고싶어"));
+                break;
+            }
+        }
+    }
+
+
+    public void decibelDataSave() {
+        if (pref.getValue("0", "0", "Note5") == "0") {
+            for (int i = 0; i < 16; i++) {
+                if (i == 0) {
+                    pref.putValue(Integer.toString(i), "3.7", "Note5");
+                } else if (i == 1) {
+                    pref.putValue(Integer.toString(i), "4.78", "Note5");
+                } else if (i == 2) {
+                    pref.putValue(Integer.toString(i), "5.11", "Note5");
+                } else if (i == 3) {
+                    pref.putValue(Integer.toString(i), "6.27", "Note5");
+                } else if (i == 4) {
+                    pref.putValue(Integer.toString(i), "8.39", "Note5");
+                } else if (i == 5) {
+                    pref.putValue(Integer.toString(i), "13.28", "Note5");
+                } else if (i == 6) {
+                    pref.putValue(Integer.toString(i), "20.42", "Note5");
+                } else if (i == 7) {
+                    pref.putValue(Integer.toString(i), "31.73", "Note5");
+                } else if (i == 8) {
+                    pref.putValue(Integer.toString(i), "44.92", "Note5");
+                } else if (i == 9) {
+                    pref.putValue(Integer.toString(i), "55.75", "Note5");
+                } else if (i == 10) {
+                    pref.putValue(Integer.toString(i), "78", "Note5");
+                } else if (i == 11) {
+                    pref.putValue(Integer.toString(i), "110.43", "Note5");
+                } else if (i == 12) {
+                    pref.putValue(Integer.toString(i), "176", "Note5");
+                } else if (i == 13) {
+                    pref.putValue(Integer.toString(i), "279", "Note5");
+                } else if (i == 14) {
+                    pref.putValue(Integer.toString(i), "443", "Note5");
+                } else if (i == 15) {
+                    pref.putValue(Integer.toString(i), "558", "Note5");
                 }
             }
-            pref.putValue("ohm","35","earphone");
-            pref.putValue("spl","97","earphone");
+            pref.putValue("ohm", "35", "earphone");
+            pref.putValue("spl", "97", "earphone");
         }
     }
 
@@ -199,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("서비스 러닝여부", "O");
         }
 
-        if(!mServiceData.isMyServiceRunning(ListeningService.class)) {
+        if (!mServiceData.isMyServiceRunning(ListeningService.class)) {
             //musicOnTxt.setText(pref.getValue("0", "없음", "음악 재생 정보"));
             isPlayingTxt.setText("Stop");
             elapseTxt.setText(mServiceData.convertLongToHms(pref.getValue("todayListeningTime", 0, "todayInfo")));
@@ -210,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("서비스 러닝여부", "O");
         }
 
-        if(!mServiceData.isMyServiceRunning(DecibelService.class)) {
+        if (!mServiceData.isMyServiceRunning(DecibelService.class)) {
             decibelTxt.setText("0");
         }
 
@@ -259,8 +541,8 @@ public class MainActivity extends AppCompatActivity {
             case "현재 데시벨":
                 //Log.i("메인으로 넘어온 값", textContent + "?");
                 if (decibelTxt != null) {
-                    if(sServiceData.isMyServiceRunning(MainService.class)){
-                        if(Integer.parseInt(textContent)>=LIMIT_DECIBEL) {
+                    if (sServiceData.isMyServiceRunning(MainService.class)) {
+                        if (Integer.parseInt(textContent) >= LIMIT_DECIBEL) {
                             changeCircle("red");
                         } else {
                             changeCircle("sky");
@@ -320,7 +602,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         //청력측정 페이지
-        else if(id == R.id.action_hearing_test) {
+        else if (id == R.id.action_hearing_test) {
             Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
 
             startActivity(intent);
@@ -328,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         //로그아웃 페이지
-        else if(id == R.id.action_logout) {
+        else if (id == R.id.action_logout) {
             FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
 
@@ -342,9 +624,102 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
 
-        }        
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        Log.d("태그", "AsyncTask");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            return task.execute();
+
+        }
+    }
+
+    private void createAndShowDialogFromTask(final Exception exception, String title) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowDialog(exception, "Error");
+            }
+        });
+        Log.d("태그", "createAndShowDialogFromTask");
+
+    }
+
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param exception The exception to show in the dialog
+     * @param title     The dialog title
+     */
+    private void createAndShowDialog(Exception exception, String title) {
+        Throwable ex = exception;
+        if (exception.getCause() != null) {
+            ex = exception.getCause();
+        }
+        createAndShowDialog(ex.getMessage(), title);
+        Log.d("태그", "createAndShowDialog1");
+
+    }
+
+    /**
+     * Creates a dialog and shows it
+     *
+     * @param message The dialog message
+     * @param title   The dialog title
+     */
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+        Log.d("태그", "createAndShowDialog2");
+
+
+    }
+
 
 }

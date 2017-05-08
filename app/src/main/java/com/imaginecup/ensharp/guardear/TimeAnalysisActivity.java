@@ -1,8 +1,12 @@
 package com.imaginecup.ensharp.guardear;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
@@ -14,8 +18,12 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Semin on 2017-02-27.
@@ -23,6 +31,12 @@ import java.util.ArrayList;
 public class TimeAnalysisActivity extends Activity {
     private BarChart mChart;
     private TextView dayTxt;
+
+
+    /* 서버 */
+    private MobileServiceClient mClient;
+    private MobileServiceTable<ListeningData> mListeningDataTable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +51,78 @@ public class TimeAnalysisActivity extends Activity {
         String day = intent.getExtras().getString("day");
         dayTxt.setText(day);
         initiate();
+
+
+        try {
+            // Create the Mobile Service Client instance, using the provided
+            // Mobile Service URL and key
+            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", TimeAnalysisActivity.this);
+
+            // Get the Mobile Service Table instance to use
+            mListeningDataTable = mClient.getTable(ListeningData.class);
+
+            // create a new item
+            final ListeningData ListeningDataItem = new ListeningData();
+
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+
+                        // 데이터를 가져오는 리스트
+                        final List<ListeningData> result = mListeningDataTable.execute().get();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                                for(ListeningData item : result){
+
+                                    Log.d("서버로부터 청취정보", "시간 : " + item.getDate());
+                                    Log.d("서버로부터 청취정보", "00시 : " + Integer.toString(item.getTime_00()));
+                                    Log.d("서버로부터 청취정보", "01시 : " + Integer.toString(item.getTime_01()));
+                                    Log.d("서버로부터 청취정보", "02시 : " + Integer.toString(item.getTime_02()));
+                                    Log.d("서버로부터 청취정보", "03시 : " + Integer.toString(item.getTime_03()));
+                                    Log.d("서버로부터 청취정보", "04시 : " + Integer.toString(item.getTime_04()));
+                                    Log.d("서버로부터 청취정보", "05시 : " + Integer.toString(item.getTime_05()));
+                                    Log.d("서버로부터 청취정보", "06시 : " + Integer.toString(item.getTime_06()));
+                                    Log.d("서버로부터 청취정보", "07시 : " + Integer.toString(item.getTime_07()));
+                                    Log.d("서버로부터 청취정보", "08시 : " + Integer.toString(item.getTime_08()));
+                                    Log.d("서버로부터 청취정보", "09시 : " + Integer.toString(item.getTime_09()));
+                                    Log.d("서버로부터 청취정보", "10시 : " + Integer.toString(item.getTime_10()));
+                                    Log.d("서버로부터 청취정보", "11시 : " + Integer.toString(item.getTime_11()));
+                                    Log.d("서버로부터 청취정보", "12시 : " + Integer.toString(item.getTime_12()));
+                                    Log.d("서버로부터 청취정보", "13시 : " + Integer.toString(item.getTime_13()));
+                                    Log.d("서버로부터 청취정보", "14시 : " + Integer.toString(item.getTime_14()));
+                                    Log.d("서버로부터 청취정보", "15시 : " + Integer.toString(item.getTime_15()));
+                                    Log.d("서버로부터 청취정보", "16시 : " + Integer.toString(item.getTime_16()));
+                                    Log.d("서버로부터 청취정보", "17시 : " + Integer.toString(item.getTime_17()));
+                                    Log.d("서버로부터 청취정보", "18시 : " + Integer.toString(item.getTime_18()));
+                                    Log.d("서버로부터 청취정보", "19시 : " + Integer.toString(item.getTime_19()));
+                                    Log.d("서버로부터 청취정보", "20시 : " + Integer.toString(item.getTime_20()));
+                                    Log.d("서버로부터 청취정보", "21시 : " + Integer.toString(item.getTime_21()));
+                                    Log.d("서버로부터 청취정보", "22시 : " + Integer.toString(item.getTime_22()));
+                                    Log.d("서버로부터 청취정보", "23시 : " + Integer.toString(item.getTime_23()));
+
+
+                                }
+                                Looper.loop();
+                            }
+                        });
+                    } catch (final Exception e){
+                        //createAndShowDialogFromTask(e, "Error");
+                    }
+                    return null;
+                }
+            };
+            runAsyncTask(task);
+
+
+        } catch (MalformedURLException e) {
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        }
     }
 
     private void initiate() {
@@ -213,4 +299,49 @@ public class TimeAnalysisActivity extends Activity {
             mChart.animateY(800);
         }
     }
+
+    private void createAndShowDialogFromTask(final Exception exception, String title) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowDialog(exception, "Error");
+            }
+        });
+        Log.d("태그", "createAndShowDialogFromTask");
+
+    }
+
+    private void createAndShowDialog(Exception exception, String title) {
+        Throwable ex = exception;
+        if(exception.getCause() != null){
+            ex = exception.getCause();
+        }
+        createAndShowDialog(ex.getMessage(), title);
+        Log.d("태그", "createAndShowDialog1");
+
+    }
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+        Log.d("태그", "createAndShowDialog2");
+
+
+    }
+    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
+        Log.d("태그", "AsyncTask");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            return task.execute();
+
+        }
+    }
+
+
+
+
 }

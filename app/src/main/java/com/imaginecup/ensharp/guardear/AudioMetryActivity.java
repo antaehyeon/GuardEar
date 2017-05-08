@@ -51,7 +51,6 @@ public class AudioMetryActivity extends AppCompatActivity {
 
 
     // 그래프 V2 변수들
-    int numberOfLines = 2;
     int maxNumberOfLines = 4;
     int numberOfPoints = 8;
 
@@ -67,8 +66,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     private boolean hasLabels = false;
     private boolean isCubic = false;
     private boolean hasLabelForSelected = false;
-    private boolean pointsHaveDifferentColor = false;
-    private boolean hasGradientToTransparent = false;
 
     TextView txtStep, txtFreq, txtEar;
 
@@ -81,7 +78,7 @@ public class AudioMetryActivity extends AppCompatActivity {
     private int sampleRate = 44100;
     private int numSamples = duration * sampleRate;
     private double sample[] = new double[numSamples];
-    private double freqOfTone = 750; // hz
+    private double freqOfTone = 1000; // hz
 
     public byte generatedSnd[] = new byte[2 * numSamples];
 
@@ -90,8 +87,8 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     boolean btnCantHearClick = false;
 
-    public static final int LEFT = 1;
-    public static final int RIGHT = 2;
+    public static final int LEFT = 2;
+    public static final int RIGHT = 1;
 
     public static final int SHORT = 1;
     public static final int LONG = 2;
@@ -104,8 +101,8 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     Line leftLine, rightLine;
 
-    float leftTone = 0.5f;
-    float rightTone = 0.5f;
+    float leftTone = 0.08f;
+    float rightTone = 0.08f;
 
     // Frequency Index (RightValue, LeftValue)
     public static final int FREQ250 = 0;
@@ -117,34 +114,30 @@ public class AudioMetryActivity extends AppCompatActivity {
     public static final int FREQ8000 = 6;
 
     // Freq Left Decibel
-    int freq250LeftDecibel = 30;
-    int freq500LeftDecibel = 30;
-    int freq1000LeftDecibel = 30;
-    int freq2000LeftDecibel = 30;
-    int freq4000LeftDecibel = 30;
-    int freq6000LeftDecibel = 30;
-    int freq8000LeftDecibel = 30;
+    int freq250LeftDecibel = 40;
+    int freq500LeftDecibel = 40;
+    int freq1000LeftDecibel = 40;
+    int freq2000LeftDecibel = 40;
+    int freq4000LeftDecibel = 40;
+    int freq6000LeftDecibel = 40;
+    int freq8000LeftDecibel = 40;
 
     // Freq Right Decibel
-    int freq250RightDecibel = 30;
-    int freq500RightDecibel = 30;
-    int freq1000RightDecibel = 30;
-    int freq2000RightDecibel = 30;
-    int freq4000RightDecibel = 30;
-    int freq6000RightDecibel = 30;
-    int freq8000RightDecibel = 30;
-
+    int freq250RightDecibel = 40;
+    int freq500RightDecibel = 40;
+    int freq1000RightDecibel = 40;
+    int freq2000RightDecibel = 40;
+    int freq4000RightDecibel = 40;
+    int freq6000RightDecibel = 40;
+    int freq8000RightDecibel = 40;
 
     int step = 1;
-    int earState = LEFT;
-
-    boolean threadCancel = false;
+    int earState = RIGHT;
 
     private TimerTask second;
     private final Handler handler = new Handler();
 
-    int timer_sec = 0;
-    int count = 0;
+    int upDownCount = 8;
 
     Singleton mSingleton;
 
@@ -155,11 +148,6 @@ public class AudioMetryActivity extends AppCompatActivity {
     Button toolbarNextButton;
 
     boolean isRepeatAudioTrackPlayAndStop = false;
-    boolean isAudioTrackAlreadyUse = false;
-
-    TextView surround_dB;
-    private Timer mTimer;
-    private Handler mHandler;
 
     public void decibelStart() {
         second = new TimerTask() {
@@ -175,10 +163,11 @@ public class AudioMetryActivity extends AppCompatActivity {
     public void Update() {
         Runnable updater = new Runnable() {
             public void run() {
+
                 controlFreq(step);
                 genTone();
                 playSound(leftTone, rightTone);
-//                playTone(leftTone, rightTone);
+                Log.i("HYEON", "Timer CHECK");
             }
         };
         handler.post(updater);
@@ -232,7 +221,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         // 그래프에 랜덤 데이터 넣는 부분이였지만, 초기데이터 40으로 지정함
         for (int i = 0; i < maxNumberOfLines; ++i) {
             for (int j = 0; j < numberOfPoints; ++j) {
-//                randomNumbersTab[i][j] = (float) Math.random() * 100f;
                 randomNumbersTab[i][j] = 40;
             }
         }
@@ -260,20 +248,24 @@ public class AudioMetryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (audioMetryEnd) {
-                    mSingleton.setFreqRightData(freq250RightDecibel,
-                            freq500RightDecibel,
-                            freq1000RightDecibel,
-                            freq2000RightDecibel,
-                            freq4000RightDecibel,
-                            freq6000RightDecibel,
-                            freq8000RightDecibel);
+                    mSingleton.setFreqRightData(
+                            freq250LeftDecibel,
+                            freq500LeftDecibel,
+                            freq1000LeftDecibel,
+                            freq2000LeftDecibel,
+                            freq4000LeftDecibel,
+                            freq6000LeftDecibel,
+                            freq8000LeftDecibel);
+
+                    Log.i("HYEON", "1 Line CHECK");
 
                     second.cancel();
+                    second = null;
 
                     Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
                     startActivity(intent);
-                    //mTimer.cancel();
                     finish();
+                    return ;
                 }
 
                 if (!btnCantHearClick) {
@@ -281,31 +273,42 @@ public class AudioMetryActivity extends AppCompatActivity {
                     btnFreqUp.setEnabled(true);
                     btnCantHear.setTextSize(16);
                     btnCantHear.setTypeface(null, Typeface.BOLD);
-                    btnCantHear.setText("들리지 않으면\n클릭하세요");
+                    btnCantHear.setText("최대한 들을 수 있는 곳에서 클릭하세요");
                     btnCantHearClick = true;
-                    toastMessage("왼쪽부터 테스트가 시작됩니다.", SHORT);
-                    toastMessage("버튼을 이용해 들리지 않을때까지 조정하세요", LONG);
-                    if (earState == LEFT) {
-                        audioMetryDataChange(1, 1000, LEFT);
+                    if (earState == RIGHT) {
+                        toastMessage("오른쪽 귀 테스트가 시작됩니다", SHORT);
                     } else {
-                        audioMetryDataChange(1, 1000, RIGHT);
-                        txtEar.setTextSize(25);
+                        toastMessage("왼쪽 귀 테스트가 시작됩니다", SHORT);
                     }
 
+                    toastMessage("버튼을 이용해 들리지 않을때까지 조정하세요", LONG);
+                    txtEar.setTextSize(20);
+                    if (earState == RIGHT) {
+                        audioMetryDataChange(1, 1000, RIGHT);
+                        leftTone = 0;
+                    } else {
+                        audioMetryDataChange(1, 1000, LEFT);
+                        leftTone = 0.08f;
+                        rightTone = 0;
+                    }
 
                     decibelStart();
                 } else {
+                    Log.i("HYEON", "btnCantHearClick else");
                     // 역치 정하고 데이터 저장하는 부분으로 진행
+                    controlDecibelWithHardware();
+                    hardWareVolumeControl(11);
+                    upDownCount = 8;
                     step++;
 
-                    if (earState == LEFT && step == 8) {
+                    if (earState == RIGHT && step == 8) {
                         second.cancel();
                         step = 1;
-                        earState = RIGHT;
+                        earState = LEFT;
                         btnFreqDown.setEnabled(false);
                         btnFreqUp.setEnabled(false);
-                        toastMessage("오른쪽 테스트를 시작하려면 버튼을 눌러주세요", LONG);
-                        btnCantHear.setText("오른쪽 테스트를 \n시작하려면 클릭하세요");
+                        toastMessage("왼쪽 테스트를 시작하려면 버튼을 눌러주세요", LONG);
+                        btnCantHear.setText("왼쪽 테스트를 \n시작하려면 클릭하세요");
                         btnCantHear.setTextSize(16);
                         btnCantHear.setTypeface(null, Typeface.BOLD);
                         btnCantHearClick = false;
@@ -313,74 +316,70 @@ public class AudioMetryActivity extends AppCompatActivity {
                     }
 
                     second.cancel();
-
+                    second = null;
                     int tempFreq = stepToFreq(step);
-
                     audioMetryDataChange(step, tempFreq, earState);
-
                     controlFreq(step);
                     genTone();
                     decibelStart();
-                    if (earState == LEFT) {
-                        playTone(0.5f, 0.0f);
-                    } else {
-                        playTone(0.0f, 0.5f);
-                    }
+                    Log.i("HYEON", "2 Line CHECK");
                 }
 
-
-                if (earState == RIGHT && step == 7) {
+                if (earState == LEFT && step == 7) {
+                    Log.i("HYEON", "3 Line Check");
                     toastMessage("마지막 단계입니다", LONG);
                     btnCantHear.setText("클릭하시면\n결과가 저장됩니다");
                     btnCantHear.setTextSize(16);
                     btnCantHear.setTypeface(null, Typeface.BOLD);
                     audioMetryEnd = true;
-                    return;
+
+                    Log.i("HYEON", "LeftTone : " + leftTone + "RightTone : " + rightTone + "earState" + earState);
+                    Log.i("HYEON", "STEP : " + step);
+
+                    return ;
                 }
 
                 // 다른 Class로 넘겨주기 위해서 마지막 단계일경우 데시벨 정보를 저장시킴
-                if (step == 7 && earState == LEFT) {
-                    mSingleton.setFreqLeftData(freq250LeftDecibel,
-                            freq500LeftDecibel,
-                            freq1000LeftDecibel,
-                            freq2000LeftDecibel,
-                            freq4000LeftDecibel,
-                            freq6000LeftDecibel,
-                            freq8000LeftDecibel);
+                if (step == 1 && earState == LEFT) {
+                    mSingleton.setFreqRightData(
+                            freq250RightDecibel,
+                            freq500RightDecibel,
+                            freq1000RightDecibel,
+                            freq2000RightDecibel,
+                            freq4000RightDecibel,
+                            freq6000RightDecibel,
+                            freq8000RightDecibel);
                 }
             }
         });
+
         btnFreqDown = (Button) findViewById(R.id.btn_freqDown);
         btnFreqDown.setTextColor(pointColor);
         btnFreqDown.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 boolean decibelZero = judgmentDecibel(step);
-                if (decibelZero) return;
+                if (decibelZero) {
+                    upDownCount = 0;
+                    controlDecibelWithHardware();
+                    return;
+                }
 
                 controlDecibel(step, DOWN);
-                if (txtEar.getText().equals("LEFT")) {
-                    leftTone -= 0.1f;
-                } else {
-                    rightTone -= 0.1f;
-                }
-                playTone(leftTone, rightTone);
+                upDownCount --;
+                controlDecibelWithHardware();
                 controlGraphY(step, earState);
             }
         });
+
         btnFreqUp = (Button) findViewById(R.id.btn_freqUp);
         btnFreqUp.setTextColor(pointColor);
         btnFreqUp.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controlDecibel(step, UP);
-                if (txtEar.getText().equals("LEFT")) {
-                    leftTone += 0.1f;
-                } else {
-                    rightTone += 0.1f;
-                }
-                playTone(leftTone, rightTone);
+                upDownCount ++;
+                controlDecibelWithHardware();
                 controlGraphY(step, earState);
             }
         });
@@ -391,7 +390,7 @@ public class AudioMetryActivity extends AppCompatActivity {
 
         // 하드웨어 오디오 볼륨 조절
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 5, 0);
+        hardWareVolumeControl(11);
 
         txtStep.setText(null);
         txtFreq.setText(null);
@@ -401,7 +400,8 @@ public class AudioMetryActivity extends AppCompatActivity {
         tempButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSingleton.setFreqLeftData(freq250LeftDecibel,
+                mSingleton.setFreqLeftData(
+                        freq250LeftDecibel,
                         freq500LeftDecibel,
                         freq1000LeftDecibel,
                         freq2000LeftDecibel,
@@ -453,7 +453,6 @@ public class AudioMetryActivity extends AppCompatActivity {
         sample = new double[numSamples];
 
         generatedSnd = new byte[2 * numSamples];
-
     }
 
     public void toastMessage(CharSequence text, int mode) {
@@ -477,9 +476,9 @@ public class AudioMetryActivity extends AppCompatActivity {
         }
         txtFreq.setText(String.valueOf(freq));
         if (ear == 1) {
-            txtEar.setText("LEFT");
-        } else {
             txtEar.setText("RIGHT");
+        } else {
+            txtEar.setText("LEFT");
         }
     }
 
@@ -562,7 +561,6 @@ public class AudioMetryActivity extends AppCompatActivity {
                 setSineWaveData(2, 44100, 8000);
                 break;
         }
-//        threadCancel = true;
     }
 
     public int stepToFreq(int step) {
@@ -583,6 +581,68 @@ public class AudioMetryActivity extends AppCompatActivity {
                 return 8000;
         }
         return 0;
+    }
+
+    // 하드웨어의 볼륨을 조절해 데시벨을 조정한다
+    public void controlDecibelWithHardware() {
+        switch (upDownCount) {
+            case 10:
+                hardWareVolumeControl(15);
+                break;
+            case 9:
+                hardWareVolumeControl(13);
+                break;
+            case 8: // 40데시벨
+                hardWareVolumeControl(11);
+                break;
+            case 7: // 35데시벨
+                hardWareVolumeControl(9);
+                break;
+            case 6: // 30데시벨
+                hardWareVolumeControl(7);
+                break;
+            case 5: // 25데시벨
+                hardWareVolumeControl(5);
+                break;
+            case 4: // 20데시벨
+                hardWareVolumeControl(3);
+                if (earState == RIGHT) {
+                    playTone(0, 0.06f);
+                } else {
+                    playTone(0.06f, 0);
+                }
+                break;
+            case 3: // 15데시벨
+                hardWareVolumeControl(2);
+                if (earState == RIGHT) {
+                    playTone(0, 0.05f);
+                } else {
+                    playTone(0.05f, 0);
+                }
+                break;
+            case 2: // 10데시벨
+                hardWareVolumeControl(1);
+                if (earState == RIGHT) {
+                    playTone(0, 0.015f);
+                } else {
+                    playTone(0.015f, 0);
+                }
+                break;
+            case 1: // 5데시벨
+                hardWareVolumeControl(1);
+                if (earState == RIGHT) {
+                    playTone(0, 0.007f);
+                } else {
+                    playTone(0.007f, 0);
+                }
+                break;
+            case 0: // 0데시벨
+                hardWareVolumeControl(0);
+                break;
+            default:
+                hardWareVolumeControl(15);
+                break;
+        }
     }
 
     public boolean judgmentDecibel(int step) {
@@ -748,22 +808,22 @@ public class AudioMetryActivity extends AppCompatActivity {
         rightValue = new ArrayList<PointValue>();
 
         // PointValue (X, Y좌표)
-        leftValue.add(new PointValue(250, 30));
-        leftValue.add(new PointValue(500, 30));
-        leftValue.add(new PointValue(1000, 30));
-        leftValue.add(new PointValue(2000, 30));
-        leftValue.add(new PointValue(4000, 30));
-        leftValue.add(new PointValue(6000, 30));
-        leftValue.add(new PointValue(8000, 30));
+        leftValue.add(new PointValue(250, 40));
+        leftValue.add(new PointValue(500, 40));
+        leftValue.add(new PointValue(1000, 40));
+        leftValue.add(new PointValue(2000, 40));
+        leftValue.add(new PointValue(4000, 40));
+        leftValue.add(new PointValue(6000, 40));
+        leftValue.add(new PointValue(8000, 40));
 
         // PointValue (X, Y좌표)
-        rightValue.add(new PointValue(250, 30));
-        rightValue.add(new PointValue(500, 30));
-        rightValue.add(new PointValue(1000, 30));
-        rightValue.add(new PointValue(2000, 30));
-        rightValue.add(new PointValue(4000, 30));
-        rightValue.add(new PointValue(6000, 30));
-        rightValue.add(new PointValue(8000, 30));
+        rightValue.add(new PointValue(250, 40));
+        rightValue.add(new PointValue(500, 40));
+        rightValue.add(new PointValue(1000, 40));
+        rightValue.add(new PointValue(2000, 40));
+        rightValue.add(new PointValue(4000, 40));
+        rightValue.add(new PointValue(6000, 40));
+        rightValue.add(new PointValue(8000, 40));
 
         leftLine = new Line(leftValue);
         rightLine = new Line(rightValue);
@@ -858,43 +918,19 @@ public class AudioMetryActivity extends AppCompatActivity {
     }
 
     public void playSound(float left, float right) {
-        if (audioMetryEnd) {
-            return;
-        }
-//        if (isAudioTrackAlreadyUse) {
-//            isAudioTrackAlreadyUse = false;
-//            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate,
-//                    AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
-//                    numSamples, AudioTrack.MODE_STATIC);
-//            Log.i("HYEON", "isAudioTrackAlready 867 OK");
-//        }
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
         audioTrack.getChannelConfiguration();
         audioTrack.setStereoVolume(left, right);
-//        isAudioTrackAlreadyUse = true;
 
-        audioTrack.getState();
-        Log.i("HYEON", "audioTrack 875 OK");
+        Log.i("HYEON", "" + isRepeatAudioTrackPlayAndStop);
 
         if (isRepeatAudioTrackPlayAndStop) {
-            Log.i("HYEON", "audioTrack stop OK");
             audioTrack.stop();
             isRepeatAudioTrackPlayAndStop = false;
         } else {
-            Log.i("HYEON", "audioTrack Play OK");
             audioTrack.play();
             isRepeatAudioTrackPlayAndStop = true;
         }
-
-        Log.i("HYEON", "true - 889 OK");
-
-//        try {
-//            audioTrack.play();
-//        } catch (Exception e) { // error message if not playable
-//            controlFreq(step);
-//            genTone();
-//            playSound(leftTone, rightTone);
-//        }
     }
 
     public void playTone(float left, float right) { // overloaded playTone
@@ -921,6 +957,10 @@ public class AudioMetryActivity extends AppCompatActivity {
         }
     }
 
+    public void hardWareVolumeControl(int volume) {
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+    }
+
     private class GeneratedSineWave extends Thread {
         private static final String TAG = "GeneratedSineWave";
 
@@ -931,7 +971,5 @@ public class AudioMetryActivity extends AppCompatActivity {
             controlFreq(step + 1);
         }
     }
-
-
 }
 

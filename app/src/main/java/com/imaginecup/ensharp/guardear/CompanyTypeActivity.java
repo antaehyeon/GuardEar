@@ -69,6 +69,7 @@ public class CompanyTypeActivity extends Activity {
             // create a new item
             final Company companyItem = new Company();
 
+
             companyItem.setID(mEtSearch.getText().toString());
             companyItem.setComplete(false);
 

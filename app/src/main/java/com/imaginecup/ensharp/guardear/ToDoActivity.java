@@ -3,12 +3,13 @@ package com.imaginecup.ensharp.guardear;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,13 +26,16 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.http.NextServiceFilterCallback;
-import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilter;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
@@ -41,14 +45,12 @@ import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDat
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
 import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,28 +82,36 @@ public class ToDoActivity extends Activity {
     /**
      * EditText containing the "New To Do" text
      */
-    private EditText mTextNewToDoID;
+    private EditText mTextNewToDoID; // email
     private EditText mTextNewToDo;
     private EditText mTextNewToDo2; //password confirm
     private EditText mTextNewToDOName;
 
     private Spinner mSpinnerAge;
     private RadioGroup radioGroup;
+    private RadioButton redio_female;
+    private RadioButton radio_male;
     private String select_age;
     private String select_sex;
 
-    private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
+    private SharedPreferences mPref;
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
 
     Button btn_check;
-    String convertStr;
-    String[] strArray;
+
+    boolean checked;
+    String mail;
 
     /**
      * Progress spinner to use for table operations
      */
     private ProgressBar mProgressBar;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     /**
      * Initializes the activity
@@ -114,7 +124,7 @@ public class ToDoActivity extends Activity {
         Log.d("태그", "TodoActivity 화면 전환 2");
 
         mProgressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
-        mTextNewToDoID = (EditText) findViewById(R.id.textNewToDoID);
+        mTextNewToDoID = (EditText) findViewById(R.id.textNewToDoID); //id
         mTextNewToDo = (EditText) findViewById(R.id.textNewToDo);
         mTextNewToDo2 = (EditText) findViewById(R.id.textNewToDo2);
         mTextNewToDOName = (EditText) findViewById(R.id.textNewToDoName);
@@ -123,22 +133,29 @@ public class ToDoActivity extends Activity {
         btn_check = (Button) findViewById(R.id.btn_check);
 
 
+
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.Age, android.R.layout.simple_spinner_item);
+        
+        //스피너와 어댑터 연결
+        mSpinnerAge.setAdapter(adapter);
+
+
+
         // Initialize the progress bar
         mProgressBar.setVisibility(ProgressBar.GONE);
 
-        mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+        mPref = new SharedPreferences(this);
 
         setting = getSharedPreferences("setting", 0);
         editor = setting.edit();
 
 
         try {
-            // Create the Mobile Service Client instance, using the provided
-            // Mobile Service URL and key
-            mClient = new MobileServiceClient("https://guardear.azurewebsites.net", ToDoActivity.this).withFilter(new ProgressFilter());
-
+            Log.d("Error test", "try in");
+            mClient = new MobileServiceClient("http://guardear.azurewebsites.net", ToDoActivity.this).withFilter(new ProgressFilter());
+            Log.d("Error test", "try suc.");
             // Extend timeout from default of 10s to 20s
-            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
+           /* mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
                 @Override
                 public OkHttpClient createOkHttpClient() {
                     OkHttpClient client = new OkHttpClient();
@@ -146,23 +163,26 @@ public class ToDoActivity extends Activity {
                     client.setWriteTimeout(20, TimeUnit.SECONDS);
                     return client;
                 }
-            });
+            });*/
             // Get the Mobile Service Table instance to use
             mToDoTable = mClient.getTable(ToDoItem.class);
-
-            // Offline Sync
-            //mToDoTable = mClient.getSyncTable("ToDoItem", ToDoItem.class);
-
-            //Init local storage
-            initLocalStore().get();
+            Log.d("Error test", "mToDoTable suc.");
 
 
-            AgeSpinner();
+            btn_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("회원가입 test", "onClick_checkItem");
+                    checkItem();
+                }
+            });
 
+            // 성별
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    Log.d("Error test", "radioGroup");
                     // TODO Auto-generated method stub
 
                     RadioButton radioGroup = (RadioButton) findViewById(checkedId);
@@ -193,7 +213,6 @@ public class ToDoActivity extends Activity {
 
             // Create an adapter to bind the items with the view
             mAdapter = new ToDoItemAdapter(this, R.layout.row_list_to_do);
-
 
             // Load the items from the Mobile Service
             //refreshItemsFromTable();
@@ -233,6 +252,58 @@ public class ToDoActivity extends Activity {
         } catch (Exception e) {
             createAndShowDialog(e, "Error");
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("ToDo Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    public class MyOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent,
+                                   View view, int pos, long id) {
+            Toast.makeText(getApplicationContext(), "The planet is " +
+                    parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
+        }
+
+        public void onNothingSelected(AdapterView parent) {
+            // Do nothing.
+        }
     }
 
 
@@ -244,13 +315,14 @@ public class ToDoActivity extends Activity {
     public void addItem(View view) {
 
         Log.d("태그", "addItem 실행 ");
+        Log.d("태그", "T?F : "+ checked );
 
         if (mClient == null) {
             return;
         }
 
         // 이메일 입력 확인
-        if (mTextNewToDoID.getText().toString().length() == 0) {
+        if (mTextNewToDoID.getText().toString().length() == 0 || checkEmail(mTextNewToDoID.getText().toString()) == false) {
             checkEmail(mTextNewToDoID.getText().toString());
             Toast.makeText(ToDoActivity.this, "Email을 입력하세요!", Toast.LENGTH_SHORT).show();
             mTextNewToDoID.requestFocus();
@@ -280,65 +352,70 @@ public class ToDoActivity extends Activity {
             return;
         }
 
-        // Create a new item
-        final ToDoItem item = new ToDoItem(mTextNewToDo.getText().toString(), mTextNewToDoID.getText().toString(),
-                mTextNewToDOName.getText().toString(), select_age, select_sex);
+        if(checked == true){
 
-        Log.d("태그프리퍼런스저장", item.toString());
-        Log.d("태그프리퍼런스저장", mTextNewToDo.getText().toString());
+            // Create a new item
+            final ToDoItem item = new ToDoItem(mTextNewToDo.getText().toString(), mTextNewToDoID.getText().toString(),
+                    mTextNewToDOName.getText().toString(), mSpinnerAge.getSelectedItem().toString(), select_sex);
 
-        Log.d("태그", "정보 서버로 저장 ");
-
-        // 회원가입 시 사용자 정보 임시 저장
-        mPref.putValue("id", mTextNewToDoID.getText().toString(), "userinfo");
-        mPref.putValue("pw", mTextNewToDo.getText().toString(), "userinfo");
-        mPref.putValue("age", select_age, "userinfo");
-        mPref.putValue("sex", select_sex, "userinfo");
-        mPref.putValue("name", mTextNewToDOName.getText().toString(), "userinfo");
+            Log.d("태그프리퍼런스저장", item.toString());
+            Log.d("태그프리퍼런스저장", mTextNewToDo.getText().toString());
 
 
-        //item.setText(mTextNewToDo.getText().toString());
-        item.setComplete(false); // 내부 데이터 초기화
+
+            Log.d("태그", "정보 서버로 저장 ");
+
+            // 회원가입 시 사용자 정보 임시 저장
+            mPref.putValue("id", mTextNewToDoID.getText().toString(), "userinfo");
+            mPref.putValue("pw", mTextNewToDo.getText().toString(), "userinfo");
+            mPref.putValue("age", select_age, "userinfo");
+            mPref.putValue("sex", select_sex, "userinfo");
+            mPref.putValue("name", mTextNewToDOName.getText().toString(), "userinfo");
 
 
-        // Insert the new item
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
+            //item.setText(mTextNewToDo.getText().toString());
+            item.setComplete(false); // 내부 데이터 초기화
 
-                    final ToDoItem entity = addItemInTable(item);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!entity.isComplete()) {
-                                Log.d("태그", "Insert the new item ");
+            // Insert the new item
+            /*AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
 
-                                mAdapter.add(entity);
+                        final ToDoItem entity = addItemInTable(item);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!entity.isComplete()) {
+                                    Log.d("태그", "Insert the new item ");
+
+                                    mAdapter.add(entity);
+                                }
                             }
-                        }
-                    });
+                        });
 
-                } catch (final Exception e) {
-                    createAndShowDialogFromTask(e, "Error");
+                    } catch (final Exception e) {
+                        createAndShowDialogFromTask(e, "Error");
+                    }
+                    return null;
                 }
-                return null;
-            }
-        };
+            };
 
-        runAsyncTask(task);
+            runAsyncTask(task);*/
 
-        //입력 후 다시 공백칸으로
-        mTextNewToDo.setText("");
-        mTextNewToDoID.setText("");
-        mTextNewToDOName.setText("");
+            //입력 후 다시 공백칸으로
+            mTextNewToDo.setText("");
+            mTextNewToDoID.setText("");
+            mTextNewToDOName.setText("");
 
-        // 창 전환 -> LoginActivity
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            // 창 전환 -> LoginActivity
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 
-        startActivity(intent);
-        finish();
+            startActivity(intent);
+            finish();
+        }
 
     }
 
@@ -354,58 +431,105 @@ public class ToDoActivity extends Activity {
     }
 
 
-    // 중복 확인(닉네임)
-    public void checkName(View view) throws ExecutionException, InterruptedException {
+    public void checkItem(){
 
-        convertStr = mTextNewToDOName.getText().toString();
+        mail = mTextNewToDoID.getText().toString();
 
-        //mPref.removeAllPreferences("ID");
+        Log.d("회원가입 test_mail : ", mail);
+        if(checkEmail(mail)) {
 
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        // 데이터를 가져오는 리스트
+                        final List<ToDoItem> result = mToDoTable.where().field("id").eq(mail).execute().get();
+                        Log.d("회원가입 test", result.toString());
 
-                try {
-                    final List<ToDoItem> result = mToDoTable.where().field("name").eq(convertStr).execute().get();
-                    Log.d("태그", "중복확인 result 값 받아오기");
+                        if(result.toString().equals("[]")){
+                            checked = true;
 
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
 
-                    strArray = result.get(0).toString().split("/");
-
-                    Log.d("태그", "결과값 확인 : " + result.toString());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (Looper.myLooper() == null) {
-                                Looper.prepare();
-                            }
-
-                        /*    String str = mTextNewToDOName.getText().toString() ;
-
-                            // process incoming messages here
-                            if(str.equals(strArray[2]) ){
-                                Log.d("태그", "if(str.equals(result.toString()))");
-                                Toast.makeText(ToDoActivity.this, "중복된 이름입니다 " + strArray[2] , Toast.LENGTH_SHORT).show();
-                                mTextNewToDOName.setText(null);
-                            }
-                            else{
-                                mPref.putValue("Login", strArray[0]+ "/" + strArray[1]+ "/" + strArray[2], "ID");
-                                String test;
-                                test = mPref.getValue("Login", "", "ID");
-                                Log.d("태그", test);
-                                Toast.makeText(ToDoActivity.this, "사용할 수 있는 이름입니다" + strArray[2] , Toast.LENGTH_SHORT).show();
-                            } */
-                            Looper.loop();
+                            //builder.setTitle("제목 설정");
+                            builder.setMessage("사용가능한 이름입니다");
+                            Log.d("회원가입 setMessage", "setMessage 들어옴");
+                            //확인 버튼 클릭 시 설정
+                            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    return;
+                                }
+                            });
+                            //알림창 객체 설정
+                            android.support.v7.app.AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
-                    });
-                } catch (final Exception e) {
-                    createAndShowDialogFromTask(e, "Error");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for (ToDoItem item : result) {
+                                    Log.d("회원가입 test_for", item.toString());
+
+                                    //이메일이 있을때
+                                    //if (item.getId().toString().equals(mail)) {
+
+                                        Log.d("회원가입 test_if", item.getId().toString());
+
+                                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
+
+                                        //builder.setTitle("제목 설정");
+                                        builder.setMessage("중복된 이름입니다");
+                                        //확인 버튼 클릭 시 설정
+                                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                return;
+                                            }
+                                        });
+                                        //알림창 객체 설정
+                                        android.support.v7.app.AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                        // text 초기화
+                                        mTextNewToDoID.setText(null);
+                                        checked = false;
+
+                                        return;
+
+                                    //} else {
+
+
+                                    //}
+                                } //for
+
+                            } //run()
+                        });
+                    } catch (final Exception e) {
+                        //createAndShowDialogFromTask(e, "Error");
+                    }
+                    return null;
                 }
-                return null;
-            }
-        };
-        runAsyncTask(task);
+            }.execute();
+        }
+        else{
+
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
+
+            //builder.setTitle("제목 설정");
+            builder.setMessage("잘못된 이메일입니다");
+            //확인 버튼 클릭 시 설정
+            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    return;
+                }
+            });
+            //알림창 객체 설정
+            android.support.v7.app.AlertDialog dialog = builder.create();
+            dialog.show();
+
+
+            return;
+        }
     }
 
     // 취소버튼
@@ -662,26 +786,7 @@ public class ToDoActivity extends Activity {
 
     }
 
-    /**
-     * Age, Sex Spinner
-     **/
-    private void AgeSpinner() {
-        ArrayAdapter<CharSequence> Adapter;
-        Adapter = ArrayAdapter.createFromResource(ToDoActivity.this, R.array.spinner_age, android.R.layout.simple_spinner_item);
-        Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerAge.setAdapter(Adapter);
-        mSpinnerAge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                select_age = mSpinnerAge.getSelectedItem().toString();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
 }
 
     /**
