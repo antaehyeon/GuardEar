@@ -135,14 +135,14 @@ public class CompanyTypeActivity extends Activity {
     }
 
     public void checkItem(final Company item) {
-        String image = null;
+
 
         mPref.putValue("earphone_company", item.getID().toString(), "userinfo");
+        Log.d("이어폰 회사 엑티비티", mPref.getValue("earphone_company", "SAMSUNG", "userinfo"));
 
         Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
         startActivity(intent);
 
-        finish();
     }
 
 

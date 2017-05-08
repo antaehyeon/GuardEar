@@ -239,6 +239,7 @@
                     android:layout_weight="50">
 
                     <Button
+                        android:id="@+id/btn_change"
                         android:layout_width="50dp"
                         android:layout_height="27dp"
                         android:layout_alignParentBottom="true"

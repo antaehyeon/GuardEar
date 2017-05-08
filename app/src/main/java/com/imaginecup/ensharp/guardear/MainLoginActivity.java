@@ -120,15 +120,7 @@ public class MainLoginActivity extends AppCompatActivity {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent( mGoogleApiClient );
                 startActivityForResult( signInIntent, RESOLVE_CONNECTION_REQUEST_CODE );
 
-                /*  자동 로그인 */
 
-
-
-
-                Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
-                startActivity(intent);
-
-                finish();
 
             }
         } );
@@ -250,7 +242,7 @@ public class MainLoginActivity extends AppCompatActivity {
                                         item.setComplete(false);
 
                                         // Insert the new item
-                                        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                                       /* AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                                             @Override
                                             protected Void doInBackground(Void... params) {
                                                 try {
@@ -274,7 +266,7 @@ public class MainLoginActivity extends AppCompatActivity {
                                             }
                                         };
 
-                                        runAsyncTask(task);
+                                        runAsyncTask(task);*/
 
 
                                         Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
@@ -343,6 +335,13 @@ public class MainLoginActivity extends AppCompatActivity {
                 if ( result.isSuccess( ) ) {
                     GoogleSignInAccount acct = result.getSignInAccount( ); // 계정 정보 얻어오기
 
+                    // 이메일, 이름, 성별, 나이 비밀번호
+                    String name = acct.getDisplayName();
+                    String email = acct.getEmail();
+                    String pw = "0000";
+                    String age = "23";
+                    String gender = "male";
+
                     /* 자동 로그인 정보 저장*/
 
                     editor.putString("ID", acct.getEmail());
@@ -350,8 +349,17 @@ public class MainLoginActivity extends AppCompatActivity {
                     editor.putBoolean("Auto_Login_enabled", true);
                     editor.commit();
 
+                    final ToDoItem item = new ToDoItem(pw, email, name, age, gender);
+                    // 내부 데이터 초기화
+                    item.setComplete(false);
+
                     Log.i("GOOGLE" , acct.getDisplayName( ) +" " );
                     Log.i("GOOGLE" , acct.getEmail( ) +" " );
+                     /*  자동 로그인 */
+                    Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                    startActivity(intent);
+
+                    finish();
                 }
                 break;
             default:

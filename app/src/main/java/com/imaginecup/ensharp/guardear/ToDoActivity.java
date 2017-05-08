@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -151,9 +152,7 @@ public class ToDoActivity extends Activity {
 
 
         try {
-            Log.d("Error test", "try in");
             mClient = new MobileServiceClient("http://guardear.azurewebsites.net", ToDoActivity.this).withFilter(new ProgressFilter());
-            Log.d("Error test", "try suc.");
             // Extend timeout from default of 10s to 20s
            /* mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
                 @Override
@@ -430,12 +429,33 @@ public class ToDoActivity extends Activity {
 
     }
 
+    //다이아로그 창
+    public void alertMessage(){
+        Log.d("오류 확인중  ", "alertMessage()");
+
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
+
+        //builder.setTitle("제목 설정");
+        builder.setMessage("사용가능한 이름입니다");
+        Log.d("회원가입 setMessage", "setMessage 들어옴");
+
+        //확인 버튼 클릭 시 설정
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                return;
+            }
+        });
+        //알림창 객체 설정
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
     public void checkItem(){
 
         mail = mTextNewToDoID.getText().toString();
 
-        Log.d("회원가입 test_mail : ", mail);
+        Log.d("오류 확인중  1: ", mail);
         if(checkEmail(mail)) {
 
             new AsyncTask<Void, Void, Void>() {
@@ -444,16 +464,21 @@ public class ToDoActivity extends Activity {
                     try {
                         // 데이터를 가져오는 리스트
                         final List<ToDoItem> result = mToDoTable.where().field("id").eq(mail).execute().get();
-                        Log.d("회원가입 test", result.toString());
 
+                        //  result.toString().equals("[]")
                         if(result.toString().equals("[]")){
+                            Log.d("오류 확인중  3", "if문 들어옴");
                             checked = true;
+
+                            // 다이아로그 창
+                            Log.d("오류 확인중  ", "alertMessage()");
 
                             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
 
                             //builder.setTitle("제목 설정");
                             builder.setMessage("사용가능한 이름입니다");
                             Log.d("회원가입 setMessage", "setMessage 들어옴");
+
                             //확인 버튼 클릭 시 설정
                             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -463,19 +488,28 @@ public class ToDoActivity extends Activity {
                             //알림창 객체 설정
                             android.support.v7.app.AlertDialog dialog = builder.create();
                             dialog.show();
+                            //Toast.makeText(ToDoActivity.this, "사용가능한 아이디입니다", Toast.LENGTH_SHORT).show();
+                            //alertMessage();
+                            Log.d("오류 확인중  2", "다이아로그 호출완료");
+
                         }
+                        else {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                for (ToDoItem item : result) {
-                                    Log.d("회원가입 test_for", item.toString());
+                                    if (Looper.myLooper() == null) {
+                                        Looper.prepare();
+                                    }
 
-                                    //이메일이 있을때
-                                    //if (item.getId().toString().equals(mail)) {
+                                    for (ToDoItem item : result) {
+                                        Log.d("회원가입 test_for", item.toString());
 
-                                        Log.d("회원가입 test_if", item.getId().toString());
+                                        //이메일이 있을때
+                                        //if (item.getId().toString().equals(mail)) {
+
+                                        Log.d("회원가입 test_id", item.getId().toString());
 
                                         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ToDoActivity.this);
 
@@ -496,16 +530,14 @@ public class ToDoActivity extends Activity {
 
                                         return;
 
-                                    //} else {
+                                    } //for
+                                    Looper.loop();
 
-
-                                    //}
-                                } //for
-
-                            } //run()
-                        });
+                                } //run()
+                            });
+                        }
                     } catch (final Exception e) {
-                        //createAndShowDialogFromTask(e, "Error");
+                        createAndShowDialogFromTask(e, "Error");
                     }
                     return null;
                 }
@@ -526,7 +558,6 @@ public class ToDoActivity extends Activity {
             //알림창 객체 설정
             android.support.v7.app.AlertDialog dialog = builder.create();
             dialog.show();
-
 
             return;
         }
@@ -685,6 +716,7 @@ public class ToDoActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Log.d("오류 확인중 ? ", "createAndShowDialogFromTask");
                 createAndShowDialog(exception, "Error");
             }
         });
@@ -702,6 +734,7 @@ public class ToDoActivity extends Activity {
     private void createAndShowDialog(Exception exception, String title) {
         Throwable ex = exception;
         if (exception.getCause() != null) {
+            Log.d("오류 확인중 ? ", "createAndShowDialog if");
             ex = exception.getCause();
         }
         createAndShowDialog(ex.getMessage(), title);

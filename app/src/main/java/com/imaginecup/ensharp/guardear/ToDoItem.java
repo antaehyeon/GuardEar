@@ -50,7 +50,7 @@ public class ToDoItem {
     /**
      * Initializes a new ToDoItem
      *
-     * @param text
+     * @param password
      *            The item textf
      * @param id
      *            The item id

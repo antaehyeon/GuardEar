@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
@@ -27,6 +28,7 @@ public class EarphoneActivity extends Activity {
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
 
     private EarphoneAdapter mAdapter;
+    private MyInfo myInfo;
 
     //private ProgressBar mProgressBar;
 
@@ -37,6 +39,8 @@ public class EarphoneActivity extends Activity {
     private EditText mEtSearch;
     ListView listViewToDo;
     Button btn_Next;
+    TextView linear_name;
+    int count = 0;
 
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
@@ -48,14 +52,23 @@ public class EarphoneActivity extends Activity {
 
         Log.d("순서확인중", " EarphoneActivity onCreate(Bundle savedInstanceState)");
 
-
         //이어폰 등록 부분
         //model = (EditText)findViewById(R.id.model);
         //soundpressure = (EditText)findViewById(R.id.soundpressure);
         //impedance = (EditText)findViewById(R.id.impedance);
         mEtSearch = (EditText)findViewById(R.id.etSearch);
         btn_Next = (Button)findViewById(R.id.btn_Next);
+        linear_name = (TextView)findViewById(R.id.linear_name);
         //btn_Next.setVisibility(View.INVISIBLE);
+
+        mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
+
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+        String CompanyName = mPref.getValue("earphone_company", "SAMSUNG", "userinfo");
+        Log.d("확인중ㅇㅇㅇㅇ", CompanyName);
+        linear_name.setText(CompanyName);
+
 
         Log.d("이어폰", "이어폰 onCreate()");
 
@@ -76,10 +89,7 @@ public class EarphoneActivity extends Activity {
             listViewToDo = (ListView)findViewById(R.id.listViewToDo);
             listViewToDo.setAdapter(mAdapter);
 
-            mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
 
-            setting = getSharedPreferences("setting", 0);
-            editor = setting.edit();
 
             // create a new item
             final Earphone earphoneItem = new Earphone();
@@ -93,20 +103,14 @@ public class EarphoneActivity extends Activity {
                     try {
                         // 데이터를 가져오는 리스트
                         String company = mPref.getValue("earphone_company", "", "userinfo");
-                        Log.d("회사명 확인중", company);
 
                         final List<Earphone> result = mEarphoneTable.where().field("companyName").eq(company).execute().get();
 
                         Log.d("순서확인중", " EarphoneActivity "+ result.toString());
 
-                        Log.d("이어폰", "중복확인 result 값 받아오기");
-                        Log.d("이어폰", "결과값 확인 : " + result.toString());
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                Log.d("이어폰", "런 들어옴");
 
                                 if(Looper.myLooper() == null){ Looper.prepare();   }
 
@@ -212,25 +216,22 @@ public class EarphoneActivity extends Activity {
     }
 
     public void checkItem(final Earphone item, String url) {
-        String image=null;
+        String image=url;
 
         btn_Next.setVisibility(View.VISIBLE);
-
-
-        Log.d("CheckItem", "checkItem 들어옴");
-        Log.d("CheckItem", "정보 들어오나 : " + item.toString());
-        Log.d("CheckItem", "정보 들어오나 : " + item.getID().toString());
-        Log.d("CheckItem", "정보 들어오나 : " + item.getSoundPressure().toString());
-        Log.d("CheckItem", "정보 들어오나 : " + item.getImpedance().toString());
-
 
         mPref.putValue("earphone_company", item.getCompanyName().toString(), "userinfo");
         mPref.putValue("earphone_model", item.getID().toString(), "userinfo");
         mPref.putValue("earphone_impedance", item.getImpedance().toString(), "userinfo");
         mPref.putValue("earphone_soundpressure", item.getSoundPressure().toString(), "userinfo");
+        mPref.putValue("earphone_image", image, "userinfo");
 
-        image = url;
 
+        Log.d("이어폰 정보", item.getModelName().toString());
+        Log.d("이어폰 정보", item.getID().toString());
+        Log.d("이어폰 정보", item.getImpedance().toString());
+        Log.d("이어폰 정보", item.getSoundPressure().toString());
+        Log.d("이어폰 정보", image);
 
 
 
@@ -262,17 +263,6 @@ public class EarphoneActivity extends Activity {
             image = "eo_bg920bbkg";
         }
 */
-
-        mPref.putValue("earphone_image", image, "userinfo");
-
-
-        Log.d("이어폰 정보", item.getModelName().toString());
-        Log.d("이어폰 정보", item.getID().toString());
-        Log.d("이어폰 정보", item.getImpedance().toString());
-        Log.d("이어폰 정보", item.getSoundPressure().toString());
-        Log.d("이어폰 정보", image);
-
-
 
         //btn_Next.setVisibility(View.VISIBLE);
 
@@ -310,10 +300,22 @@ public class EarphoneActivity extends Activity {
 
     public void NextClick(View view){
 
-        if(btn_Next.isPressed()) {
+
+        count++;
+
+        Log.d("COUNT", Integer.toString(count));
+
+        if(btn_Next.isPressed() && count==2) {
 
             //Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+
+            finish();
+        }
+        else if(btn_Next.isPressed() && count!=2){
+
+            Intent intent = new Intent(getApplicationContext(), MyInfo.class);
             startActivity(intent);
 
             finish();

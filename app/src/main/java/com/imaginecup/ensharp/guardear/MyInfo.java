@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
 
 /**
  * Created by Semin on 2017-02-20.
@@ -34,9 +36,9 @@ public class MyInfo extends AppCompatActivity {
     private boolean mIsBreakNotification;
     private ImageButton mAutoVolumeBtn;
     private ImageButton mBreakNotificationBtn;
-
     Context mContextEar;
 
+    public int earphone_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class MyInfo extends AppCompatActivity {
         myInfoTitleTxt.setText("내 정보");
         mPref = new SharedPreferences(this);
         mContextEar = this;
+
         settingMyInfo();
         settingButton();
     }
@@ -63,6 +66,7 @@ public class MyInfo extends AppCompatActivity {
         TextView earphone_soundpressureTxt = (TextView) findViewById(R.id.earphone_soundpressureTxt);
         Button maleBtn = (Button) findViewById(R.id.manBtn);
         Button femaleBtn = (Button) findViewById(R.id.womanBtn);
+        Button chageBtn = (Button)findViewById(R.id.btn_change); // 이어폰 수정 버튼
         mEarphoneImage = (ImageView) findViewById(R.id.earphoneImg);
 
         nameTxt.setText(mPref.getValue("name", "성민경", "userinfo"));
@@ -81,11 +85,12 @@ public class MyInfo extends AppCompatActivity {
         }
 
         // 서버에서 바로 이미지 정보 받아오기
-        String url = mPref.getValue("earphone_image", "eo_bg920bbkg", "userinfo");
+        String url = mPref.getValue("earphone_image", "", "userinfo");
+        Log.d("이어폰 URL", url);
 
         Picasso.with(this)
                 .load("http://i.imgur.com/"+url)
-                .placeholder(R.drawable.eo_bg920bbkg)
+                .placeholder(R.drawable.eo_ig930bbegkr)
                 .into(mEarphoneImage);
 
 
@@ -93,6 +98,23 @@ public class MyInfo extends AppCompatActivity {
       /*  mEarphoneImage = (ImageView) findViewById(R.id.earphoneImg);
         mEarphonePicture = resizeImage(mPref.getValue("earphone_image", "eo_bg920bbkg", "userinfo"), 190, 190);
         mEarphoneImage.setImageBitmap(getCircleBitmap(mEarphonePicture));*/
+
+
+        chageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                earphone_count++;
+
+
+                Intent intent = new Intent(getApplicationContext(), CompanyTypeActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+
+
     }
 
     public Bitmap resizeImage(String iconName, int width, int height) {

@@ -23,6 +23,7 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
     </android.support.v7.widget.Toolbar>
+
     <include
         layout="@layout/layout_myinfo"
         android:layout_width="match_parent"
