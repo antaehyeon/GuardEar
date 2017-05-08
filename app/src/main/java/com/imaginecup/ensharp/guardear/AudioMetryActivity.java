@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +23,7 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -391,18 +391,11 @@ public class AudioMetryActivity extends AppCompatActivity {
         tempButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSingleton.setFreqLeftData(
-                        freq250LeftDecibel,
-                        freq500LeftDecibel,
-                        freq1000LeftDecibel,
-                        freq2000LeftDecibel,
-                        freq4000LeftDecibel,
-                        freq6000LeftDecibel,
-                        freq8000LeftDecibel);
+
+                setRandomFrequency();
 
                 Intent intent = new Intent(AudioMetryActivity.this, AudioMetryResultActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -948,6 +941,42 @@ public class AudioMetryActivity extends AppCompatActivity {
 
     public void hardWareVolumeControl(int volume) {
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+    }
+
+    public void setRandomFrequency() {
+        Random random = new Random();
+        freq250LeftDecibel = random.nextInt(41);
+        freq250RightDecibel = random.nextInt(41);
+        freq500LeftDecibel = random.nextInt(41);
+        freq500RightDecibel = random.nextInt(41);
+        freq1000LeftDecibel = random.nextInt(41);
+        freq1000RightDecibel = random.nextInt(41);
+        freq2000LeftDecibel = random.nextInt(41);
+        freq2000RightDecibel = random.nextInt(41);
+        freq4000LeftDecibel = random.nextInt(41);
+        freq4000RightDecibel = random.nextInt(41);
+        freq6000LeftDecibel = random.nextInt(41);
+        freq6000RightDecibel = random.nextInt(41);
+        freq8000LeftDecibel = random.nextInt(41);
+        freq8000RightDecibel = random.nextInt(41);
+
+        mSingleton.setFreqRightData(
+                freq250LeftDecibel,
+                freq500LeftDecibel,
+                freq1000LeftDecibel,
+                freq2000LeftDecibel,
+                freq4000LeftDecibel,
+                freq6000LeftDecibel,
+                freq8000LeftDecibel);
+
+        mSingleton.setFreqRightData(
+                freq250RightDecibel,
+                freq500RightDecibel,
+                freq1000RightDecibel,
+                freq2000RightDecibel,
+                freq4000RightDecibel,
+                freq6000RightDecibel,
+                freq8000RightDecibel);
     }
 
     private class GeneratedSineWave extends Thread {

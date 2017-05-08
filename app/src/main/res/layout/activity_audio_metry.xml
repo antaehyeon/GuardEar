@@ -243,9 +243,9 @@
 
     <Button
         android:id="@+id/btn_tempNextActivity"
-        android:text="TEMP\nBUTTON"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:text="N"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/LL_decibel"
         android:layout_alignStart="@+id/LL_decibel" />
 

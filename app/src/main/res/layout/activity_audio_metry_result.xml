@@ -152,14 +152,14 @@
             <LinearLayout
                 android:id="@+id/linearL_graph"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="10dp"
+                android:layout_height="match_parent"
                 android:layout_weight="55"
                 android:background="@drawable/rounded_radius"
                 android:orientation="vertical">
 
                 <lecho.lib.hellocharts.view.LineChartView
                     android:id="@+id/resultChart"
+                    android:background="@drawable/audio_metry_result_graph_background_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="5dp"
@@ -168,16 +168,16 @@
                     android:paddingTop="10dp" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_radius"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/test_image"/>
-            </RelativeLayout>
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@drawable/rounded_radius"-->
+                <!--android:orientation="vertical">-->
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/test_image"/>-->
+            <!--</RelativeLayout>-->
         </FrameLayout>
 
         <LinearLayout
