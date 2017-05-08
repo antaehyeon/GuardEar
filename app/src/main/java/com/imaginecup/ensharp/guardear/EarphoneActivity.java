@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class EarphoneActivity extends Activity {
     ListView listViewToDo;
     Button btn_Next;
     TextView linear_name;
+    ImageButton btn_item;
 
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
@@ -58,6 +60,7 @@ public class EarphoneActivity extends Activity {
         mEtSearch = (EditText)findViewById(R.id.etSearch);
         btn_Next = (Button)findViewById(R.id.btn_Next);
         linear_name = (TextView)findViewById(R.id.linear_name);
+        btn_item = (ImageButton)findViewById(R.id.btnSearch) ;
         //btn_Next.setVisibility(View.INVISIBLE);
 
         mPref = new com.imaginecup.ensharp.guardear.SharedPreferences(this);
@@ -296,6 +299,43 @@ public class EarphoneActivity extends Activity {
         runAsyncTask(task);
                 */
     }
+
+    public void getItem(View view){
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // 데이터를 가져오는 리스트
+                    final List<Earphone> result = mEarphoneTable.execute().get();
+
+                    Log.d("순서확인중", " 리스트뷰 "+ result.toString());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                            listViewToDo.setAdapter(mAdapter);
+
+                            for(Earphone item : result){
+
+                                mAdapter.add(item);
+                            }
+                            Looper.loop();
+                        }
+                    });
+                } catch (final Exception e){
+                    //createAndShowDialogFromTask(e, "Error");
+                }
+                return null;
+            }
+        };
+        runAsyncTask(task);
+
+    }
+
 
     public void NextClick(View view){
 

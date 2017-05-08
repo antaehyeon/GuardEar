@@ -8,7 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -22,15 +24,19 @@ public class CompanyTypeActivity extends Activity {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<Company> mCompanyTable;
+    private MobileServiceTable<Earphone> mEarphoneTable;
     private com.imaginecup.ensharp.guardear.SharedPreferences mPref;
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
 
     private CompanyTypeAdapter mAdapter;
+    private EarphoneAdapter mEarphoneAdapter;
+
 
     //private CompanyType mListView = null;
 
     private EditText mEtSearch;
+    ImageButton btnSearch;
     ListView listViewCompany;
 
 
@@ -49,6 +55,7 @@ public class CompanyTypeActivity extends Activity {
         final Company companyTypeItem = new Company();
 
         mEtSearch = (EditText)findViewById(R.id.etSearch);
+        btnSearch = (ImageButton)findViewById(R.id.btnSearch); // 검색 버튼
         //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.hideSoftInputFromWindow(mEtSearch.getWindowToken(), 0);
 
@@ -64,8 +71,13 @@ public class CompanyTypeActivity extends Activity {
 
             // Get the Mobile Service Table instance to use
             mCompanyTable = mClient.getTable(Company.class);
+            mEarphoneTable = mClient.getTable(Earphone.class);
 
             mAdapter = new CompanyTypeAdapter(this, R.layout.row_earphone_company);
+
+            mEarphoneAdapter = new EarphoneAdapter(this, R.layout.row_earphone);
+
+
 
             listViewCompany = (ListView)findViewById(R.id.listViewCompany);
             listViewCompany.setAdapter(mAdapter);
@@ -137,6 +149,43 @@ public class CompanyTypeActivity extends Activity {
                 finish();
             }
         });*/
+
+    }
+
+    // 검색 버튼
+   public void getItem(View view){
+
+       AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+           @Override
+           protected Void doInBackground(Void... params) {
+               try {
+                   // 데이터를 가져오는 리스트
+                   final List<Earphone> result = mEarphoneTable.execute().get();
+
+                   Log.d("순서확인중", " 리스트뷰 "+ result.toString());
+
+                   runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+
+                           if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                           listViewCompany.setAdapter(mEarphoneAdapter);
+
+                           for(Earphone item : result){
+
+                               mEarphoneAdapter.add(item);
+                           }
+                           Looper.loop();
+                       }
+                   });
+               } catch (final Exception e){
+                   //createAndShowDialogFromTask(e, "Error");
+               }
+               return null;
+           }
+       };
+       runAsyncTask(task);
 
     }
 
