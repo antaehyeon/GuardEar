@@ -106,8 +106,10 @@ public class MyInfo extends AppCompatActivity {
 
                 earphone_count++;
 
-
                 Intent intent = new Intent(getApplicationContext(), CompanyTypeActivity.class);
+
+                intent.putExtra("count", 1);
+
                 startActivity(intent);
 
 

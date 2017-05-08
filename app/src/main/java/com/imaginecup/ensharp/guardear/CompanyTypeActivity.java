@@ -52,6 +52,11 @@ public class CompanyTypeActivity extends Activity {
         //InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.hideSoftInputFromWindow(mEtSearch.getWindowToken(), 0);
 
+
+        // 실시간 검색
+
+
+
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
@@ -61,6 +66,7 @@ public class CompanyTypeActivity extends Activity {
             mCompanyTable = mClient.getTable(Company.class);
 
             mAdapter = new CompanyTypeAdapter(this, R.layout.row_earphone_company);
+
             listViewCompany = (ListView)findViewById(R.id.listViewCompany);
             listViewCompany.setAdapter(mAdapter);
 
