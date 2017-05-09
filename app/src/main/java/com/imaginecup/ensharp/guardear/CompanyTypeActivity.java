@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -132,7 +131,10 @@ public class CompanyTypeActivity extends Activity {
 
 
         } catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+            Log.d("tryCatch 수정중11", "오류 걸림");
+            onCreate(savedInstanceState);
+            Log.d("tryCatch 수정중", "온크리에이트 호출");
+            //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
 
 
@@ -153,7 +155,7 @@ public class CompanyTypeActivity extends Activity {
     }
 
     // 검색 버튼
-   public void getItem(View view){
+   /*public void getItem(View view){
 
        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
            @Override
@@ -187,7 +189,7 @@ public class CompanyTypeActivity extends Activity {
        };
        runAsyncTask(task);
 
-    }
+    }*/
 
     public void checkItem(final Company item) {
 
@@ -196,8 +198,10 @@ public class CompanyTypeActivity extends Activity {
         Log.d("이어폰 회사 엑티비티", mPref.getValue("earphone_company", "SAMSUNG", "userinfo"));
 
         Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
-        startActivity(intent);
 
+        intent.putExtra("count", 1);
+
+        startActivity(intent);
         finish();
 
     }

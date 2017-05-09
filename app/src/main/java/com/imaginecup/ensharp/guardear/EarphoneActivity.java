@@ -42,6 +42,7 @@ public class EarphoneActivity extends Activity {
     Button btn_Next;
     TextView linear_name;
     ImageButton btn_item;
+    Intent intent;
 
     android.content.SharedPreferences setting;
     android.content.SharedPreferences.Editor editor;
@@ -339,13 +340,14 @@ public class EarphoneActivity extends Activity {
 
     public void NextClick(View view){
 
-        Intent intent = getIntent();
-        int count = intent.getExtras().getInt("count");
+        intent = getIntent();
 
+
+        int count = intent.getExtras().getInt("count");
 
         if(btn_Next.isPressed() && count!=1) {
 
-            intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
             startActivity(intent);
 
             finish();
