@@ -621,14 +621,17 @@ public class MainActivity extends AppCompatActivity {
             FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
 
-
             editor.clear();
             editor.commit();
+
+
 
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
 
 
             Intent intent = new Intent(getApplicationContext(), MainLoginActivity.class);
+
+            intent.putExtra("count", 0);
 
             startActivity(intent);
             finish();

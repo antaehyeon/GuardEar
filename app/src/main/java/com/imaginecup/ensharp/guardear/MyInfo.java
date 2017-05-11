@@ -101,6 +101,7 @@ public class MyInfo extends AppCompatActivity {
         mEarphoneImage.setImageBitmap(getCircleBitmap(mEarphonePicture));*/
 
 
+        // 이어폰 변경 클릭
         chageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,4 +212,10 @@ public class MyInfo extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+
 }

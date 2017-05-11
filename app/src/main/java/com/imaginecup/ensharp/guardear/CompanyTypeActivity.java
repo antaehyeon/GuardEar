@@ -37,11 +37,12 @@ public class CompanyTypeActivity extends Activity {
     private EditText mEtSearch;
     ImageButton btnSearch;
     ListView listViewCompany;
+    Intent intent;
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_type);
         Log.d("회사명", "CompanyTypeActivity 들어옴");
@@ -154,6 +155,12 @@ public class CompanyTypeActivity extends Activity {
 
     }
 
+    private void retry() {
+
+
+
+    }
+
     // 검색 버튼
    /*public void getItem(View view){
 
@@ -197,11 +204,16 @@ public class CompanyTypeActivity extends Activity {
         mPref.putValue("earphone_company", item.getID().toString(), "userinfo");
         Log.d("이어폰 회사 엑티비티", mPref.getValue("earphone_company", "SAMSUNG", "userinfo"));
 
-        Intent intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+        intent = getIntent();
 
-        intent.putExtra("count", 1);
+        int count = intent.getExtras().getInt("count");
+
+        intent = new Intent(getApplicationContext(), EarphoneActivity.class);
+
+        intent.putExtra("count", count);
 
         startActivity(intent);
+
         finish();
 
     }
