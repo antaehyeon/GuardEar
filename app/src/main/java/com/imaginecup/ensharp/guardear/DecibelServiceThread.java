@@ -159,7 +159,7 @@ public class DecibelServiceThread extends Thread {
                 //이제부터 음원에 대한 계산
                 //mDecibels = "54";
                 temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
-                dB = Math.round(dB - temp);
+                dB = Math.round(dB - temp)-8;
             } else {
                 dB = 0;
             }
@@ -179,7 +179,7 @@ public class DecibelServiceThread extends Thread {
                 //이제부터 음원에 대한 계산
                 temp = MEASURE_DECIBEL - Double.parseDouble(mDecibels);
                 //Log.i("temp=",temp+" ");
-                dB = Math.round(dB - temp);
+                dB = Math.round(dB - temp)-8;
                 //Log.i("dB=",dB+" ");
                 if (dB >= 70) {
                     //Log.i("볼륨 80 이상", "줄이기");
