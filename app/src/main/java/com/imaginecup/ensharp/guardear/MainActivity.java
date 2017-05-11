@@ -609,32 +609,26 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         //청력측정 페이지
-        /*else if (id == R.id.action_hearing_test) {
+        else if (id == R.id.action_hearing_test) {
 
             Intent intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
-
             startActivity(intent);
-            finish();
-        }*/
+            return true;
+        }
         //로그아웃 페이지
         else if (id == R.id.action_logout) {
             FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
-
 
             editor.clear();
             editor.commit();
 
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
 
-
             Intent intent = new Intent(getApplicationContext(), MainLoginActivity.class);
-
             startActivity(intent);
             finish();
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -727,8 +721,5 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
         Log.d("태그", "createAndShowDialog2");
 
-
     }
-
-
 }

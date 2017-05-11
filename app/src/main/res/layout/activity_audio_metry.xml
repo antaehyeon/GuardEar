@@ -247,6 +247,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@+id/LL_decibel"
-        android:layout_alignStart="@+id/LL_decibel" />
+        android:layout_alignStart="@+id/LL_decibel"
+        android:visibility="gone" />
 
 </RelativeLayout>
