@@ -67,6 +67,7 @@ public class MainLoginActivity extends AppCompatActivity {
 
     private static final String TAG = "AppPermission";
     private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+    Intent intent;
 
 
     @Override
@@ -93,6 +94,20 @@ public class MainLoginActivity extends AppCompatActivity {
 
         setting = getSharedPreferences("setting", 0);
         editor = setting.edit();
+
+
+        //intent = getIntent();
+
+
+        // object.getPerson() == null? 0: object.getPerson();
+
+        /*if(Integer.toString(intent.getExtras().getInt("count")) != null){
+
+            intent.putExtra("count", intent.getExtras().getInt("count"));
+
+        }*/
+
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder( GoogleSignInOptions.DEFAULT_SIGN_IN )
                             .requestEmail( )
@@ -137,10 +152,12 @@ public class MainLoginActivity extends AppCompatActivity {
             if(setting.getBoolean("Auto_Login_enabled", false)){
 
                 Log.d("자동로그인 test", "자동로그인");
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                intent.putExtra("count", 1);
 
                 startActivity(intent);
-                //finish();
+                finish();
 
             }
 
@@ -269,7 +286,10 @@ public class MainLoginActivity extends AppCompatActivity {
                                         runAsyncTask(task);*/
 
 
-                                        Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                                        intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+
+                                        intent.putExtra("count", 0);
+
                                         startActivity(intent);
 
                                         finish();
@@ -305,7 +325,11 @@ public class MainLoginActivity extends AppCompatActivity {
     public void LoginEmail(View view) {
 
 
-        Intent intent = new Intent(getApplicationContext(),  LoginActivity.class);
+        intent = new Intent(getApplicationContext(),  LoginActivity.class);
+
+
+        intent.putExtra("count", 0);
+
         startActivity(intent);
 
         finish();
@@ -314,7 +338,11 @@ public class MainLoginActivity extends AppCompatActivity {
 
     public void JoinEmail(View view) {
 
-        Intent intent = new Intent(getApplicationContext(),  ToDoActivity.class);
+        intent = new Intent(getApplicationContext(),  ToDoActivity.class);
+
+
+        intent.putExtra("count", 0);
+
         startActivity(intent);
 
         finish();
@@ -356,7 +384,11 @@ public class MainLoginActivity extends AppCompatActivity {
                     Log.i("GOOGLE" , acct.getDisplayName( ) +" " );
                     Log.i("GOOGLE" , acct.getEmail( ) +" " );
                      /*  자동 로그인 */
-                    Intent intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+                    intent = new Intent(MainLoginActivity.this, CompanyTypeActivity.class);
+
+
+                    intent.putExtra("count", 0);
+
                     startActivity(intent);
 
                     finish();
