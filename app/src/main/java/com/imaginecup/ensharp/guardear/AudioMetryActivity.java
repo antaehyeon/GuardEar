@@ -247,7 +247,7 @@ public class AudioMetryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (audioMetryEnd) {
-                    mSingleton.setFreqRightData(
+                    mSingleton.setFreqLeftData(
                             freq250LeftDecibel,
                             freq500LeftDecibel,
                             freq1000LeftDecibel,
@@ -960,7 +960,7 @@ public class AudioMetryActivity extends AppCompatActivity {
         freq8000LeftDecibel = random.nextInt(41);
         freq8000RightDecibel = random.nextInt(41);
 
-        mSingleton.setFreqRightData(
+        mSingleton.setFreqLeftData(
                 freq250LeftDecibel,
                 freq500LeftDecibel,
                 freq1000LeftDecibel,
