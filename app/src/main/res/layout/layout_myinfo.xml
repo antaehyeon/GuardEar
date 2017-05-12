@@ -591,7 +591,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="30dp"
                     android:gravity="center"
-                    android:text="2월 19일~25일"
+                    android:text="5월 7일~13일"
                     android:textColor="@color/navy"
                     android:textSize="14dp" />
             </RelativeLayout>
@@ -659,7 +659,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="75"
+                                android:text="60"
                                 android:textColor="@color/navy"
                                 android:textSize="18dp" />
                         </RelativeLayout>
