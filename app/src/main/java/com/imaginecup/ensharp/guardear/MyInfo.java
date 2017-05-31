@@ -111,6 +111,7 @@ public class MyInfo extends AppCompatActivity {
                 intent.putExtra("count", 1);
 
                 startActivity(intent);
+                finish();
 
             }
         });

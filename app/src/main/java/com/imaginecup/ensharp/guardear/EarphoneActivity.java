@@ -21,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EarphoneActivity extends Activity {
 
@@ -127,6 +128,39 @@ public class EarphoneActivity extends Activity {
                             }
                         });
                     } catch (final Exception e){
+                        Log.d("캡스토온", "try- catch 걸림");
+
+                        String company = mPref.getValue("earphone_company", "", "userinfo");
+
+                        final List<Earphone> result;
+                        try {
+                            result = mEarphoneTable.where().field("companyName").eq(company).execute().get();
+                            Log.d("순서확인중", " EarphoneActivity "+ result.toString());
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                                    listViewToDo.setAdapter(mAdapter);
+
+                                    for(Earphone item : result){
+
+                                        mAdapter.add(item);
+                                    }
+                                    Looper.loop();
+                                }
+                            });
+
+
+
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        } catch (ExecutionException e1) {
+                            e1.printStackTrace();
+                        }
+
                         //createAndShowDialogFromTask(e, "Error");
                     }
                     return null;
@@ -136,6 +170,10 @@ public class EarphoneActivity extends Activity {
 
 
         } catch (MalformedURLException e) {
+            Log.d("캡스토온", "mclient try- catch 걸림");
+            Log.d("tryCatch 수정중11", "오류 걸림");
+            onCreate(savedInstanceState);
+            Log.d("tryCatch 수정중", "온크리에이트 호출");
             //createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         }
     }
@@ -230,7 +268,7 @@ public class EarphoneActivity extends Activity {
         mPref.putValue("earphone_image", image, "userinfo");
 
 
-        Log.d("이어폰 정보", item.getModelName().toString());
+        Log.d("이어폰 정보", item.getCompanyName().toString());
         Log.d("이어폰 정보", item.getID().toString());
         Log.d("이어폰 정보", item.getImpedance().toString());
         Log.d("이어폰 정보", item.getSoundPressure().toString());
@@ -347,7 +385,7 @@ public class EarphoneActivity extends Activity {
 
         if(btn_Next.isPressed() && count!=1) {
 
-            intent = new Intent(getApplicationContext(), AudioMetryActivity.class);
+            intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
 
             finish();
@@ -499,8 +537,10 @@ public class EarphoneActivity extends Activity {
         Log.d("태그", "AsyncTask");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            Log.d("태그", "AsyncTask");
             return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
+            Log.d("태그", "AsyncTask");
             return task.execute();
 
         }

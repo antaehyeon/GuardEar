@@ -13,10 +13,12 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class CompanyTypeActivity extends Activity {
     //static final String[] LIST_MENU = {"APPLE", "AUDIO-TEXHNICA", "CRESYN", "LG", "SAMSUNG","SENNHEISER","SHURE",   "SONY", "WESTONE", "XENICS"} ;
@@ -120,7 +122,48 @@ public class CompanyTypeActivity extends Activity {
                             }
                         });
                     } catch (final Exception e){
-                        createAndShowDialogFromTask(e, "Error");
+
+
+                        Log.d("캡스토온", "try- catch 걸림");
+                        final List<Company> result;
+                        try {
+                            result = mCompanyTable.execute().get();
+
+                            Log.d("회사명", "중복확인 result 값 받아오기");
+                            Log.d("회사명", "결과값 확인 : " + result.toString());
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Log.d("회사명", "런 들어옴");
+
+                                    if(Looper.myLooper() == null){ Looper.prepare();   }
+
+                                    listViewCompany.setAdapter(mAdapter);
+
+                                    for(Company item : result){
+
+                                        mAdapter.add(item);
+                                    }
+
+                                    Looper.loop();
+                                }
+                            });
+
+
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        } catch (ExecutionException e1) {
+                            e1.printStackTrace();
+                        } catch (MobileServiceException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+
+                        return null;
+                        //createAndShowDialogFromTask(e, "Error");
                     }
                     return null;
                 }
@@ -130,6 +173,7 @@ public class CompanyTypeActivity extends Activity {
 
 
         } catch (MalformedURLException e) {
+            Log.d("캡스토온", "mclient try- catch 걸림");
             Log.d("tryCatch 수정중11", "오류 걸림");
             onCreate(savedInstanceState);
             Log.d("tryCatch 수정중", "온크리에이트 호출");
@@ -251,8 +295,10 @@ public class CompanyTypeActivity extends Activity {
         Log.d("태그", "AsyncTask");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            Log.d("태그", "AsyncTask if");
             return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
+            Log.d("태그", "else AsyncTask");
             return task.execute();
 
         }
