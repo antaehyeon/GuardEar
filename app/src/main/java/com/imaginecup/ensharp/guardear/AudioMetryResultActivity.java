@@ -43,6 +43,10 @@ public class AudioMetryResultActivity extends AppCompatActivity {
     TextView title;
     Button toolBarNextButton;
 
+    TextView resultComment;
+    TextView resultCondition;
+
+    int resultCount = 0;
 
     // VARIABLE - GRAPH
     LineChartView resultChart;
@@ -72,6 +76,14 @@ public class AudioMetryResultActivity extends AppCompatActivity {
     float[] tempFreqAverage = {20, 15, 5, 10, 10, 15, 20};
     float[] freqDecibelRight;
     float[] freqDecibelLeft;
+
+    float leftLowFreqAverage, leftMidFreqAverage, leftHighFreqAverage;
+    float rightLowFreqAverage, rightMidFreqAverage, rightHighFreqAverage;
+
+    boolean bLeftLowFreq, bLeftMidFreq, bLeftHighFreq;
+    boolean bRightLowFreq, bRightMidFreq, bRightHighFreq;
+
+    String comment = "";
 
 
     // VARIABLE - SINGLETON
@@ -107,6 +119,9 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         title.setTypeface(title.getTypeface(), Typeface.BOLD);
         title.setTextSize(20);
 
+        resultComment = (TextView) findViewById(R.id.result_comment);
+        resultCondition = (TextView) findViewById(R.id.result_condition);
+
         // audiometry 최상위 뷰 속성 조정
         relativeLayout = (RelativeLayout) findViewById(R.id.activity_audio_metry_result);
         relativeLayout.setBackgroundColor(baseColor);
@@ -123,6 +138,64 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         // AudioMetryActivity 에서 Data 받아오기 (사용자가 조정한 Decibel을 Singleton 을 이용해서 받아온다)
         freqDecibelLeft = mSingleton.getFreqLeftData();
         freqDecibelRight = mSingleton.getFreqRightData();
+
+        // 왼쪽 데시벨 평균 내는 부분
+        leftLowFreqAverage = (freqDecibelLeft[0] + freqDecibelLeft[1]) / 2;
+        leftMidFreqAverage = (freqDecibelLeft[2] + freqDecibelLeft[3] + freqDecibelLeft[4]) / 3;
+        leftHighFreqAverage = (freqDecibelLeft[5] + freqDecibelLeft[6]) / 2;
+
+        // 오른쪽 데시벨 평균 내는 부분
+        rightLowFreqAverage = (freqDecibelRight[0] + freqDecibelRight[1]) / 2;
+        rightMidFreqAverage = (freqDecibelRight[2] + freqDecibelRight[3] + freqDecibelRight[4]) / 3;
+        rightHighFreqAverage = (freqDecibelRight[5] + freqDecibelRight[6]) / 2;
+
+        comment += "OOO님의 청력측정 결과입니다.\n";
+
+        switch ((int)(Math.random() * 7)) {
+            case 0:
+                resultCondition.setText("BAD");
+                comment += "현재 전체적인 청력상태는 좋지 않은 상태입니다.";
+                break;
+            case 1:
+                resultCondition.setText("NORMAL");
+                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
+                break;
+            case 2:
+                resultCondition.setText("NORMAL");
+                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
+                break;
+            case 3:
+                resultCondition.setText("NORMAL");
+                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
+                break;
+            case 4:
+                resultCondition.setText("GOOD");
+                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
+                break;
+            case 5:
+                resultCondition.setText("GOOD");
+                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
+                break;
+            case 6:
+                resultCondition.setText("GOOD");
+                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
+                break;
+        }
+
+        bLeftLowFreq = judgeFrequency(leftLowFreqAverage);
+        bLeftMidFreq = judgeFrequency(leftMidFreqAverage);
+        bLeftHighFreq = judgeFrequency(leftHighFreqAverage);
+
+        bRightLowFreq = judgeFrequency(rightLowFreqAverage);
+        bRightMidFreq = judgeFrequency(rightMidFreqAverage);
+        bRightHighFreq = judgeFrequency(rightHighFreqAverage);
+
+        if (judgeLeftFrequencyForComment() && judgeRightFrequencyForComment()) {
+            comment += " 어떤 주파수 대역에서 손실이 의심되지 않습니다.";
+        }
+
+        resultComment.setText(comment);
+
         for (int i = 0; i < 7; i++) {
             Log.i("HYEON", "FREQ RIGHT " + i + " : " + freqDecibelRight[i]);
         }
@@ -144,7 +217,6 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         /* 청력측정한 데이터를 액티비티 구성할 때 받아옴
            0, 1, 2, 3, 4, 5, 6, 7
            250, 500, 1000, 2000, 4000, 6000, 8000 */
-
         mContext = getApplicationContext();
 
         // ToolBar Button 생성
@@ -237,11 +309,66 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         mLine.setPointRadius(1);
     }
 
+    public boolean judgeFrequency(float data) {
+        if (data >= 20) {
+            resultCount ++;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
+    public boolean judgeLeftFrequencyForComment() {
+        if (!bLeftLowFreq && !bLeftMidFreq && !bLeftHighFreq) {
+            return true;
+        } else {
+            comment += " 왼쪽 [";
+        }
 
+        if (bLeftLowFreq) {
+            bLeftLowFreq = false;
+            comment += "저 주파수 ";
+        }
+        if (bLeftMidFreq) {
+            bLeftMidFreq = false;
+            comment += "중간 주파수 ";
+        }
+        if (bLeftHighFreq) {
+            bLeftHighFreq = false;
+            comment += "고 주파수 ";
+        }
 
+        comment += "] ";
 
+        return false;
+    }
 
+    public boolean judgeRightFrequencyForComment() {
+        if (!bRightLowFreq && !bRightMidFreq && !bRightHighFreq) {
+            return true;
+        } else {
+            comment += " 오른쪽 [";
+        }
+
+        if (bRightLowFreq) {
+            bRightLowFreq = false;
+            comment += "저 주파수 ";
+        }
+        if (bRightMidFreq) {
+            bRightMidFreq = false;
+            comment += "중간 주파수 ";
+        }
+        if (bRightHighFreq) {
+            bRightHighFreq = false;
+            comment += "고 주파수 ";
+        }
+
+        comment += "] ";
+        comment += "부분에서 약간의 청력손실이 의심되니 병원의 진료를 권합니다.";
+
+        return false;
+    }
 
 
 } // AudioMetryResultActivity CLASS
