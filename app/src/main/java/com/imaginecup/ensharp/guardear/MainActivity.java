@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, MainService.class);
                     serviceBtn.setText("서비스 종료");
                     changeCircle("sky");
+                    earphoneModelTxt.setText(pref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
                     startService(intent);
                 } else {
                     //Toast.makeText(getApplicationContext(), "서비스 종료", Toast.LENGTH_SHORT).show();
@@ -536,7 +537,9 @@ public class MainActivity extends AppCompatActivity {
             case "음악 재생 정보":
                 Log.i("메인으로 넘어온 값", textContent + "?");
                 if (musicOnTxt != null) {
-                    musicOnTxt.setText(textContent);
+                    //musicOnTxt.setText(textContent);
+                    //isPlayingTxt.setText(textContent);
+                    earphoneModelTxt.setText(sPref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
                 }
                 break;
             case "음악 청취 시간":
@@ -565,6 +568,17 @@ public class MainActivity extends AppCompatActivity {
                 if (volumeTxt != null) {
                     volumeTxt.setText(textContent);
                 }
+                break;
+            case "이어폰 모델":
+                if (volumeTxt != null) {
+                    volumeTxt.setText(textContent);
+                }
+                break;
+            case "음악 재생 여부":
+                if (isPlayingTxt != null) {
+                    isPlayingTxt.setText(textContent);
+                }
+                earphoneModelTxt.setText(sPref.getValue("earphone_model", "EO-BG920BBKG", "userinfo"));
                 break;
         }
     }

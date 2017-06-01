@@ -164,6 +164,9 @@ public class DecibelServiceThread extends Thread {
                 dB = 0;
             }
             decibel = (int) dB;
+            if(decibel<0){
+                decibel = 0;
+            }
             return Integer.toString(decibel);
         } else {
             //Log.i("볼륨컨트롤O", "dd");
@@ -190,6 +193,9 @@ public class DecibelServiceThread extends Thread {
                 dB = 0;
             }
             decibel = (int) dB;
+            if(decibel<0){
+                decibel = 0;
+            }
             return Integer.toString(decibel);
         }
     }

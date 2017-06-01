@@ -22,7 +22,7 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
     SharedPreferences mPref;
     SoundFile mSoundfile;
     private static final int SEND_MUSIC_INFORMATION = 6;
-
+    private static final int SEND_MUSIC_PLAYING = 8;
     private String mTrackName;
     private String mArtistName;
     private String mTrackFullPath;
@@ -88,6 +88,11 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                     if (!mServiceData.isMyServiceRunning(ListeningService.class)) {
                         context.startService(mIntent);
                     }
+                    mMsg = mHandler.obtainMessage();
+                    mMsg.what = SEND_MUSIC_PLAYING;
+                    String isMusicPlaying = new String("Playing");
+                    mMsg.obj = isMusicPlaying;
+                    mHandler.sendMessage(mMsg);
 
                     if (mServiceData.isMyServiceRunning(DecibelService.class)) {
                         context.stopService(mdBIntent);
@@ -122,6 +127,11 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                     //mdBIntent = new Intent(context, DecibelService.class);
                     context.stopService(mdBIntent);
                     Log.e("음악재생여부", "일시정지");
+                    mMsg = mHandler.obtainMessage();
+                    mMsg.what = SEND_MUSIC_PLAYING;
+                    String isMusicPlaying = new String("Stop");
+                    mMsg.obj = isMusicPlaying;
+                    mHandler.sendMessage(mMsg);
                 }
             }
         } else {
@@ -157,6 +167,11 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
                     mMsg.obj = musicInfo;
                     mHandler.sendMessage(mMsg);
                     mPref.putValue("0", musicInfo, "음악 재생 정보");
+                    mMsg = mHandler.obtainMessage();
+                    mMsg.what = SEND_MUSIC_PLAYING;
+                    String isMusicPlaying = new String("Playing");
+                    mMsg.obj = isMusicPlaying;
+                    mHandler.sendMessage(mMsg);
                     if (!mServiceData.isMyServiceRunning(ListeningService.class)) {
                         context.startService(mIntent);
                     }
@@ -188,11 +203,16 @@ public class MusicBroadcastReceiver extends BroadcastReceiver {
 //            }
                 } else {
                     mMsg.what = SEND_MUSIC_INFORMATION;
-                    String musicInfo = new String("정지");
+                    String musicInfo = new String("Stop");
                     mMsg.obj = musicInfo;
                     mHandler.sendMessage(mMsg);
                     //Log.i("저장값", "lastTrackName : " + mTrackName + " lastPackageName : " + mPackageName);
                     mPref.putValue("0", musicInfo, "음악 재생 정보");
+                    mMsg = mHandler.obtainMessage();
+                    mMsg.what = SEND_MUSIC_PLAYING;
+                    String isMusicPlaying = new String("Stop");
+                    mMsg.obj = isMusicPlaying;
+                    mHandler.sendMessage(mMsg);
                     if (mServiceData.isMyServiceRunning(ListeningService.class)) {
                         context.stopService(mIntent);
                     }

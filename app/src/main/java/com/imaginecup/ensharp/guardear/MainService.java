@@ -26,6 +26,7 @@ public class MainService extends Service {
     private static final int SEND_THREAD_BLUETOOTHEARPHONE_UNCONNECTED = 5;
     private static final int SEND_MUSIC_INFORMATION= 6;
     private static final int SEND_LISTENING_ELAPSE = 7;
+    private static final int SEND_MUSIC_PLAYING = 8;
 
     public MainService() {
     }
@@ -108,7 +109,10 @@ public class MainService extends Service {
                     Log.i("핸들러에서의 스트링값",msg.obj.toString());
                     MainActivity.setMainUiText("음악 재생 정보", msg.obj.toString());
                     break;
-
+                case SEND_MUSIC_PLAYING :
+                    Log.i("핸들러에서의 스트링값",msg.obj.toString());
+                    MainActivity.setMainUiText("음악 재생 여부", msg.obj.toString());
+                    break;
 //                case SEND_LISTENING_ELAPSE :
 //                    Log.i("핸들러에서의 청취 시간",msg.obj.toString());
 //                    MainActivity.setMainUiText("음악 청취 시간", msg.obj.toString());
