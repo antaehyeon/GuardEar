@@ -27,10 +27,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tb_audioMetryResult"
         android:orientation="vertical"
-        android:weightSum="105"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:weightSum="105">
 
         <LinearLayout
             android:layout_width="match_parent"
