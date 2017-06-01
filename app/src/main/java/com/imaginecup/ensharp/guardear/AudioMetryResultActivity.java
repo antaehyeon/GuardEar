@@ -151,37 +151,6 @@ public class AudioMetryResultActivity extends AppCompatActivity {
 
         comment += "OOO님의 청력측정 결과입니다.\n";
 
-        switch ((int)(Math.random() * 7)) {
-            case 0:
-                resultCondition.setText("BAD");
-                comment += "현재 전체적인 청력상태는 좋지 않은 상태입니다.";
-                break;
-            case 1:
-                resultCondition.setText("NORMAL");
-                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
-                break;
-            case 2:
-                resultCondition.setText("NORMAL");
-                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
-                break;
-            case 3:
-                resultCondition.setText("NORMAL");
-                comment += "현재 전체적인 청력상태는 관리가 필요한 상태입니다.";
-                break;
-            case 4:
-                resultCondition.setText("GOOD");
-                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
-                break;
-            case 5:
-                resultCondition.setText("GOOD");
-                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
-                break;
-            case 6:
-                resultCondition.setText("GOOD");
-                comment += "현재 전체적인 청력상태는 양호한 상태입니다.";
-                break;
-        }
-
         bLeftLowFreq = judgeFrequency(leftLowFreqAverage);
         bLeftMidFreq = judgeFrequency(leftMidFreqAverage);
         bLeftHighFreq = judgeFrequency(leftHighFreqAverage);
@@ -190,9 +159,33 @@ public class AudioMetryResultActivity extends AppCompatActivity {
         bRightMidFreq = judgeFrequency(rightMidFreqAverage);
         bRightHighFreq = judgeFrequency(rightHighFreqAverage);
 
-        if (judgeLeftFrequencyForComment() && judgeRightFrequencyForComment()) {
-            comment += " 어떤 주파수 대역에서 손실이 의심되지 않습니다.";
+        switch(resultCount) {
+            case 0:
+            case 1:
+            case 2:
+                resultCondition.setText("GOOD");
+                resultCondition.setTextColor(Color.parseColor("#8BC34A"));
+                comment += "현재 청력상태는 전체적으로 양호한 상태입니다.";
+                break;
+            case 3:
+            case 4:
+                resultCondition.setText("NORMAL");
+                resultCondition.setTextColor(Color.parseColor("#FDD835"));
+                comment += "현재 청력상태는 관리가 필요한 상태입니다.";
+                break;
+            case 5:
+            case 6:
+                resultCondition.setText("BAD");
+                resultCondition.setTextColor(Color.parseColor("#F44336"));
+                comment += "현재 청력상태는 좋지 않은 상태입니다.";
+                break;
         }
+
+        if (judgeLeftFrequencyForComment()) {
+            if (judgeRightFrequencyForComment()) {
+                comment += " 어떤 주파수 대역에서도 손실이 의심되지 않습니다.";
+            }
+        } else if (judgeRightFrequencyForComment()) { }
 
         resultComment.setText(comment);
 
